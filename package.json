@@ -1,0 +1,18 @@
+{
+  "name": "shadow-empty",
+  "version": "1.0.0",
+  "description": "shadow empty module",
+  "main": "index.js",
+  "typings": "./bin/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc && tsc -p samples"
+  },
+  "keywords": [],
+  "author": "fskorzec",
+  "license": "MIT",
+  "devDependencies": {
+    "jest-cli": "^13.2.3",
+    "shadow-lib": "git+ssh://git@github.com/fskorzec/shadow-lib.git"
+  }
+}

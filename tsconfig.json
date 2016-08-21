@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "target": "es5",
+        "noImplicitAny": true,
+        "sourceMap": false,
+        "outDir": "./bin",
+        "declaration": true
+
+    },
+    "exclude": [
+        "node_modules",
+        "samples",
+        "__tests__",
+        "bin"
+    ]
+}
