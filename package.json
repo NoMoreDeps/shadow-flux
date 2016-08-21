@@ -1,7 +1,7 @@
 {
-  "name": "shadow-empty",
+  "name": "shadow-flux",
   "version": "1.0.0",
-  "description": "shadow empty module",
+  "description": "Flux implementation",
   "main": "index.js",
   "typings": "./bin/index.d.ts",
   "scripts": {
@@ -12,7 +12,9 @@
   "author": "fskorzec",
   "license": "MIT",
   "devDependencies": {
-    "jest-cli": "^13.2.3",
+    "jest-cli": "^13.2.3"
+  },
+  "dependencies": {
     "shadow-lib": "git+ssh://git@github.com/fskorzec/shadow-lib.git"
   }
 }
