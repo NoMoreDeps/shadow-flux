@@ -2,19 +2,24 @@
   "name": "shadow-flux",
   "version": "1.0.0",
   "description": "Flux implementation",
-  "main": "index.js",
-  "typings": "./bin/index.d.ts",
+  "main": "Flux.js",
   "scripts": {
+    "postinstall": "tsc -p ./node_modules/shadow-lib --module commonjs --outDir ./node_modules/shadow-lib",
+    "pretest": "npm run commonjs",
     "test": "jest",
-    "build": "tsc && tsc -p samples"
+    "commonjs": "tsc -p . --module commonjs",
+    "systemjs" : "tsc"
   },
   "keywords": [],
   "author": "fskorzec",
   "license": "MIT",
   "devDependencies": {
-    "jest-cli": "^13.2.3"
+    "@types/jest": "^15.1.1",
+    "jest": "^15.1.1"
   },
   "dependencies": {
+    "@types/es6-promise": "0.0.32",
+    "es6-promise": "^3.3.1",
     "shadow-lib": "git+ssh://git@github.com/fskorzec/shadow-lib.git"
   }
 }

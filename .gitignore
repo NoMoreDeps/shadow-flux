@@ -1,4 +1,4 @@
 node_modules
 typings
-bin
-samples/out
+types/__tests__
+.vscode/settings.json

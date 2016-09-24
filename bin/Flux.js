@@ -15,13 +15,21 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-import {Dispatcher} from "./Utils/Dispatcher" ;
-import {Store}      from "./Utils/Store"      ;
-import {Action}     from "./Utils/Action"     ;
-
-export {
-  Dispatcher ,
-  Store      ,
-  Action
-};
+System.register(["./Utils/Dispatcher", "./Utils/Store"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
+    var Dispatcher_1, Store_1;
+    return {
+        setters:[
+            function (Dispatcher_1_1) {
+                Dispatcher_1 = Dispatcher_1_1;
+            },
+            function (Store_1_1) {
+                Store_1 = Store_1_1;
+            }],
+        execute: function() {
+            exports_1("Dispatcher", Dispatcher_1.Dispatcher);
+            exports_1("Store", Store_1.Store);
+        }
+    }
+});

@@ -16,9 +16,11 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {Action}                 from "Action";
-import {Dispatcher}             from "Dispatcher";
-import {Emitter}                from "shadow-lib/Event/Emitter";
+import {Action}                 from "./Action";
+import {Dispatcher}             from "./Dispatcher";
+import {Emitter   ,
+  EmitterDelegate ,
+  EmitterAutoOff}               from "shadow-lib/Event/Emitter";
 
 export abstract class BaseStore<T> {
   protected _tokenId            : string;
@@ -43,11 +45,29 @@ export abstract class BaseStore<T> {
     this._emitter            = new Emitter();
   }
 
+  get on() : (eventName: string, callback: EmitterDelegate) => EmitterAutoOff {
+    return this._emitter.on.bind(this._emitter);
+  }
+
+  get once(): (eventName: string, callback: EmitterDelegate) => EmitterAutoOff {
+    return this._emitter.once.bind(this._emitter);
+  }
+
+  get tokenListToWaitFor(): Array<string> {
+    return this._tokenListToWaitFor;
+  }
+
+  set tokenListToWaitFor(tokens: Array<string>) {
+    this._tokenListToWaitFor = tokens;
+  }
+
   abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
   protected abstract initializeState(): void ;
   protected abstract nextState(state: T): void;
   abstract getState(): T;
 }
+
+
 
 export abstract class Store<T> extends BaseStore<T> {
   protected _state  : T        ;

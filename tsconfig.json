@@ -5,13 +5,18 @@
         "noImplicitAny": true,
         "sourceMap": false,
         "outDir": "./bin",
-        "declaration": true
-
+        "declaration": true,
+        "declarationDir": "./types",
+        "baseUrl": "./",
+        "paths": {
+            "shadow-lib/*" : ["node_modules/shadow-lib/types/*"],
+            "es6-promise"  : ["node_modules/es6-promise"]
+        },
+        "pretty": true
     },
     "exclude": [
         "node_modules",
-        "samples",
-        "__tests__",
+        "types",
         "bin"
     ]
 }

@@ -1,6 +1,6 @@
 /**
  * The MIT License (MIT)
- * Copyright (c) <2016> <Beewix Interactive>
+ * Copyright (c) <2016> <Beewix>
  * Author <François Skorzec>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
@@ -15,13 +15,6 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-import {Dispatcher} from "./Utils/Dispatcher" ;
-import {Store}      from "./Utils/Store"      ;
-import {Action}     from "./Utils/Action"     ;
-
-export {
-  Dispatcher ,
-  Store      ,
-  Action
+export declare type Action = {
+    type: string;
 };

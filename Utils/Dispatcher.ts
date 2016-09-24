@@ -19,9 +19,9 @@
 /**
  * Import declarations
  */
-import {Promise}          from "es6-promise"            ;
-import {Store}            from "shadow-flux//Utils/Store"                ;
-import {Action}           from "shadow-flux/Utils/Action"               ;
+import {Promise}          from "es6-promise"          ;
+import {Store}            from "../Utils/Store"       ;
+import {Action}           from "../Utils/Action"      ;
 import {Guid}             from "shadow-lib/Text/Guid" ; // Shadow Guid Module
 
 export type traceType = {
@@ -40,14 +40,15 @@ export type traceType = {
  * @md
  */
 export class Dispatcher {
-  protected stores      : Array<(payload: Action, success: () => void, error: (error: Error) => void) => void>;
-  protected storesMap   : {[index: string]: number};
-  protected actions     : Array<Action>;
-  protected withTrace   : boolean;
-  protected storeTraces : Array<Store<Object>>;
+  protected storesHandlerPool : Array<(payload: Action, success: () => void, error: (error: Error) => void) => void>;
+  protected storesPoolMap     : {[index: string]: number};
+  protected storesMap         : {[index: string]: Store<any>};
+  protected actions           : Array<Action>;
+  protected withTrace         : boolean;
+  protected storeTraces       : Array<Store<Object>>;
 
-  protected _isDispatching  : boolean;
-  protected bufferedActions : Array<Action>;
+  protected _isDispatching    : boolean;
+  protected bufferedActions   : Array<Action>;
 
   protected disptachStoreProcessList: {[index: string]: Promise<void> | number};
 
@@ -56,13 +57,14 @@ export class Dispatcher {
    * @md
    */
   constructor(withTrace: boolean = false) {
-    this.stores          = []        ;
-    this.storesMap       = {}        ;
-    this._isDispatching  = false     ;
-    this.bufferedActions = []        ;
-    this.actions         = []        ;
-    this.withTrace       = withTrace ;
-    this.storeTraces     = []        ;
+    this.storesHandlerPool = []        ;
+    this.storesPoolMap     = {}        ;
+    this._isDispatching    = false     ;
+    this.bufferedActions   = []        ;
+    this.actions           = []        ;
+    this.withTrace         = withTrace ;
+    this.storeTraces       = []        ;
+    this.storesMap         = {}        ;
   }
 
   /**
@@ -75,19 +77,25 @@ export class Dispatcher {
    * @md
    */
   register<T>(store: Store<T>, id?: string): string {
-    let storeIdx = this.stores.push(store.dispatchHandler.bind(store)) - 1;
+    let storeIdx = this.storesHandlerPool.push(store.dispatchHandler.bind(store)) - 1;
     let guid     = id || new Guid().toString();
 
-    this.storesMap[guid] = storeIdx       ;
+    this.storesPoolMap[guid] = storeIdx       ;
     store["_tokenId"]    = guid           ;
     store["_dispatcher"] = this           ;
     store["_withTrace"]  = this.withTrace ;
+
+    this.storesMap[store.tokenId] = store;
 
     if (this.withTrace) {
       this.storeTraces.push(store);
     }
 
     return guid;
+  }
+
+  getStoreFromTokenId<T>(id: string): T  {
+    return (<any>this.storesMap[id]) as T;
   }
 
   getTraces(): Array<traceType> {
@@ -115,10 +123,11 @@ export class Dispatcher {
 
   // Removes a callback based on its token.
   unregister(id: string): void {
-    if (id in this.storesMap) {
-      delete this.stores[this.storesMap[id]];
+    if (id in this.storesPoolMap) {
+      delete this.storesHandlerPool[this.storesPoolMap[id]];
+      delete this.storesPoolMap[id];
       delete this.storesMap[id];
-      this.stores = this.stores.filter( itm => itm !== void 0);
+      this.storesHandlerPool = this.storesHandlerPool.filter( itm => itm !== void 0);
     }
   }
 
@@ -146,7 +155,7 @@ export class Dispatcher {
 
   private getPromiseFromProcessList(index: string, action: Action): Promise<void> {
     if (typeof(this.disptachStoreProcessList[index]) === "number") {
-      let bindedHandler = this.stores[this.storesMap[index]];
+      let bindedHandler = this.storesHandlerPool[this.storesPoolMap[index]];
       this.disptachStoreProcessList[index] = new Promise<void>((rc, xc) => {
         bindedHandler(action, rc, xc);
       });
@@ -158,8 +167,8 @@ export class Dispatcher {
   private createProcessList(action: Action): Promise<void> {
    return new Promise<void>((r, x) => {
       this.disptachStoreProcessList = {};
-      Object.keys(this.storesMap).forEach((index) => {
-        this.disptachStoreProcessList[index] = this.storesMap[index];
+      Object.keys(this.storesPoolMap).forEach((index) => {
+        this.disptachStoreProcessList[index] = this.storesPoolMap[index];
       });
       r();
     });
@@ -172,7 +181,7 @@ export class Dispatcher {
     this.createProcessList(action).then(() => {
 
       let pmsList = [] as Array<Promise<void>>;
-      Object.keys(this.storesMap).forEach((index) => {
+      Object.keys(this.storesPoolMap).forEach((index) => {
         pmsList.push(this.getPromiseFromProcessList(index, action));
       });
 
@@ -191,7 +200,7 @@ export class Dispatcher {
   }
 
   //  a payload to all registered callbacks.
-  dispatch(action: Action): void {
+  dispatch<T>(action: Action & T): void {
     this.bufferedActions.push(action);
     if (!this._isDispatching) {
       this._isDispatching = true;
