@@ -22,6 +22,10 @@ import {Emitter   ,
   EmitterDelegate ,
   EmitterAutoOff}               from "shadow-lib/Event/Emitter";
 
+/**
+ * @class BaseStore
+ * @generic {T}
+ */
 export abstract class BaseStore<T> {
   protected _tokenId            : string;
   protected _dispatcher         : Dispatcher;

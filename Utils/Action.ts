@@ -16,6 +16,12 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * Simple action descriptor
+ * Each action should have its own description, but "type" field is mandatory
+ * @type {Action}
+ * @field {string} type Action's type
+ */
 export type Action = {
   type: string;
 }

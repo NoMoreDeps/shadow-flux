@@ -24,7 +24,12 @@ import {Store}            from "../Utils/Store"       ;
 import {Action}           from "../Utils/Action"      ;
 import {Guid}             from "shadow-lib/Text/Guid" ; // Shadow Guid Module
 
-export type traceType = {
+/**
+ * Defines the trace type
+ * @type TraceType
+ * @field {Action} action The current action
+ */
+export type TraceType = {
   action: Action,
   stores: Array<{
     token: string;
@@ -94,15 +99,27 @@ export class Dispatcher {
     return guid;
   }
 
+  /**
+   * Retreive a store based on the storeTokenId
+   * @method getStoreFromTokenId
+   * @generic {T} Generic store type
+   * @param {string} id The store id
+   * @return {T} The corresponding store if available
+   */
   getStoreFromTokenId<T>(id: string): T  {
     return (<any>this.storesMap[id]) as T;
   }
 
-  getTraces(): Array<traceType> {
-    let res: Array<traceType> = [];
+  /**
+   * Gets all traces for debug purpose
+   * @method getTraces
+   * @return {Array<TraceType>}
+   */
+  getTraces(): Array<TraceType> {
+    let res: Array<TraceType> = [];
     let i = 0;
     for (let action of this.actions) {
-      let trace = {} as traceType;
+      let trace = {} as TraceType;
 
       trace["action"] = action;
       trace["stores"] = [];
@@ -121,7 +138,12 @@ export class Dispatcher {
     return res;
   }
 
-  // Removes a callback based on its token.
+  /**
+   * Removes a callback based on its token.
+   * @method unregister
+   * @param {string} id The store id
+   * @return {void}
+   */
   unregister(id: string): void {
     if (id in this.storesPoolMap) {
       delete this.storesHandlerPool[this.storesPoolMap[id]];
@@ -131,8 +153,14 @@ export class Dispatcher {
     }
   }
 
-  // Waits for the callbacks specified to be invoked before continuing execution of the current callback.
-  // This method should only be used by a callback in response to a dispatched payload.
+  /**
+   * Waits for the callbacks specified to be invoked before continuing execution of the current callback.
+   * This method should only be used by a callback in response to a dispatched payload.
+   * @method waitFor
+   * @param {Array<string>} ids List of stores to wait for end of handling, before processing the action
+   * @param {Action} action The action to process when ready
+   * @return {Promise<void>}
+   */
   waitFor(ids: Array<string>, action: Action): Promise<void> {
     let pmsList = ids.map<Promise<void>>((tokenId: string) => {
       let res = this.getPromiseFromProcessList(tokenId, action);
@@ -153,6 +181,13 @@ export class Dispatcher {
     });
   }
 
+  /**
+   * Gets a list of Promise from internal list tp process
+   * @method getPromiseFromProcessList
+   * @param {string} index The key
+   * @param {Action} the action to apply
+   * @return {Promise<void>}
+   */
   private getPromiseFromProcessList(index: string, action: Action): Promise<void> {
     if (typeof(this.disptachStoreProcessList[index]) === "number") {
       let bindedHandler = this.storesHandlerPool[this.storesPoolMap[index]];
@@ -164,6 +199,12 @@ export class Dispatcher {
     return this.disptachStoreProcessList[index] as Promise<void>;
   }
 
+  /**
+   * Creates a new list of promise to process
+   * @method createProcessList
+   * @param {Action} action
+   * @return {Promise<void>}
+   */
   private createProcessList(action: Action): Promise<void> {
    return new Promise<void>((r, x) => {
       this.disptachStoreProcessList = {};
@@ -174,7 +215,13 @@ export class Dispatcher {
     });
   }
 
-  private disptachAction(action: Action) {
+  /**
+   * Dispatch the action to all stores
+   * @method dispatchAction
+   * @param {Action} action
+   * @return {void}
+   */
+  private dispatchAction(action: Action): void {
     if (this.withTrace) {
       this.actions.push(action);
     }
@@ -191,7 +238,7 @@ export class Dispatcher {
           this._isDispatching = false;
         } else {
           console.log("Current action is solved, but there is another one");
-          this.disptachAction(this.bufferedActions.shift());
+          this.dispatchAction(this.bufferedActions.shift());
         }
       }).catch(ex => {
         console.error(ex);
@@ -199,16 +246,26 @@ export class Dispatcher {
     });
   }
 
-  //  a payload to all registered callbacks.
+  /**
+   * Dispatch the action or bufferize it if an action is already processing
+   * @method dispatch
+   * @generic {T}
+   * @param {Action & T} action The action to dispatch
+   * @return {void}
+   */
   dispatch<T>(action: Action & T): void {
     this.bufferedActions.push(action);
     if (!this._isDispatching) {
       this._isDispatching = true;
-      this.disptachAction(this.bufferedActions.shift());
+      this.dispatchAction(this.bufferedActions.shift());
     }
   }
 
-  // Is this Dispatcher currently dispatching.
+  /**
+   * Gets a value indicating wether or not an action is dispatching
+   * @method isDispatching
+   * @return {boolean}
+   */
   isDispatching(): boolean {
     return this._isDispatching;
   }
