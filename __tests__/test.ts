@@ -100,4 +100,23 @@ describe("Flux tests", () => {
     });
 
   });
+
+  it("Should raise an error if a cycling reference is detected", () => {
+    return new Promise<void>((r,x) => {
+      let d = new flux.Dispatcher(true);
+      let d1 = new TestStore();
+      let d2 = new TestStore();
+
+      d.register(d1, "d1");
+      d.register(d2, "d2");
+
+      d1.tokenListToWaitFor = ["d2"];
+      d2.tokenListToWaitFor = ["d1"];
+
+      expect(() => {
+        d.dispatch({ type: ""});
+      }).toThrowError(`Cycling references detected between store <${d1.tokenId}> and <${d2.tokenId}>`);
+      r();
+    });
+  });
 });
