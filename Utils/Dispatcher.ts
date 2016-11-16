@@ -85,7 +85,7 @@ export class Dispatcher {
     let storeIdx = this.storesHandlerPool.push(store.dispatchHandler.bind(store)) - 1;
     let guid     = id || new Guid().toString();
 
-    this.storesPoolMap[guid] = storeIdx       ;
+    this.storesPoolMap[guid] = storeIdx   ;
     store["_tokenId"]    = guid           ;
     store["_dispatcher"] = this           ;
     store["_withTrace"]  = this.withTrace ;
@@ -223,6 +223,17 @@ export class Dispatcher {
    */
   private dispatchAction(action: Action): void {
     if (this.withTrace) {
+      // Controls if there is no cycle references between stores
+      Object.keys(this.storesMap).forEach(key => {
+        let source = this.storesMap[key];
+        let sourceTokens = source.tokenListToWaitFor;
+
+        sourceTokens.forEach(token => {
+          if (this.storesMap[token].tokenListToWaitFor.indexOf(source.tokenId) !== -1) {
+            throw Error(`Cycling references detected between store <${source.tokenId}> and <${token}>`);
+          }
+        });
+      });
       this.actions.push(action);
     }
     this.createProcessList(action).then(() => {
