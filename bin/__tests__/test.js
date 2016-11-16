@@ -102,6 +102,21 @@ System.register(["../Flux"], function(exports_1, context_1) {
                         });
                     });
                 });
+                it("Should raise an error if a cycling reference is detected", function () {
+                    return new Promise(function (r, x) {
+                        var d = new flux.Dispatcher(true);
+                        var d1 = new TestStore();
+                        var d2 = new TestStore();
+                        d.register(d1, "d1");
+                        d.register(d2, "d2");
+                        d1.tokenListToWaitFor = ["d2"];
+                        d2.tokenListToWaitFor = ["d1"];
+                        expect(function () {
+                            d.dispatch({ type: "" });
+                        }).toThrowError("Cycling references detected between store <" + d1.tokenId + "> and <" + d2.tokenId + ">");
+                        r();
+                    });
+                });
             });
         }
     }

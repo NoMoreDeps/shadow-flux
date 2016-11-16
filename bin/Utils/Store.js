@@ -31,7 +31,15 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                 Emitter_1 = Emitter_1_1;
             }],
         execute: function() {
+            /**
+             * @class BaseStore
+             * @generic {T}
+             */
             BaseStore = (function () {
+                /**
+                 * Creates a new store
+                 * @constructor
+                 */
                 function BaseStore() {
                     this._tokenId = "";
                     this._tokenListToWaitFor = [];
@@ -40,6 +48,10 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                     this._emitter = new Emitter_1.Emitter();
                 }
                 Object.defineProperty(BaseStore.prototype, "tokenId", {
+                    /**
+                     * Retreives the unique store identifier
+                     * @property {string} tokenId
+                     */
                     get: function () {
                         return this._tokenId;
                     },
@@ -47,6 +59,10 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                     configurable: true
                 });
                 Object.defineProperty(BaseStore.prototype, "dispatcher", {
+                    /**
+                     * Retreives the dispatcher witch the store is registered to.
+                     * @property {Dispatcher} dispatcher;
+                     */
                     get: function () {
                         return this._dispatcher;
                     },
@@ -54,6 +70,10 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                     configurable: true
                 });
                 Object.defineProperty(BaseStore.prototype, "on", {
+                    /**
+                     * Gets access to the internal emitter to register for a specific event
+                     * @property {RegisterEventDelegate} on
+                     */
                     get: function () {
                         return this._emitter.on.bind(this._emitter);
                     },
@@ -61,6 +81,10 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                     configurable: true
                 });
                 Object.defineProperty(BaseStore.prototype, "once", {
+                    /**
+                     * Gets access to the internal emitter to register once for a specific event
+                     * @property {RegisterEventDelegate} once
+                     */
                     get: function () {
                         return this._emitter.once.bind(this._emitter);
                     },
@@ -68,6 +92,9 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                     configurable: true
                 });
                 Object.defineProperty(BaseStore.prototype, "tokenListToWaitFor", {
+                    /**
+                     * Gets or sets the token list to wait for
+                     */
                     get: function () {
                         return this._tokenListToWaitFor;
                     },

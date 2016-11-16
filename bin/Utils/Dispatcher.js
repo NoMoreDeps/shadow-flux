@@ -73,9 +73,21 @@ System.register(["es6-promise", "shadow-lib/Text/Guid"], function(exports_1, con
                     }
                     return guid;
                 };
+                /**
+                 * Retreive a store based on the storeTokenId
+                 * @method getStoreFromTokenId
+                 * @generic {T} Generic store type
+                 * @param {string} id The store id
+                 * @return {T} The corresponding store if available
+                 */
                 Dispatcher.prototype.getStoreFromTokenId = function (id) {
                     return this.storesMap[id];
                 };
+                /**
+                 * Gets all traces for debug purpose
+                 * @method getTraces
+                 * @return {Array<TraceType>}
+                 */
                 Dispatcher.prototype.getTraces = function () {
                     var res = [];
                     var i = 0;
@@ -99,7 +111,12 @@ System.register(["es6-promise", "shadow-lib/Text/Guid"], function(exports_1, con
                     }
                     return res;
                 };
-                // Removes a callback based on its token.
+                /**
+                 * Removes a callback based on its token.
+                 * @method unregister
+                 * @param {string} id The store id
+                 * @return {void}
+                 */
                 Dispatcher.prototype.unregister = function (id) {
                     if (id in this.storesPoolMap) {
                         delete this.storesHandlerPool[this.storesPoolMap[id]];
@@ -108,8 +125,14 @@ System.register(["es6-promise", "shadow-lib/Text/Guid"], function(exports_1, con
                         this.storesHandlerPool = this.storesHandlerPool.filter(function (itm) { return itm !== void 0; });
                     }
                 };
-                // Waits for the callbacks specified to be invoked before continuing execution of the current callback.
-                // This method should only be used by a callback in response to a dispatched payload.
+                /**
+                 * Waits for the callbacks specified to be invoked before continuing execution of the current callback.
+                 * This method should only be used by a callback in response to a dispatched payload.
+                 * @method waitFor
+                 * @param {Array<string>} ids List of stores to wait for end of handling, before processing the action
+                 * @param {Action} action The action to process when ready
+                 * @return {Promise<void>}
+                 */
                 Dispatcher.prototype.waitFor = function (ids, action) {
                     var _this = this;
                     var pmsList = ids.map(function (tokenId) {
@@ -129,6 +152,13 @@ System.register(["es6-promise", "shadow-lib/Text/Guid"], function(exports_1, con
                         });
                     });
                 };
+                /**
+                 * Gets a list of Promise from internal list tp process
+                 * @method getPromiseFromProcessList
+                 * @param {string} index The key
+                 * @param {Action} the action to apply
+                 * @return {Promise<void>}
+                 */
                 Dispatcher.prototype.getPromiseFromProcessList = function (index, action) {
                     if (typeof (this.disptachStoreProcessList[index]) === "number") {
                         var bindedHandler_1 = this.storesHandlerPool[this.storesPoolMap[index]];
@@ -138,6 +168,12 @@ System.register(["es6-promise", "shadow-lib/Text/Guid"], function(exports_1, con
                     }
                     return this.disptachStoreProcessList[index];
                 };
+                /**
+                 * Creates a new list of promise to process
+                 * @method createProcessList
+                 * @param {Action} action
+                 * @return {Promise<void>}
+                 */
                 Dispatcher.prototype.createProcessList = function (action) {
                     var _this = this;
                     return new es6_promise_1.Promise(function (r, x) {
@@ -148,9 +184,25 @@ System.register(["es6-promise", "shadow-lib/Text/Guid"], function(exports_1, con
                         r();
                     });
                 };
-                Dispatcher.prototype.disptachAction = function (action) {
+                /**
+                 * Dispatch the action to all stores
+                 * @method dispatchAction
+                 * @param {Action} action
+                 * @return {void}
+                 */
+                Dispatcher.prototype.dispatchAction = function (action) {
                     var _this = this;
                     if (this.withTrace) {
+                        // Controls if there is no cycle references between stores
+                        Object.keys(this.storesMap).forEach(function (key) {
+                            var source = _this.storesMap[key];
+                            var sourceTokens = source.tokenListToWaitFor;
+                            sourceTokens.forEach(function (token) {
+                                if (_this.storesMap[token].tokenListToWaitFor.indexOf(source.tokenId) !== -1) {
+                                    throw Error("Cycling references detected between store <" + source.tokenId + "> and <" + token + ">");
+                                }
+                            });
+                        });
                         this.actions.push(action);
                     }
                     this.createProcessList(action).then(function () {
@@ -165,22 +217,32 @@ System.register(["es6-promise", "shadow-lib/Text/Guid"], function(exports_1, con
                             }
                             else {
                                 console.log("Current action is solved, but there is another one");
-                                _this.disptachAction(_this.bufferedActions.shift());
+                                _this.dispatchAction(_this.bufferedActions.shift());
                             }
                         }).catch(function (ex) {
                             console.error(ex);
                         });
                     });
                 };
-                //  a payload to all registered callbacks.
+                /**
+                 * Dispatch the action or bufferize it if an action is already processing
+                 * @method dispatch
+                 * @generic {T}
+                 * @param {Action & T} action The action to dispatch
+                 * @return {void}
+                 */
                 Dispatcher.prototype.dispatch = function (action) {
                     this.bufferedActions.push(action);
                     if (!this._isDispatching) {
                         this._isDispatching = true;
-                        this.disptachAction(this.bufferedActions.shift());
+                        this.dispatchAction(this.bufferedActions.shift());
                     }
                 };
-                // Is this Dispatcher currently dispatching.
+                /**
+                 * Gets a value indicating wether or not an action is dispatching
+                 * @method isDispatching
+                 * @return {boolean}
+                 */
                 Dispatcher.prototype.isDispatching = function () {
                     return this._isDispatching;
                 };
