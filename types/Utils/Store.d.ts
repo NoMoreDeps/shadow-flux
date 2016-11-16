@@ -18,17 +18,45 @@
 import { Action } from "./Action";
 import { Dispatcher } from "./Dispatcher";
 import { Emitter, EmitterDelegate, EmitterAutoOff } from "shadow-lib/Event/Emitter";
+export declare type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
+/**
+ * @class BaseStore
+ * @generic {T}
+ */
 export declare abstract class BaseStore<T> {
     protected _tokenId: string;
     protected _dispatcher: Dispatcher;
     protected _tokenListToWaitFor: Array<string>;
     protected _withTrace: boolean;
     protected _emitter: Emitter;
+    /**
+     * Retreives the unique store identifier
+     * @property {string} tokenId
+     */
     readonly tokenId: string;
+    /**
+     * Retreives the dispatcher witch the store is registered to.
+     * @property {Dispatcher} dispatcher;
+     */
     readonly dispatcher: Dispatcher;
+    /**
+     * Creates a new store
+     * @constructor
+     */
     constructor();
-    readonly on: (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
-    readonly once: (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
+    /**
+     * Gets access to the internal emitter to register for a specific event
+     * @property {RegisterEventDelegate} on
+     */
+    readonly on: RegisterEventDelegate;
+    /**
+     * Gets access to the internal emitter to register once for a specific event
+     * @property {RegisterEventDelegate} once
+     */
+    readonly once: RegisterEventDelegate;
+    /**
+     * Gets or sets the token list to wait for
+     */
     tokenListToWaitFor: Array<string>;
     abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
     protected abstract initializeState(): void;

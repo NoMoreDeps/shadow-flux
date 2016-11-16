@@ -1,7 +1,12 @@
 /// <reference types="es6-promise" />
 import { Store } from "../Utils/Store";
 import { Action } from "../Utils/Action";
-export declare type traceType = {
+/**
+ * Defines the trace type
+ * @type TraceType
+ * @field {Action} action The current action
+ */
+export declare type TraceType = {
     action: Action;
     stores: Array<{
         token: string;
@@ -46,13 +51,70 @@ export declare class Dispatcher {
      * @md
      */
     register<T>(store: Store<T>, id?: string): string;
+    /**
+     * Retreive a store based on the storeTokenId
+     * @method getStoreFromTokenId
+     * @generic {T} Generic store type
+     * @param {string} id The store id
+     * @return {T} The corresponding store if available
+     */
     getStoreFromTokenId<T>(id: string): T;
-    getTraces(): Array<traceType>;
+    /**
+     * Gets all traces for debug purpose
+     * @method getTraces
+     * @return {Array<TraceType>}
+     */
+    getTraces(): Array<TraceType>;
+    /**
+     * Removes a callback based on its token.
+     * @method unregister
+     * @param {string} id The store id
+     * @return {void}
+     */
     unregister(id: string): void;
+    /**
+     * Waits for the callbacks specified to be invoked before continuing execution of the current callback.
+     * This method should only be used by a callback in response to a dispatched payload.
+     * @method waitFor
+     * @param {Array<string>} ids List of stores to wait for end of handling, before processing the action
+     * @param {Action} action The action to process when ready
+     * @return {Promise<void>}
+     */
     waitFor(ids: Array<string>, action: Action): Promise<void>;
+    /**
+     * Gets a list of Promise from internal list tp process
+     * @method getPromiseFromProcessList
+     * @param {string} index The key
+     * @param {Action} the action to apply
+     * @return {Promise<void>}
+     */
     private getPromiseFromProcessList(index, action);
+    /**
+     * Creates a new list of promise to process
+     * @method createProcessList
+     * @param {Action} action
+     * @return {Promise<void>}
+     */
     private createProcessList(action);
-    private disptachAction(action);
+    /**
+     * Dispatch the action to all stores
+     * @method dispatchAction
+     * @param {Action} action
+     * @return {void}
+     */
+    private dispatchAction(action);
+    /**
+     * Dispatch the action or bufferize it if an action is already processing
+     * @method dispatch
+     * @generic {T}
+     * @param {Action & T} action The action to dispatch
+     * @return {void}
+     */
     dispatch<T>(action: Action & T): void;
+    /**
+     * Gets a value indicating wether or not an action is dispatching
+     * @method isDispatching
+     * @return {boolean}
+     */
     isDispatching(): boolean;
 }
