@@ -22,6 +22,9 @@ import {Emitter   ,
   EmitterDelegate ,
   EmitterAutoOff}               from "shadow-lib/Event/Emitter";
 
+export type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
+
+
 /**
  * @class BaseStore
  * @generic {T}
@@ -33,14 +36,26 @@ export abstract class BaseStore<T> {
   protected _withTrace          : boolean;
   protected _emitter            : Emitter;
 
+  /**
+   * Retreives the unique store identifier
+   * @property {string} tokenId
+   */
   get tokenId(): string {
     return this._tokenId;
   }
 
+  /**
+   * Retreives the dispatcher witch the store is registered to.
+   * @property {Dispatcher} dispatcher;
+   */
   get dispatcher(): Dispatcher {
     return this._dispatcher;
   }
 
+  /**
+   * Creates a new store
+   * @constructor
+   */
   constructor() {
     this._tokenId            = ""     ;
     this._tokenListToWaitFor = []     ;
@@ -49,14 +64,25 @@ export abstract class BaseStore<T> {
     this._emitter            = new Emitter();
   }
 
-  get on() : (eventName: string, callback: EmitterDelegate) => EmitterAutoOff {
+  /**
+   * Gets access to the internal emitter to register for a specific event
+   * @property {RegisterEventDelegate} on
+   */
+  get on() : RegisterEventDelegate {
     return this._emitter.on.bind(this._emitter);
   }
 
-  get once(): (eventName: string, callback: EmitterDelegate) => EmitterAutoOff {
+  /**
+   * Gets access to the internal emitter to register once for a specific event
+   * @property {RegisterEventDelegate} once
+   */
+  get once(): RegisterEventDelegate {
     return this._emitter.once.bind(this._emitter);
   }
 
+  /**
+   * Gets or sets the token list to wait for
+   */
   get tokenListToWaitFor(): Array<string> {
     return this._tokenListToWaitFor;
   }
