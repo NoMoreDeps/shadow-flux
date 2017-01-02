@@ -4,7 +4,6 @@
   "description": "Flux implementation",
   "main": "Flux.js",
   "scripts": {
-    "postinstall": "tsc -p ./node_modules/shadow-lib --module commonjs --outDir ./node_modules/shadow-lib",
     "pretest": "npm run commonjs",
     "test": "jest",
     "commonjs": "tsc -p . --module commonjs",
