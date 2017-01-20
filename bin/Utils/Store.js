@@ -24,7 +24,7 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
     var Emitter_1;
-    var BaseStore, Store;
+    var BaseStore, Store, MapStore;
     return {
         setters:[
             function (Emitter_1_1) {
@@ -129,6 +129,31 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                 return Store;
             }(BaseStore));
             exports_1("Store", Store);
+            MapStore = (function (_super) {
+                __extends(MapStore, _super);
+                function MapStore() {
+                    _super.call(this);
+                    this.initializeState();
+                }
+                MapStore.prototype.initializeState = function () {
+                    this._state = void 0;
+                    this._states = [];
+                };
+                MapStore.prototype.getState = function () {
+                    return this._state.toJS();
+                };
+                MapStore.prototype.nextState = function (state) {
+                    if (state === void 0) { state = void 0; }
+                    if (this._withTrace) {
+                        this._states.push(this._state.toJS());
+                    }
+                    if (state !== void 0) {
+                        this._state = this._state.merge(state);
+                    }
+                };
+                return MapStore;
+            }(BaseStore));
+            exports_1("MapStore", MapStore);
         }
     }
 });

@@ -18,6 +18,7 @@
 import { Action } from "./Action";
 import { Dispatcher } from "./Dispatcher";
 import { Emitter, EmitterDelegate, EmitterAutoOff } from "shadow-lib/Event/Emitter";
+import { Map } from "immutable";
 export declare type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
 /**
  * @class BaseStore
@@ -71,4 +72,13 @@ export declare abstract class Store<T> extends BaseStore<T> {
     protected nextState(state?: T): void;
     abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
     abstract getState(): T;
+}
+export declare abstract class MapStore<T> extends BaseStore<T> {
+    protected _state: Map<string, any>;
+    protected _states: Array<T>;
+    protected initializeState(): void;
+    constructor();
+    getState(): T;
+    protected nextState(state?: T): void;
+    abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
 }
