@@ -62,10 +62,10 @@ export declare abstract class BaseStore<T> {
     abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
     protected abstract initializeState(): void;
     protected abstract nextState(state: T): void;
-    abstract getState(): T;
+    abstract getState(): any;
 }
 export declare abstract class Store<T> extends BaseStore<T> {
-    protected _state: T;
+    protected _state: any;
     protected _states: Array<T>;
     protected initializeState(): void;
     constructor();
@@ -78,7 +78,7 @@ export declare abstract class MapStore<T> extends BaseStore<T> {
     protected _states: Array<T>;
     protected initializeState(): void;
     constructor();
-    getState(): T;
+    getState(): Map<string, any>;
     protected nextState(state?: T): void;
     abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
 }

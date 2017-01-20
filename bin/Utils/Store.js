@@ -140,7 +140,7 @@ System.register(["shadow-lib/Event/Emitter"], function(exports_1, context_1) {
                     this._states = [];
                 };
                 MapStore.prototype.getState = function () {
-                    return this._state.toJS();
+                    return this._state;
                 };
                 MapStore.prototype.nextState = function (state) {
                     if (state === void 0) { state = void 0; }

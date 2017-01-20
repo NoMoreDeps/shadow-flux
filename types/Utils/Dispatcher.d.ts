@@ -1,5 +1,5 @@
 /// <reference types="es6-promise" />
-import { Store } from "../Utils/Store";
+import { BaseStore } from "../Utils/Store";
 import { Action } from "../Utils/Action";
 /**
  * Defines the trace type
@@ -26,11 +26,11 @@ export declare class Dispatcher {
         [index: string]: number;
     };
     protected storesMap: {
-        [index: string]: Store<any>;
+        [index: string]: BaseStore<any>;
     };
     protected actions: Array<Action>;
     protected withTrace: boolean;
-    protected storeTraces: Array<Store<Object>>;
+    protected storeTraces: Array<BaseStore<Object>>;
     protected _isDispatching: boolean;
     protected bufferedActions: Array<Action>;
     protected disptachStoreProcessList: {
@@ -50,7 +50,7 @@ export declare class Dispatcher {
      * @return {string} The Id
      * @md
      */
-    register<T>(store: Store<T>, id?: string): string;
+    register(store: BaseStore<any>, id?: string): string;
     /**
      * Retreive a store based on the storeTokenId
      * @method getStoreFromTokenId
