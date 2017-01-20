@@ -124,7 +124,7 @@ export class Dispatcher {
       trace["action"] = action;
       trace["stores"] = [];
 
-      this.storeTraces.forEach(store => {
+      this.storeTraces.forEach((store: any) => {
         trace["stores"].push({
           token: store.tokenId,
           trace: store["_states"][i],
