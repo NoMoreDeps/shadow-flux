@@ -16,12 +16,31 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {Dispatcher} from "./Utils/Dispatcher" ;
-import {Store}      from "./Utils/Store"      ;
-import {Action}     from "./Utils/Action"     ;
+import { Dispatcher }   from "./Utils/Dispatcher"   ;
+import { Store }        from "./Utils/Store"        ;
+import { Action }       from "./Utils/Action"       ;
+import { MapContainer } from "./React/MapContainer" ;
+import {
+  Container        ,
+  actionCreator    ,
+  mapToActionsType ,
+  mapToProps       ,
+  mapToPropsType   ,
+  mapToState       ,
+  mapToStateType
+} from "./React/Container";
 
-export {
-  Dispatcher ,
-  Store      ,
-  Action
+export  {
+  Dispatcher       ,
+  Store            ,
+  Action           ,
+  Container        ,
+  MapContainer     ,
+  actionCreator    ,
+  mapToActionsType ,
+  mapToProps       ,
+  mapToPropsType   ,
+  mapToState       ,
+  mapToStateType
+
 };

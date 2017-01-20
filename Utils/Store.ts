@@ -21,6 +21,7 @@ import {Dispatcher}             from "./Dispatcher";
 import {Emitter   ,
   EmitterDelegate ,
   EmitterAutoOff}               from "shadow-lib/Event/Emitter";
+import {Map} from "immutable";
 
 export type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
 
@@ -97,8 +98,6 @@ export abstract class BaseStore<T> {
   abstract getState(): T;
 }
 
-
-
 export abstract class Store<T> extends BaseStore<T> {
   protected _state  : T        ;
   protected _states : Array<T> ;
@@ -125,4 +124,35 @@ export abstract class Store<T> extends BaseStore<T> {
 
   abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
   abstract getState(): T;
+}
+
+export abstract class MapStore<T> extends BaseStore<T> {
+  protected _state  : Map<string, any>;
+  protected _states : Array<T> ;
+
+  protected initializeState(): void {
+    this._state  = void 0 ;
+    this._states = []     ;
+  }
+
+  constructor() {
+    super();
+    this.initializeState();
+  }
+
+  getState(): T {
+    return this._state.toJS();
+  }
+
+  protected nextState(state: T = void 0): void {
+    if (this._withTrace) {
+      this._states.push(this._state.toJS());
+    }
+
+    if (state !== void 0) {
+      this._state = this._state.merge(state);
+    }
+  }
+
+  abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
 }
