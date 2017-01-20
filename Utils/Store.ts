@@ -95,11 +95,11 @@ export abstract class BaseStore<T> {
   abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
   protected abstract initializeState(): void ;
   protected abstract nextState(state: T): void;
-  abstract getState(): T;
+  abstract getState(): any;
 }
 
 export abstract class Store<T> extends BaseStore<T> {
-  protected _state  : T        ;
+  protected _state  : any;
   protected _states : Array<T> ;
 
   protected initializeState(): void {
@@ -140,8 +140,8 @@ export abstract class MapStore<T> extends BaseStore<T> {
     this.initializeState();
   }
 
-  getState(): T {
-    return this._state.toJS();
+  getState(): Map<string, any> {
+    return this._state;
   }
 
   protected nextState(state: T = void 0): void {

@@ -48,7 +48,7 @@ export abstract class Container<T> extends React.Component<{dispatcher: Dispatch
 
   subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler: mapToState,
     handler: (stateData: T) => void): EmitterAutoOff {
-      const registeredEvent = this.getStore<Store<void>>(storeTokenId).on(eventName, () => {
+      const registeredEvent = this.getStore<Store<any>>(storeTokenId).on(eventName, () => {
       const storeState = this.getStore<Store<any>>(storeTokenId).getState();
       const stateData = mapToStateHandler(storeState);
       handler(stateData as T);
