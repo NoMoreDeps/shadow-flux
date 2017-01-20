@@ -34,7 +34,7 @@ class TestStoreWaiter extends flux.Store<number> {
   }
 }
 
-describe("Flux tests", () => {
+describe( "Flux tests", () => {
   let dispatcher: flux.Dispatcher = null;
   let store: TestStore;
   let waitStore: TestStoreWaiter;
@@ -96,9 +96,7 @@ describe("Flux tests", () => {
         "type": "TestAction",
         "value": 50
       });
-
     });
-
   });
 
   it("Should raise an error if a cycling reference is detected", () => {

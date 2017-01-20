@@ -18,4 +18,6 @@
 import { Dispatcher } from "./Utils/Dispatcher";
 import { Store } from "./Utils/Store";
 import { Action } from "./Utils/Action";
-export { Dispatcher, Store, Action };
+import { MapContainer } from "./React/MapContainer";
+import { Container, actionCreator, mapToActionsType, mapToProps, mapToPropsType, mapToState, mapToStateType } from "./React/Container";
+export { Dispatcher, Store, Action, Container, MapContainer, actionCreator, mapToActionsType, mapToProps, mapToPropsType, mapToState, mapToStateType };
