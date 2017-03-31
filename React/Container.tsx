@@ -6,10 +6,9 @@ import {
   Dispatcher
 } from "../Flux";
 
-import {
-  Emitter,
-  EmitterAutoOff
-} from "shadow-lib/Event/Emitter";
+import * as ShadowLib from "shadow-lib";
+import Emitter = ShadowLib.Event.Emitter;
+import EmitterAutoOff = ShadowLib.Event.EmitterAutoOff;
 
 export type mapToState       = (storeState : any) => {[key: string]: any};
 export type mapToProps       = (state      : any) => {[key: string]: any};

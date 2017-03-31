@@ -1,6 +1,6 @@
 import { Container } from "./Container";
 import { Action, Dispatcher, Store } from "../Flux";
-import { Map } from "immutable";
+import * as Immutable from "immutable";
 
 type ImmutableDefault = Immutable.Map<any, any>;
 

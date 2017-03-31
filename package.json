@@ -38,8 +38,8 @@
   "dependencies": {
     "es6-promise": "^3.3.1",
     "immutable": "^3.8.1",
-    "shadow-lib": "^1.0.11",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "shadow-lib": "^1.0.14"
   }
 }

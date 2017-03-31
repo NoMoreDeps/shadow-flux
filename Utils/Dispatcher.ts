@@ -22,7 +22,8 @@
 import {Promise}          from "es6-promise"          ;
 import {BaseStore}        from "../Utils/Store"       ;
 import {Action}           from "../Utils/Action"      ;
-import {Guid}             from "shadow-lib/Text/Guid" ; // Shadow Guid Module
+import * as ShadowLib     from "shadow-lib" ; // Shadow Guid Module
+import Guid = ShadowLib.Text.Guid;
 
 /**
  * Defines the trace type

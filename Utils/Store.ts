@@ -18,10 +18,12 @@
 
 import {Action}                 from "./Action";
 import {Dispatcher}             from "./Dispatcher";
-import {Emitter   ,
-  EmitterDelegate ,
-  EmitterAutoOff}               from "shadow-lib/Event/Emitter";
+import * as ShadowLib           from "shadow-lib";
 import {Map} from "immutable";
+
+import EmitterAutoOff  = ShadowLib.Event.EmitterAutoOff;
+import EmitterDelegate = ShadowLib.Event.EmitterDelegate;
+import Emitter = ShadowLib.Event.Emitter;
 
 export type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
 
@@ -35,7 +37,7 @@ export abstract class BaseStore<T> {
   protected _dispatcher         : Dispatcher;
   protected _tokenListToWaitFor : Array<string>;
   protected _withTrace          : boolean;
-  protected _emitter            : Emitter;
+  protected _emitter            : ShadowLib.Event.Emitter;
 
   /**
    * Retreives the unique store identifier
