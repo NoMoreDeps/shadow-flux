@@ -19,7 +19,7 @@
   ],
   "author": "fskorzec",
   "license": "MIT",
-   "repository": {
+  "repository": {
     "type": "git",
     "url": "git+http://labs.beewix.com/beewix-public/shadow-flux.git"
   },
@@ -29,6 +29,7 @@
   "homepage": "http://labs.beewix.com/beewix-public/shadow-flux",
   "devDependencies": {
     "@types/es6-promise": "0.0.32",
+    "@types/immutable": "^3.8.7",
     "@types/jest": "^15.1.1",
     "@types/react": "^15.0.1",
     "@types/react-dom": "^0.14.20",
