@@ -15,6 +15,7 @@ export abstract class MapContainer<T> extends Container<T> {
     let res = newState.equals(this.state);
     if (!res) {
       this.state = newState as ImmutableDefault;
+      this.forceUpdate();
     }
     return !res;
   }

@@ -8,3 +8,5 @@ Shadow Flux is an implementation of the Flux pattern in Typescript. It can be us
   npm i -S shadow-flux
 ```
 <br />
+### Overview
+Flux follows a simple unidirectional data flow pattern that can be sumurized as below :

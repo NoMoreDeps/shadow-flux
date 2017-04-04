@@ -21,6 +21,7 @@ var MapContainer = (function (_super) {
         var res = newState.equals(this.state);
         if (!res) {
             this.state = newState;
+            this.forceUpdate();
         }
         return !res;
     };

@@ -1,8 +1,9 @@
 {
   "name": "shadow-flux",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "Flux implementation written in typescript",
   "main": "bin/Flux.js",
+  "types": "bin/Flux.d.ts",
   "files": [
     "bin"
   ],
@@ -40,6 +41,6 @@
     "immutable": "^3.8.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "shadow-lib": "^1.0.14"
+    "shadow-lib": "^1.0.15"
   }
 }
