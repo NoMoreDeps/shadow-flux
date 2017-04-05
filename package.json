@@ -1,6 +1,6 @@
 {
   "name": "shadow-flux",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Flux implementation written in typescript",
   "main": "bin/Flux.js",
   "types": "bin/Flux.d.ts",
