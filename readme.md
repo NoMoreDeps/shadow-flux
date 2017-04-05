@@ -130,4 +130,4 @@ export default class extends Flux.Store<number> {
 }
 ```
 
-### To be continue
+### To be continued
