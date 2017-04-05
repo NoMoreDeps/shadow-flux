@@ -10,7 +10,7 @@ Shadow Flux is an implementation of the Flux pattern in Typescript. It can be us
 ### Overview
 Flux follows a simple unidirectional data flow pattern that can be sumurized as below :
 
-<pre>
+```
                             +-----------+
 +--------------------------->  SERVER   |
 |                           +-----+-----+
@@ -26,7 +26,8 @@ Flux follows a simple unidirectional data flow pattern that can be sumurized as 
 |                           +-----+------+
 |                                 |
 +---------------------------------+
-</pre>
+
+```
 
 * An action is triggered from a view or from a server
 * The action is stacked in the dispatcher
