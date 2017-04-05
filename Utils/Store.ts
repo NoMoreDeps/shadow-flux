@@ -16,28 +16,27 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {Action}                 from "./Action";
-import {Dispatcher}             from "./Dispatcher";
-import * as ShadowLib           from "shadow-lib";
-import {Map} from "immutable";
+import {Action}                 from "./Action"     ;
+import {Dispatcher}             from "./Dispatcher" ;
+import * as ShadowLib           from "shadow-lib"   ;
+import {Map}                    from "immutable"    ;
 
-import EmitterAutoOff  = ShadowLib.Event.EmitterAutoOff;
-import EmitterDelegate = ShadowLib.Event.EmitterDelegate;
-import Emitter = ShadowLib.Event.Emitter;
+import EmitterAutoOff  = ShadowLib.Event.EmitterAutoOff  ;
+import EmitterDelegate = ShadowLib.Event.EmitterDelegate ;
+import Emitter         = ShadowLib.Event.Emitter         ;
 
 export type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
-
 
 /**
  * @class BaseStore
  * @generic {T}
  */
 export abstract class BaseStore<T> {
-  protected _tokenId            : string;
-  protected _dispatcher         : Dispatcher;
-  protected _tokenListToWaitFor : Array<string>;
-  protected _withTrace          : boolean;
-  protected _emitter            : ShadowLib.Event.Emitter;
+  protected _tokenId            : string                  ;
+  protected _dispatcher         : Dispatcher              ;
+  protected _tokenListToWaitFor : Array<string>           ;
+  protected _withTrace          : boolean                 ;
+  protected _emitter            : ShadowLib.Event.Emitter ;
 
   /**
    * Retreives the unique store identifier
@@ -64,7 +63,8 @@ export abstract class BaseStore<T> {
     this._tokenListToWaitFor = []     ;
     this._dispatcher         = void 0 ;
     this._withTrace          = false  ;
-    this._emitter            = new Emitter();
+
+    this._emitter = new Emitter();
   }
 
   /**
