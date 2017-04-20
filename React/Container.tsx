@@ -36,7 +36,9 @@ export type mapToStateType   = {[key: string]: mapToStateType   | mapToState}   
 export type mapToPropsType   = {[key: string]: mapToPropsType   | mapToProps}    ;
 export type mapToActionsType = {[key: string]: mapToActionsType | actionCreator} ;
 
-export abstract class Container<T> extends React.Component<{dispatcher: Dispatcher}, T>  {
+export type requiredProps    = {dispatcher: Dispatcher};
+
+export abstract class Container<P extends requiredProps, S> extends React.Component<P, S>  {
   private _hashComponent : {[key: string]: JSX.Element}    ;
   private _hashEvent     : {[key: string]: EmitterAutoOff} ;
 
@@ -46,7 +48,7 @@ export abstract class Container<T> extends React.Component<{dispatcher: Dispatch
   protected mapProps     : mapToPropsType   ;
   public    state        : any              ;
 
-  constructor(props: {dispatcher: Dispatcher}) {
+  constructor(props: P) {
     super(props);
 
     this._hashComponent = {};
@@ -59,7 +61,7 @@ export abstract class Container<T> extends React.Component<{dispatcher: Dispatch
     return this._dispatcher.getStoreFromTokenId<K>(storeTokenId);
   }
 
-  getState(): T {
+  getState(): S {
     return this.state;
   }
 
@@ -82,7 +84,7 @@ export abstract class Container<T> extends React.Component<{dispatcher: Dispatch
     }
   }
 
-  abstract nextState(newState: T): boolean;
+  abstract nextState(newState: S): boolean;
   abstract initState(): void;
   abstract render(): JSX.Element;
 }

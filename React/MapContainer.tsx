@@ -16,8 +16,9 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Container }  from "./Container" ;
-import * as Immutable from "immutable"   ;
+import { Container     }  from "./Container" ;
+import { requiredProps }  from "./Container" ;
+import * as Immutable     from "immutable"   ;
 
 import { 
   Action     , 
@@ -27,9 +28,9 @@ import {
 
 type ImmutableDefault = Immutable.Map<any, any>;
 
-export abstract class MapContainer<T> extends Container<T> {
+export abstract class MapContainer<P extends requiredProps, S> extends Container<P, S> {
 
-  constructor(props: {dispatcher: Dispatcher}) {
+  constructor(props: P) {
     super(props);
   }
 
