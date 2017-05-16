@@ -48,6 +48,8 @@ var Container = (function (_super) {
         var _this = this;
         var registeredEvent = this.getStore(storeTokenId).on(eventName, function () {
             var storeState = _this.getStore(storeTokenId).getState();
+            mapToStateHandler = mapToStateHandler || function (storeState) { return storeState; };
+            handler = handler || function () { };
             var stateData = mapToStateHandler(storeState);
             handler(stateData);
         });

@@ -50,7 +50,7 @@ export declare abstract class Container<P extends requiredProps, S> extends Reac
     constructor(props: P);
     getStore<K>(storeTokenId: string): K;
     getState(): S;
-    subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler: mapToState, handler: (stateData: T) => void): EmitterAutoOff;
+    subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler?: mapToState, handler?: (stateData: T) => void): EmitterAutoOff;
     unsubscribe(storeTokenId: string, eventName: string): void;
     abstract nextState(newState: S): boolean;
     abstract initState(): void;

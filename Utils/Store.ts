@@ -142,7 +142,11 @@ export abstract class MapStore<T> extends BaseStore<T> {
     this.initializeState();
   }
 
-  getState(): Map<string, any> {
+  getState(): T {
+    return this._state.toJS();
+  }
+
+  getMapState(): Map<string, any> {
     return this._state;
   }
 

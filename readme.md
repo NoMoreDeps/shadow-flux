@@ -132,3 +132,11 @@ export default class extends Flux.Store<number> {
 ```
 
 ### To be continued
+
+
+### What's new in version 1.0.10
+* Subscribe function now has the mapToStateHandler optional, it will just return the storeSate as is by default.
+* MapStore getState returns the Map.toJS()
+* MapStore has a new getMapState() to return the Map State instead of the JS representation
+MapContainer nextState use mergeDeep instead of merge
+MapContainer now use a descriptor with nextState to allow better configuration of the mergeDeep

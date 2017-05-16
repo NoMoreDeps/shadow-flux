@@ -17,7 +17,13 @@
  */
 import { Container } from "./Container";
 import { requiredProps } from "./Container";
+export declare type mergeDescriptor = Array<{
+    path: string;
+    action: "keep" | "replace";
+}>;
 export declare abstract class MapContainer<P extends requiredProps, S> extends Container<P, S> {
     constructor(props: P);
     nextState(newStateData: any): boolean;
+    nextState(newStateData: any, mergeDescriptor?: mergeDescriptor): boolean;
+    getState(): S;
 }

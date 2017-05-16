@@ -140,6 +140,9 @@ var MapStore = (function (_super) {
         this._states = [];
     };
     MapStore.prototype.getState = function () {
+        return this._state.toJS();
+    };
+    MapStore.prototype.getMapState = function () {
         return this._state;
     };
     MapStore.prototype.nextState = function (state) {

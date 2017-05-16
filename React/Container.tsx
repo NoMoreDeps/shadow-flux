@@ -65,10 +65,15 @@ export abstract class Container<P extends requiredProps, S> extends React.Compon
     return this.state;
   }
 
-  subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler: mapToState,
-    handler: (stateData: T) => void): EmitterAutoOff {
+  subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler?: mapToState,
+    handler?: (stateData: T) => void): EmitterAutoOff {
+      
       const registeredEvent = this.getStore<Store<any>>(storeTokenId).on(eventName, () => {
       const storeState = this.getStore<Store<any>>(storeTokenId).getState();
+      
+      mapToStateHandler = mapToStateHandler || function(storeState: any) {return storeState};
+      handler = handler || function() {};
+
       const stateData  = mapToStateHandler(storeState);
       handler(stateData as T);
     });

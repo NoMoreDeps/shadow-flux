@@ -80,7 +80,8 @@ export declare abstract class MapStore<T> extends BaseStore<T> {
     protected _states: Array<T>;
     protected initializeState(): void;
     constructor();
-    getState(): Map<string, any>;
+    getState(): T;
+    getMapState(): Map<string, any>;
     protected nextState(state?: T): void;
     abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
 }

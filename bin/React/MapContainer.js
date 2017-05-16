@@ -28,19 +28,52 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Container_1 = require("./Container");
+var Immutable = require("immutable");
 var MapContainer = (function (_super) {
     __extends(MapContainer, _super);
     function MapContainer(props) {
         return _super.call(this, props) || this;
     }
-    MapContainer.prototype.nextState = function (newStateData) {
-        var newState = this.state.merge(newStateData);
+    MapContainer.prototype.nextState = function (newStateData, mergeDescriptor) {
+        var _this = this;
+        var newState = null;
+        if (mergeDescriptor) {
+            var newData_1 = null;
+            newData_1 = newStateData["toJS"] ? newStateData.toJS() : newStateData;
+            newState = this.state.mergeDeep(newData_1).toJS();
+            mergeDescriptor.forEach(function (desc) {
+                var path = desc.path.split(".");
+                var lastProp = path.pop();
+                var action = desc.action;
+                var cursor = newState;
+                path.forEach(function (segment) { return cursor = cursor[segment]; });
+                var cursorSt = _this.state.toJS();
+                path.forEach(function (segment) { return cursorSt = cursorSt[segment]; });
+                var cursorNw = newData_1;
+                path.forEach(function (segment) { return cursorNw = cursorNw[segment]; });
+                switch (action) {
+                    case "keep":
+                        cursor[lastProp] = cursorSt[lastProp];
+                        break;
+                    case "replace":
+                        cursor[lastProp] = cursorNw[lastProp];
+                        break;
+                }
+            });
+            newState = Immutable.Map({}).mergeDeep(newState);
+        }
+        else {
+            newState = this.state.mergeDeep(newStateData);
+        }
         var res = newState.equals(this.state);
         if (!res) {
             this.state = newState;
             this.forceUpdate();
         }
         return !res;
+    };
+    MapContainer.prototype.getState = function () {
+        return this.state.toJS();
     };
     return MapContainer;
 }(Container_1.Container));
