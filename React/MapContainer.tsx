@@ -40,44 +40,25 @@ export abstract class MapContainer<P extends requiredProps, S> extends Container
   }
 
   nextState(newStateData: any): boolean;
-  nextState(newStateData: any, mergeDescriptor?: mergeDescriptor): boolean;
+  nextState(newStateData: any, mergeDescriptor : mergeDescriptor): boolean;
   nextState(newStateData: any, mergeDescriptor?: mergeDescriptor): boolean {
-    let newState: any = null;
+    
+    const newData     = Immutable.fromJS(newStateData);
+    const currentData = this.state as ImmutableDefault;
+    let newState      = currentData.mergeDeep(newData);
 
     if (mergeDescriptor) {
-      let newData: any = null;
-
-      newData = newStateData["toJS"] ? (newStateData as ImmutableDefault).toJS() : newStateData;
-      newState = (this.state as ImmutableDefault).mergeDeep(newData).toJS();
-
-      mergeDescriptor.forEach(desc => {
-        let path   = desc.path.split(".");
-        const lastProp = path.pop();
-        const action = desc.action;
-
-        let cursor = newState;
-        path.forEach( segment => cursor = cursor[segment]);
-
-        let cursorSt = (this.state as ImmutableDefault).toJS();
-        path.forEach( segment => cursorSt = cursorSt[segment]);
-
-        let cursorNw = newData;
-        path.forEach( segment => cursorNw = cursorNw[segment]);
-
-        switch(action) {
+      mergeDescriptor.forEach( elt => {
+        const path = elt.path.split(".");
+        switch(elt.action) {
           case "keep":
-            cursor[lastProp] = cursorSt[lastProp];
+            newState = newState.setIn(path, currentData.getIn(path));
           break;
           case "replace":
-            cursor[lastProp] = cursorNw[lastProp];
+            newState = newState.setIn(path, newData.getIn(path));
           break;
         }
       });
-
-      newState = Immutable.Map({}).mergeDeep(newState);
-
-    } else {
-      newState = (this.state as ImmutableDefault).mergeDeep(newStateData);
     }
 
     let res = newState.equals(this.state);

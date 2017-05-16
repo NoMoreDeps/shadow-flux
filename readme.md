@@ -130,13 +130,86 @@ export default class extends Flux.Store<number> {
   }
 }
 ```
+### Using an Immutable based Store
+In order to use a store which state is Immutable, you can use the MapStore<T> class. This Store helps you manipulate Immutable based states
+
+By default, the nextState function will apply a mergeDeep of the new state to the current one. You can provide a mergeDescriptor if you want the nextState to apply specific rules when merging, like keeping an old value or replacing it without merging it
+```javascript
+export type State = {
+  id : string;
+  nested: {
+    name       : string        ;
+    collection : Array<number> ;
+  }
+};
+
+export class myMapStore extends MapStore<State> {
+  constructor() {
+    super();
+  }
+
+  dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void {
+    /** ... **/
+    switch(payload.type) {
+      case "SomeAction":
+        this.nextState({
+          id: "newId"
+        });
+      break;
+      case "OtherMerge":
+      /** 
+        We assume that we got an object nammed newState like that : {
+          nested: {
+            name: "NewName",
+            collection: ["new","array"]
+          }
+        }
+
+      **/
+      // Here we dont want to merge the collection, but we dont want to alter the object too.
+      // So we will tell the nextsate that we want to Keep the current collection data
+      this.nextState(newState, [{ path: "nested.collection", action:"keep"}]);
+
+      // If we want instead to replace the collection, ignoring the merge, we can do like that
+      this.nextState(newState, [{ path: "nested.collection", action:"replace"}]);
+        
+      break;
+    }
+  }
+}
+```
+### Using the Container
+If you use Stores, you need to use some view-controller from React code.
+You can use Container, or their immutable counterpart MapContainer, to interact with stores
+
+Keep in mind that in MapContainer class, the nextstate function has the same behaviour that in the MapStore.
+
+To create a new Container, you can do like that :
+```javascript
+export type Props = {
+  dispatcher: Flux.Dispatcher;
+}
+
+export type State ={
+  ... // you state description
+}
+
+export class MyContainer extends Flux.Container<Props, State> {
+  constructor(props: Props) {
+    super(props)
+  } 
+}
+```
 
 ### To be continued
 
+### What's new in version 1.0.15
+* MapStore nextState uses mergeDeep instead of merge
+* MapStore now uses a descriptor with nextState to allow better configuration of the mergeDeep
 
 ### What's new in version 1.0.10
 * Subscribe function now has the mapToStateHandler optional, it will just return the storeSate as is by default.
 * MapStore getState returns the Map.toJS()
 * MapStore has a new getMapState() to return the Map State instead of the JS representation
-MapContainer nextState use mergeDeep instead of merge
-MapContainer now use a descriptor with nextState to allow better configuration of the mergeDeep
+* MapContainer nextState use mergeDeep instead of merge
+* MapContainer now use a descriptor with nextState to allow better configuration of the mergeDeep

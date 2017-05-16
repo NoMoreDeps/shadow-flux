@@ -16,10 +16,11 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {Action}                 from "./Action"     ;
-import {Dispatcher}             from "./Dispatcher" ;
-import * as ShadowLib           from "shadow-lib"   ;
-import {Map}                    from "immutable"    ;
+import {Action}                 from "./Action"              ;
+import {Dispatcher}             from "./Dispatcher"          ;
+import * as ShadowLib           from "shadow-lib"            ;
+import * as Immutable           from "immutable"             ;
+import {mergeDescriptor}        from "../React/MapContainer" ;
 
 import EmitterAutoOff  = ShadowLib.Event.EmitterAutoOff  ;
 import EmitterDelegate = ShadowLib.Event.EmitterDelegate ;
@@ -129,7 +130,7 @@ export abstract class Store<T> extends BaseStore<T> {
 }
 
 export abstract class MapStore<T> extends BaseStore<T> {
-  protected _state  : Map<string, any>;
+  protected _state  : Immutable.Map<string, any>;
   protected _states : Array<T> ;
 
   protected initializeState(): void {
@@ -140,25 +141,51 @@ export abstract class MapStore<T> extends BaseStore<T> {
   constructor() {
     super();
     this.initializeState();
+    this.initState();
   }
 
   getState(): T {
     return this._state.toJS();
   }
 
-  getMapState(): Map<string, any> {
+  getMapState(): Immutable.Map<string, any> {
     return this._state;
   }
 
-  protected nextState(state: T = void 0): void {
+  protected nextState(state?: T): void;  
+  protected nextState(state?: T, mergeDescriptor? : mergeDescriptor): void;
+  protected nextState(state: T = void 0, mergeDescriptor: mergeDescriptor = void 0): void {
     if (this._withTrace) {
       this._states.push(this._state.toJS());
     }
 
     if (state !== void 0) {
-      this._state = this._state.merge(state);
+
+      const newData     = Immutable.fromJS(state);
+      const currentData = this._state as Immutable.Map<any,any>;
+      let newState      = currentData.mergeDeep(newData);
+
+      if (mergeDescriptor) {
+        mergeDescriptor.forEach( elt => {
+          const path = elt.path.split(".");
+          switch(elt.action) {
+            case "keep":
+              newState = newState.setIn(path, currentData.getIn(path));
+            break;
+            case "replace":
+              newState = newState.setIn(path, newData.getIn(path));
+            break;
+          }
+        });
+      }
+
+      let res = newState.equals(this._state);
+      if (!res) {
+        this._state = newState;
+      }
     }
   }
 
   abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
+  abstract initState(): void;
 }
