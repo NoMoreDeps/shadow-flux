@@ -39,9 +39,9 @@ export abstract class MapContainer<P extends requiredProps, S> extends Container
     super(props);
   }
 
-  nextState(newStateData: any): boolean;
-  nextState(newStateData: any, mergeDescriptor : mergeDescriptor): boolean;
-  nextState(newStateData: any, mergeDescriptor?: mergeDescriptor): boolean {
+  nextState(newStateData: S): boolean;
+  nextState(newStateData: S, mergeDescriptor : mergeDescriptor): boolean;
+  nextState(newStateData: S, mergeDescriptor?: mergeDescriptor): boolean {
     
     const newData     = Immutable.fromJS(newStateData);
     const currentData = this.state as ImmutableDefault;

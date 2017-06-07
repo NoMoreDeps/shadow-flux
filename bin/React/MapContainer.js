@@ -1,3 +1,4 @@
+"use strict";
 /**
  * The MIT License (MIT)
  * Copyright (c) <2016> <Beewix>
@@ -15,7 +16,6 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -35,35 +35,21 @@ var MapContainer = (function (_super) {
         return _super.call(this, props) || this;
     }
     MapContainer.prototype.nextState = function (newStateData, mergeDescriptor) {
-        var _this = this;
-        var newState = null;
+        var newData = Immutable.fromJS(newStateData);
+        var currentData = this.state;
+        var newState = currentData.mergeDeep(newData);
         if (mergeDescriptor) {
-            var newData_1 = null;
-            newData_1 = newStateData["toJS"] ? newStateData.toJS() : newStateData;
-            newState = this.state.mergeDeep(newData_1).toJS();
-            mergeDescriptor.forEach(function (desc) {
-                var path = desc.path.split(".");
-                var lastProp = path.pop();
-                var action = desc.action;
-                var cursor = newState;
-                path.forEach(function (segment) { return cursor = cursor[segment]; });
-                var cursorSt = _this.state.toJS();
-                path.forEach(function (segment) { return cursorSt = cursorSt[segment]; });
-                var cursorNw = newData_1;
-                path.forEach(function (segment) { return cursorNw = cursorNw[segment]; });
-                switch (action) {
+            mergeDescriptor.forEach(function (elt) {
+                var path = elt.path.split(".");
+                switch (elt.action) {
                     case "keep":
-                        cursor[lastProp] = cursorSt[lastProp];
+                        newState = newState.setIn(path, currentData.getIn(path));
                         break;
                     case "replace":
-                        cursor[lastProp] = cursorNw[lastProp];
+                        newState = newState.setIn(path, newData.getIn(path));
                         break;
                 }
             });
-            newState = Immutable.Map({}).mergeDeep(newState);
-        }
-        else {
-            newState = this.state.mergeDeep(newStateData);
         }
         var res = newState.equals(this.state);
         if (!res) {

@@ -23,7 +23,7 @@ export declare type mergeDescriptor = Array<{
 }>;
 export declare abstract class MapContainer<P extends requiredProps, S> extends Container<P, S> {
     constructor(props: P);
-    nextState(newStateData: any): boolean;
-    nextState(newStateData: any, mergeDescriptor?: mergeDescriptor): boolean;
+    nextState(newStateData: S): boolean;
+    nextState(newStateData: S, mergeDescriptor: mergeDescriptor): boolean;
     getState(): S;
 }

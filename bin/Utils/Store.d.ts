@@ -18,7 +18,8 @@
 import { Action } from "./Action";
 import { Dispatcher } from "./Dispatcher";
 import * as ShadowLib from "shadow-lib";
-import { Map } from "immutable";
+import * as Immutable from "immutable";
+import { mergeDescriptor } from "../React/MapContainer";
 import EmitterAutoOff = ShadowLib.Event.EmitterAutoOff;
 import EmitterDelegate = ShadowLib.Event.EmitterDelegate;
 export declare type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
@@ -76,12 +77,14 @@ export declare abstract class Store<T> extends BaseStore<T> {
     abstract getState(): T;
 }
 export declare abstract class MapStore<T> extends BaseStore<T> {
-    protected _state: Map<string, any>;
+    protected _state: Immutable.Map<string, any>;
     protected _states: Array<T>;
     protected initializeState(): void;
     constructor();
     getState(): T;
-    getMapState(): Map<string, any>;
+    getMapState(): Immutable.Map<string, any>;
     protected nextState(state?: T): void;
+    protected nextState(state?: T, mergeDescriptor?: mergeDescriptor): void;
     abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
+    abstract initState(): void;
 }

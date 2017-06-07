@@ -203,7 +203,11 @@ export class MyContainer extends Flux.Container<Props, State> {
 
 ### To be continued
 
-### What's new in version 1.0.15
+### What's new in version 1.0.14
+* MapContainer nexState parameter has now the same type as the MapContainer JS State
+  Same behaviour was already implemented in the MapStore. 
+
+### What's new in version 1.0.13
 * MapStore nextState uses mergeDeep instead of merge
 * MapStore now uses a descriptor with nextState to allow better configuration of the mergeDeep
 

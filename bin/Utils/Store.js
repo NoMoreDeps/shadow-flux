@@ -1,3 +1,4 @@
+"use strict";
 /**
  * The MIT License (MIT)
  * Copyright (c) <2016> <Beewix>
@@ -15,7 +16,6 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -28,6 +28,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var ShadowLib = require("shadow-lib");
+var Immutable = require("immutable");
 var Emitter = ShadowLib.Event.Emitter;
 /**
  * @class BaseStore
@@ -133,6 +134,7 @@ var MapStore = (function (_super) {
     function MapStore() {
         var _this = _super.call(this) || this;
         _this.initializeState();
+        _this.initState();
         return _this;
     }
     MapStore.prototype.initializeState = function () {
@@ -145,13 +147,33 @@ var MapStore = (function (_super) {
     MapStore.prototype.getMapState = function () {
         return this._state;
     };
-    MapStore.prototype.nextState = function (state) {
+    MapStore.prototype.nextState = function (state, mergeDescriptor) {
         if (state === void 0) { state = void 0; }
+        if (mergeDescriptor === void 0) { mergeDescriptor = void 0; }
         if (this._withTrace) {
             this._states.push(this._state.toJS());
         }
         if (state !== void 0) {
-            this._state = this._state.merge(state);
+            var newData_1 = Immutable.fromJS(state);
+            var currentData_1 = this._state;
+            var newState_1 = currentData_1.mergeDeep(newData_1);
+            if (mergeDescriptor) {
+                mergeDescriptor.forEach(function (elt) {
+                    var path = elt.path.split(".");
+                    switch (elt.action) {
+                        case "keep":
+                            newState_1 = newState_1.setIn(path, currentData_1.getIn(path));
+                            break;
+                        case "replace":
+                            newState_1 = newState_1.setIn(path, newData_1.getIn(path));
+                            break;
+                    }
+                });
+            }
+            var res = newState_1.equals(this._state);
+            if (!res) {
+                this._state = newState_1;
+            }
         }
     };
     return MapStore;
