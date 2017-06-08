@@ -103,6 +103,14 @@ var BaseStore = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * Emit a new event after a state change
+     * @param eventName The event name, "updated" by default
+     */
+    BaseStore.prototype.emit = function (eventName) {
+        if (eventName === void 0) { eventName = "updated"; }
+        this._emitter.emit(eventName);
+    };
     return BaseStore;
 }());
 exports.BaseStore = BaseStore;

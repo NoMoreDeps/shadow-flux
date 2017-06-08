@@ -65,28 +65,64 @@ export abstract class Container<P extends requiredProps, S> extends React.Compon
     return this.state;
   }
 
-  subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler?: mapToState,
-    handler?: (stateData: T) => void): EmitterAutoOff {
-      
-      const registeredEvent = this.getStore<Store<any>>(storeTokenId).on(eventName, () => {
-      const storeState = this.getStore<Store<any>>(storeTokenId).getState();
-      
-      mapToStateHandler = mapToStateHandler || function(storeState: any) {return storeState};
-      handler = handler || function() {};
+  subscribe<T>(storeTokenId: string, handler: (stateData: T) => void): EmitterAutoOff;
+  subscribe<T>(storeTokenId: string, eventName: string, handler: (stateData: T) => void): EmitterAutoOff;
+  subscribe<T>(storeTokenId: string, mapToStateHandler: mapToState, handler: (stateData: T) => void): EmitterAutoOff;
+  subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler: mapToState,
+    handler: (stateData: T) => void): EmitterAutoOff;
+  subscribe<T>(storeTokenId: string, ...params:Array<any>) {
+    let eventName         : string                 ;
+    let mapToStateHandler : mapToState             ;
+    let handler           : (stateData: T) => void ;
 
-      const stateData  = mapToStateHandler(storeState);
+    if (params.length === 1) { // only handler
+      eventName         = "updated" ;
+      mapToStateHandler = null      ;
+      handler           = params[0] ;
+    } else if (params.length === 2) {
+      if (typeof params[0] === "string") { // eventName
+        [eventName, handler] = params ;
+        mapToStateHandler    = null   ;
+      } else { // MapHandler
+        eventName                    = "updated" ;
+        [mapToStateHandler, handler] = params    ;
+      }
+    } else if (params.length === 3) {
+      [eventName, mapToStateHandler, handler] = params;
+    }
+
+    const registeredEvent = this.getStore<Store<any>>(storeTokenId).on(eventName, () => {
+      const storeState  = this.getStore<Store<any>>(storeTokenId).getState();
+      mapToStateHandler = mapToStateHandler || function(storeState: any) {return storeState};
+      const stateData   = mapToStateHandler(storeState);
+
       handler(stateData as T);
     });
+
+    const hashKey = `${storeTokenId}.${eventName}`;
+    if (this._hashEvent[hashKey]) {
+      throw Error(`The event <${eventName}> for store <${storeTokenId}> has already been registered`);
+    }
+
+    this._hashEvent[hashKey] = registeredEvent;
     return registeredEvent;
   }
 
-  unsubscribe(storeTokenId: string, eventName: string): void {
+  /**
+   * Unsubscribe for a specific event for a specific store
+   * @param {string} storeTokenId The token identifying the store
+   * @param {string} eventName The event to unscribe for, "updated" by default
+   */
+  unsubscribe(storeTokenId: string, eventName: string = "updated"): boolean {
     const hashKey = `${storeTokenId}.${eventName}`;
 
     if (this._hashEvent[hashKey]) {
       this._hashEvent[hashKey].off();
       delete this._hashEvent[hashKey];
+      return true;
     }
+
+    return false;
   }
 
   abstract nextState(newState: S): boolean;

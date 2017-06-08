@@ -50,8 +50,16 @@ export declare abstract class Container<P extends requiredProps, S> extends Reac
     constructor(props: P);
     getStore<K>(storeTokenId: string): K;
     getState(): S;
-    subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler?: mapToState, handler?: (stateData: T) => void): EmitterAutoOff;
-    unsubscribe(storeTokenId: string, eventName: string): void;
+    subscribe<T>(storeTokenId: string, handler: (stateData: T) => void): EmitterAutoOff;
+    subscribe<T>(storeTokenId: string, eventName: string, handler: (stateData: T) => void): EmitterAutoOff;
+    subscribe<T>(storeTokenId: string, mapToStateHandler: mapToState, handler: (stateData: T) => void): EmitterAutoOff;
+    subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler: mapToState, handler: (stateData: T) => void): EmitterAutoOff;
+    /**
+     * Unsubscribe for a specific event for a specific store
+     * @param {string} storeTokenId The token identifying the store
+     * @param {string} eventName The event to unscribe for, "updated" by default
+     */
+    unsubscribe(storeTokenId: string, eventName?: string): boolean;
     abstract nextState(newState: S): boolean;
     abstract initState(): void;
     abstract render(): JSX.Element;

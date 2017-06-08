@@ -22,6 +22,9 @@ import * as Immutable from "immutable";
 import { mergeDescriptor } from "../React/MapContainer";
 import EmitterAutoOff = ShadowLib.Event.EmitterAutoOff;
 import EmitterDelegate = ShadowLib.Event.EmitterDelegate;
+/**
+ * @param eventName The event
+ */
 export declare type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
 /**
  * @class BaseStore
@@ -62,6 +65,11 @@ export declare abstract class BaseStore<T> {
      * Gets or sets the token list to wait for
      */
     tokenListToWaitFor: Array<string>;
+    /**
+     * Emit a new event after a state change
+     * @param eventName The event name, "updated" by default
+     */
+    protected emit(eventName?: string): void;
     abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
     protected abstract initializeState(): void;
     protected abstract nextState(state: T): void;

@@ -26,6 +26,9 @@ import EmitterAutoOff  = ShadowLib.Event.EmitterAutoOff  ;
 import EmitterDelegate = ShadowLib.Event.EmitterDelegate ;
 import Emitter         = ShadowLib.Event.Emitter         ;
 
+/**
+ * @param eventName The event
+ */
 export type RegisterEventDelegate = (eventName: string, callback: EmitterDelegate) => EmitterAutoOff;
 
 /**
@@ -95,6 +98,14 @@ export abstract class BaseStore<T> {
     this._tokenListToWaitFor = tokens;
   }
 
+  /**
+   * Emit a new event after a state change
+   * @param eventName The event name, "updated" by default
+   */
+  protected emit(eventName: string = "updated"): void {
+    this._emitter.emit(eventName);
+  }
+
   abstract dispatchHandler(payload: Action, success: () => void, error: (error: Error) => void): void;
   protected abstract initializeState(): void ;
   protected abstract nextState(state: T): void;
@@ -152,7 +163,7 @@ export abstract class MapStore<T> extends BaseStore<T> {
     return this._state;
   }
 
-  protected nextState(state?: T): void;  
+  protected nextState(state?: T): void;
   protected nextState(state?: T, mergeDescriptor? : mergeDescriptor): void;
   protected nextState(state: T = void 0, mergeDescriptor: mergeDescriptor = void 0): void {
     if (this._withTrace) {

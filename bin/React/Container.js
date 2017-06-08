@@ -44,23 +44,60 @@ var Container = (function (_super) {
     Container.prototype.getState = function () {
         return this.state;
     };
-    Container.prototype.subscribe = function (storeTokenId, eventName, mapToStateHandler, handler) {
+    Container.prototype.subscribe = function (storeTokenId) {
         var _this = this;
+        var params = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            params[_i - 1] = arguments[_i];
+        }
+        var eventName;
+        var mapToStateHandler;
+        var handler;
+        if (params.length === 1) {
+            eventName = "updated";
+            mapToStateHandler = null;
+            handler = params[0];
+        }
+        else if (params.length === 2) {
+            if (typeof params[0] === "string") {
+                eventName = params[0], handler = params[1];
+                mapToStateHandler = null;
+            }
+            else {
+                eventName = "updated";
+                mapToStateHandler = params[0], handler = params[1];
+            }
+        }
+        else if (params.length === 3) {
+            eventName = params[0], mapToStateHandler = params[1], handler = params[2];
+        }
         var registeredEvent = this.getStore(storeTokenId).on(eventName, function () {
             var storeState = _this.getStore(storeTokenId).getState();
             mapToStateHandler = mapToStateHandler || function (storeState) { return storeState; };
-            handler = handler || function () { };
             var stateData = mapToStateHandler(storeState);
             handler(stateData);
         });
+        var hashKey = storeTokenId + "." + eventName;
+        if (this._hashEvent[hashKey]) {
+            throw Error("The event <" + eventName + "> for store <" + storeTokenId + "> has already been registered");
+        }
+        this._hashEvent[hashKey] = registeredEvent;
         return registeredEvent;
     };
+    /**
+     * Unsubscribe for a specific event for a specific store
+     * @param {string} storeTokenId The token identifying the store
+     * @param {string} eventName The event to unscribe for, "updated" by default
+     */
     Container.prototype.unsubscribe = function (storeTokenId, eventName) {
+        if (eventName === void 0) { eventName = "updated"; }
         var hashKey = storeTokenId + "." + eventName;
         if (this._hashEvent[hashKey]) {
             this._hashEvent[hashKey].off();
             delete this._hashEvent[hashKey];
+            return true;
         }
+        return false;
     };
     return Container;
 }(React.Component));

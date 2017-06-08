@@ -76,7 +76,7 @@ export default class extends Flux.Store<number> {
     super();
   }
 
-  /* 
+  /*
    * This function is automaticaly called at the end
    * of the super constructor
    */
@@ -87,22 +87,22 @@ export default class extends Flux.Store<number> {
   /**
    * You need to implement the dispatchHandler function to handle an action
    */
-  dispatchHandler( 
-    payload : Action        , 
-    success : () => void    ,   
+  dispatchHandler(
+    payload : Action        ,
+    success : () => void    ,
     error   : (error: Error
   ) => void): void {
     // Here you need to check the action type in order to know
     // If you want to process the action or not
     if (payload.type === "something I want") {
-      
+
       // Now you can update your state
       this.nextState(payload.value);
 
       // When you have finished to update your state, you have to emit an event to tell all views
         // that they can retreive the data
         this._emitter.emit("My_Event_That_Tells_I_Have_Finished");
-        
+
         //The disptach handler should be terminated with the success method or the error method
         success();
 
@@ -116,13 +116,13 @@ export default class extends Flux.Store<number> {
         // Gets the store I want to check the state
         let valueOfStore = this.dispatcher.getStoreFromTokenId("AnotherStore").getState();
 
-        // Now you can update your state        
+        // Now you can update your state
         this.nextState(payload.value + valueOfStore);
-        
+
         // When you have finished to update your state, you have to emit an event to tell all views
         // that they can retreive the data
         this._emitter.emit("My_Event_That_Tells_I_Have_Finished");
-        
+
         //The disptach handler should be terminated with the success method or the error method
         success();
       });
@@ -157,7 +157,7 @@ export class myMapStore extends MapStore<State> {
         });
       break;
       case "OtherMerge":
-      /** 
+      /**
         We assume that we got an object nammed newState like that : {
           nested: {
             name: "NewName",
@@ -172,7 +172,7 @@ export class myMapStore extends MapStore<State> {
 
       // If we want instead to replace the collection, ignoring the merge, we can do like that
       this.nextState(newState, [{ path: "nested.collection", action:"replace"}]);
-        
+
       break;
     }
   }
@@ -197,15 +197,19 @@ export type State ={
 export class MyContainer extends Flux.Container<Props, State> {
   constructor(props: Props) {
     super(props)
-  } 
+  }
 }
 ```
 
 ### To be continued
+### What's new in version 1.0.15
+* Added few new prototypes on the subscribe method of a container.
+* Added an emit function on the Store class, no need to call this._emitter.emit anymore, just this.emit
+* Now the eventName of a subscribe | unsubscribe and an emit is optional. By default, the event updated will be used
 
 ### What's new in version 1.0.14
 * MapContainer nexState parameter has now the same type as the MapContainer JS State
-  Same behaviour was already implemented in the MapStore. 
+  Same behaviour was already implemented in the MapStore.
 
 ### What's new in version 1.0.13
 * MapStore nextState uses mergeDeep instead of merge
