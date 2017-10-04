@@ -1,26 +1,16 @@
 {
     "compilerOptions": {
-        "module": "system",
+        "module": "commonjs",
         "target": "es5",
         "noImplicitAny": true,
         "sourceMap": false,
         "jsx": "react",
         "outDir": "./bin",
         "declaration": true,
-        "declarationDir": "./types",
-        "baseUrl": "./",
-        "paths": {
-            "react"        : ["node_modules/@types/react/index"],
-            "react-dom"    : ["node_modules/@types/react-dom/index"],
-            "immutable"    : ["node_modules/immutable/dist/immutable"],
-            "shadow-lib/*" : ["node_modules/shadow-lib/types/*"],
-            "es6-promise"  : ["node_modules/es6-promise"]
-        },
         "pretty": true
     },
     "exclude": [
         "node_modules",
-        "types",
         "bin"
     ]
 }

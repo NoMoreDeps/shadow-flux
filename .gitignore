@@ -2,3 +2,5 @@ node_modules
 typings
 types/__tests__
 .vscode/settings.json
+npm-debug*
+coverage

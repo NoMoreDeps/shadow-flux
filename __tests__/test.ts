@@ -1,5 +1,7 @@
 import * as flux from "../Flux";
+import * as Immutable from "immutable";
 
+/*
 type TestAction = {
   value: number
 } & flux.Action;
@@ -117,4 +119,68 @@ describe( "Flux tests", () => {
       r();
     });
   });
-});
+}); 
+
+*/
+
+class Test extends flux.MapContainer<{dispatcher: flux.Dispatcher}, {}> {
+  constructor(props: {dispatcher: flux.Dispatcher}) {
+    super(props);
+  }
+
+  initState() {
+    this.state = Immutable.Map({}).mergeDeep({
+      level1: {
+        level11: "coucou",
+        level12: [1,2,3]
+      }
+    });
+
+    console.log(this.getState());
+
+    this.nextState({
+      level1: {
+        level11: "eeee"
+      }
+    });
+
+    console.log(this.getState());
+
+    this.nextState({
+      level1: {
+        level11: "eeee",
+        level12:[]
+      }
+    });
+
+    console.log(this.getState());
+
+    
+    this.nextState({
+      level1: {
+        level11: "eeee",
+        level12:[]
+      }}, [{ path:"level1.level12", action:"replace"}]
+    );
+
+    console.log(this.getState());
+
+    this.nextState({
+      level1: {
+        level11: "eeee",
+        level12:[2,3,4]
+      }}, [{ path:"level1.level12", action:"keep"}]
+    );
+
+    console.log(this.getState());
+  }
+
+  render(): JSX.Element {
+    return null;
+  }
+}
+
+it("1", () => {
+  const x = new Test({dispatcher:null});
+  expect(true).toBe(true);
+})

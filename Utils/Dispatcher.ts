@@ -19,10 +19,11 @@
 /**
  * Import declarations
  */
-import {Promise}          from "es6-promise"          ;
-import {BaseStore}        from "../Utils/Store"       ;
-import {Action}           from "../Utils/Action"      ;
-import {Guid}             from "shadow-lib/Text/Guid" ; // Shadow Guid Module
+import {Promise}          from "es6-promise"     ;
+import {BaseStore}        from "../Utils/Store"  ;
+import {Action}           from "../Utils/Action" ;
+import * as ShadowLib     from "shadow-lib"      ; // Shadow Guid Module
+import Guid = ShadowLib.Text.Guid;
 
 /**
  * Defines the trace type
@@ -85,10 +86,11 @@ export class Dispatcher {
     let storeIdx = this.storesHandlerPool.push(store.dispatchHandler.bind(store)) - 1;
     let guid     = id || new Guid().toString();
 
-    this.storesPoolMap[guid] = storeIdx   ;
-    store["_tokenId"]    = guid           ;
-    store["_dispatcher"] = this           ;
-    store["_withTrace"]  = this.withTrace ;
+    this.storesPoolMap[guid] = storeIdx;
+    
+    store["_tokenId"]        = guid           ;
+    store["_dispatcher"]     = this           ;
+    store["_withTrace"]      = this.withTrace ;
 
     this.storesMap[store.tokenId] = store;
 

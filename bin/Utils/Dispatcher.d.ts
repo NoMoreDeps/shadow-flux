@@ -1,4 +1,3 @@
-/// <reference types="es6-promise" />
 import { BaseStore } from "../Utils/Store";
 import { Action } from "../Utils/Action";
 /**

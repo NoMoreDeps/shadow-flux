@@ -1,29 +1,46 @@
 {
   "name": "shadow-flux",
-  "version": "1.0.0",
-  "description": "Flux implementation",
-  "main": "Flux.js",
+  "version": "1.0.16",
+  "description": "Flux implementation written in typescript",
+  "main": "bin/Flux.js",
+  "types": "bin/Flux.d.ts",
+  "files": [
+    "bin"
+  ],
   "scripts": {
-    "pretest": "npm run commonjs",
-    "test": "jest",
-    "commonjs": "tsc -p . --module commonjs",
-    "systemjs": "tsc"
+    "test": "jest --coverage --verbose",
+    "build": "tsc"
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "flux",
+    "dispatcher",
+    "store",
+    "state"
+  ],
   "author": "fskorzec",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://labs.beewix.com/beewix-public/shadow-flux.git"
+  },
+  "bugs": {
+    "url": "http://labs.beewix.com/beewix-public/shadow-flux/issues"
+  },
+  "homepage": "http://labs.beewix.com/beewix-public/shadow-flux",
   "devDependencies": {
     "@types/es6-promise": "0.0.32",
+    "@types/immutable": "^3.8.7",
     "@types/jest": "^15.1.1",
     "@types/react": "^15.0.1",
     "@types/react-dom": "^0.14.20",
-    "jest": "^15.1.1",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "jest": "^15.1.1"
   },
   "dependencies": {
     "es6-promise": "^3.3.1",
     "immutable": "^3.8.1",
-    "shadow-lib": "git+ssh://git@github.com/fskorzec/shadow-lib.git"
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "shadow-lib": "^1.0.15"
   }
 }
