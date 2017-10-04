@@ -34,7 +34,7 @@ var Emitter = ShadowLib.Event.Emitter;
  * @class BaseStore
  * @generic {T}
  */
-var BaseStore = (function () {
+var BaseStore = /** @class */ (function () {
     /**
      * Creates a new store
      * @constructor
@@ -114,7 +114,7 @@ var BaseStore = (function () {
     return BaseStore;
 }());
 exports.BaseStore = BaseStore;
-var Store = (function (_super) {
+var Store = /** @class */ (function (_super) {
     __extends(Store, _super);
     function Store() {
         var _this = _super.call(this) || this;
@@ -137,7 +137,7 @@ var Store = (function (_super) {
     return Store;
 }(BaseStore));
 exports.Store = Store;
-var MapStore = (function (_super) {
+var MapStore = /** @class */ (function (_super) {
     __extends(MapStore, _super);
     function MapStore() {
         var _this = _super.call(this) || this;

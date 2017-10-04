@@ -133,7 +133,7 @@ describe( "Flux tests", () => {
 });
 
 */
-var Test = (function (_super) {
+var Test = /** @class */ (function (_super) {
     __extends(Test, _super);
     function Test(props) {
         return _super.call(this, props) || this;

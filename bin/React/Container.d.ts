@@ -37,7 +37,7 @@ export declare type mapToActionsType = {
     [key: string]: mapToActionsType | actionCreator;
 };
 export declare type requiredProps = {
-    dispatcher: Dispatcher;
+    dispatcher?: Dispatcher;
 };
 export declare abstract class Container<P extends requiredProps, S> extends React.Component<P, S> {
     private _hashComponent;
@@ -50,6 +50,7 @@ export declare abstract class Container<P extends requiredProps, S> extends Reac
     constructor(props: P);
     getStore<K>(storeTokenId: string): K;
     getState(): S;
+    sendAction<T>(payload: Action & T): void;
     subscribe<T>(storeTokenId: string, handler: (stateData: T) => void): EmitterAutoOff;
     subscribe<T>(storeTokenId: string, eventName: string, handler: (stateData: T) => void): EmitterAutoOff;
     subscribe<T>(storeTokenId: string, mapToStateHandler: mapToState, handler: (stateData: T) => void): EmitterAutoOff;

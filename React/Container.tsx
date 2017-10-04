@@ -36,7 +36,7 @@ export type mapToStateType   = {[key: string]: mapToStateType   | mapToState}   
 export type mapToPropsType   = {[key: string]: mapToPropsType   | mapToProps}    ;
 export type mapToActionsType = {[key: string]: mapToActionsType | actionCreator} ;
 
-export type requiredProps    = {dispatcher: Dispatcher};
+export type requiredProps    = {dispatcher?: Dispatcher};
 
 export abstract class Container<P extends requiredProps, S> extends React.Component<P, S>  {
   private _hashComponent : {[key: string]: JSX.Element}    ;
@@ -65,12 +65,19 @@ export abstract class Container<P extends requiredProps, S> extends React.Compon
     return this.state;
   }
 
+  sendAction<T>(payload: Action & T): void {
+    this._dispatcher &&
+      this._dispatcher.dispatch<T>(payload);
+  }
+
   subscribe<T>(storeTokenId: string, handler: (stateData: T) => void): EmitterAutoOff;
   subscribe<T>(storeTokenId: string, eventName: string, handler: (stateData: T) => void): EmitterAutoOff;
   subscribe<T>(storeTokenId: string, mapToStateHandler: mapToState, handler: (stateData: T) => void): EmitterAutoOff;
   subscribe<T>(storeTokenId: string, eventName: string, mapToStateHandler: mapToState,
     handler: (stateData: T) => void): EmitterAutoOff;
   subscribe<T>(storeTokenId: string, ...params:Array<any>) {
+    if (!this._dispatcher) return;
+
     let eventName         : string                 ;
     let mapToStateHandler : mapToState             ;
     let handler           : (stateData: T) => void ;
@@ -114,6 +121,8 @@ export abstract class Container<P extends requiredProps, S> extends React.Compon
    * @param {string} eventName The event to unscribe for, "updated" by default
    */
   unsubscribe(storeTokenId: string, eventName: string = "updated"): boolean {
+    if (!this._dispatcher) return;
+    
     const hashKey = `${storeTokenId}.${eventName}`;
 
     if (this._hashEvent[hashKey]) {

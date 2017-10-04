@@ -29,7 +29,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Container_1 = require("./Container");
 var Immutable = require("immutable");
-var MapContainer = (function (_super) {
+var MapContainer = /** @class */ (function (_super) {
     __extends(MapContainer, _super);
     function MapContainer(props) {
         return _super.call(this, props) || this;

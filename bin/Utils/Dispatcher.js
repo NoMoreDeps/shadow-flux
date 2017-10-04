@@ -29,7 +29,7 @@ var Guid = ShadowLib.Text.Guid;
  * @class Dispatcher
  * @md
  */
-var Dispatcher = (function () {
+var Dispatcher = /** @class */ (function () {
     /**
      * @constructor
      * @md

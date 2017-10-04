@@ -28,7 +28,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var Container = (function (_super) {
+var Container = /** @class */ (function (_super) {
     __extends(Container, _super);
     function Container(props) {
         var _this = _super.call(this, props) || this;
@@ -44,12 +44,18 @@ var Container = (function (_super) {
     Container.prototype.getState = function () {
         return this.state;
     };
+    Container.prototype.sendAction = function (payload) {
+        this._dispatcher &&
+            this._dispatcher.dispatch(payload);
+    };
     Container.prototype.subscribe = function (storeTokenId) {
         var _this = this;
         var params = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             params[_i - 1] = arguments[_i];
         }
+        if (!this._dispatcher)
+            return;
         var eventName;
         var mapToStateHandler;
         var handler;
@@ -91,6 +97,8 @@ var Container = (function (_super) {
      */
     Container.prototype.unsubscribe = function (storeTokenId, eventName) {
         if (eventName === void 0) { eventName = "updated"; }
+        if (!this._dispatcher)
+            return;
         var hashKey = storeTokenId + "." + eventName;
         if (this._hashEvent[hashKey]) {
             this._hashEvent[hashKey].off();
