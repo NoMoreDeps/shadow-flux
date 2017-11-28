@@ -202,6 +202,9 @@ export class MyContainer extends Flux.Container<Props, State> {
 ```
 
 ### To be continued
+### What's new in version 1.0.16
+* Moved to github
+
 ### What's new in version 1.0.15
 * Added few new prototypes on the subscribe method of a container.
 * Added an emit function on the Store class, no need to call this._emitter.emit anymore, just this.emit
