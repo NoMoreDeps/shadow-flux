@@ -1,46 +1,9 @@
 {
   "name": "shadow-flux",
-  "version": "1.0.17",
-  "description": "Flux implementation written in typescript",
-  "main": "bin/Flux.js",
-  "types": "bin/Flux.d.ts",
-  "files": [
-    "bin"
-  ],
-  "scripts": {
-    "test": "jest --coverage --verbose",
-    "build": "tsc"
-  },
-  "keywords": [
-    "react",
-    "flux",
-    "dispatcher",
-    "store",
-    "state"
-  ],
-  "author": "fskorzec",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fskorzec/shadow-flux.git"
-  },
-  "bugs": {
-    "url": "https://github.com/fskorzec/shadow-flux/issues"
-  },
-  "homepage": "https://github.com/fskorzec/shadow-flux",
-  "devDependencies": {
-    "@types/es6-promise": "0.0.32",
-    "@types/immutable": "^3.8.7",
-    "@types/jest": "^15.1.1",
-    "@types/react": "^15.0.1",
-    "@types/react-dom": "^0.14.20",
-    "jest": "^15.1.1"
-  },
-  "dependencies": {
-    "es6-promise": "^3.3.1",
-    "immutable": "^3.8.1",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "shadow-lib": "^1.0.15"
-  }
+  "version": "2.0.0",
+  "description": "Flux implementation",
+  "main": "index.js",
+  "repository": "git@github.com:fskorzec/shadow-flux.git",
+  "author": "François Skorzec",
+  "license": "MIT"
 }
