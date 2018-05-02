@@ -1,6 +1,7 @@
 import { Dispatcher } from "./Dispatcher";
 import { BaseStore } from "./Store/BaseStore";
 import { IAction } from "./Action/IAction";
+import { EventBus } from "./Utils/EventBus";
 
 const dispatcher = new Dispatcher();
 
@@ -18,14 +19,20 @@ class StoreA extends BaseStore<State> {
     super();
   }
 
-  initState() {}
+  initState() {
+    this.registerEventBus(new EventBus);
+    console.log(this.registerEventBus)
+  }
+
+   registerEventBus(eventBus: EventBus) {
+    super.registerEventBus(eventBus);
+  }
+
 
   async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) {
-    console.log("Before await store b", Date.now());
     await For("storeB")
-    console.log("After await store b", Date.now());
+    this.emit();
     success();
-
   }
 }
 
@@ -41,21 +48,36 @@ class StoreB extends BaseStore<State> {
     })
   }
 
+ registerEventBus(eventBus: EventBus) {
+    super.registerEventBus(eventBus);
+  }
+
   async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) {
     setTimeout(() => {
       console.log("has wait for a long...", Date.now());
+      this.emit("next")
       success();
-    }, 3000);
+    }, 300);
   }
 }
 
-const storeA = new StoreA();
-const storeB = new StoreB();
+let storeA = new StoreA();
+let storeB = new StoreB();
+
+console.log("storeA", storeA.registerEventBus)
 
 dispatcher.register(storeA, "storeA");
 dispatcher.register(storeB, "storeB");
 
 dispatcher.dispatch({
-  type: ""
+  type: "NewEvent"
 });
 
+dispatcher.dispatch({
+  type: "NewEvent2"
+});
+
+setTimeout(() => {
+
+  console.log(JSON.stringify(dispatcher["_debugFrames"], null, 2));
+}, 2000);

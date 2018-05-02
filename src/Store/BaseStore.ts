@@ -29,7 +29,9 @@ export abstract class BaseStore<T> implements IStore<T>{
   }
 
   protected emit(event: string = "") {
-    if (event = "") {
+    if (this._lockState) return;
+
+    if (event === "") {
       event = "updated";
     } else if(!event.startsWith("updated")) {
       event = `updated.${event}`;
@@ -55,7 +57,7 @@ export abstract class BaseStore<T> implements IStore<T>{
       this.state = Object.assign({}, this.state, newState);
     }
 
-    this._eventBus && this._eventBus.emit("nexState", this);
+    this._eventBus && this._eventBus.emit(`${this.id}.nextState`, this);
   }
 
   protected abstract async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void>;
