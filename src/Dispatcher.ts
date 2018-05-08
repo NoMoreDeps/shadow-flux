@@ -166,7 +166,67 @@ export class Dispatcher {
     this._stores.push(pStore);
 
     pStore.registerEventBus(this._eventBus);
-	}
+  }
+
+  /**
+   *
+   * @param storeId
+   * @param updatedStateHandler
+   */
+  subscribe<T>(storeId: string, updatedStateHandler: (state: T) => void): void;
+  subscribe<T,U>(storeId: string, mapToStateHandler:(state: T) => U, updatedStateHandler: (state: U) => void): void;
+  subscribe<T>(storeId: string, eventName: string, updatedStateHandler: (state: T) => void): void;
+  subscribe<T,U>(storeId: string, eventName: string, mapToStateHandler:(state: T) => U, updatedStateHandler: (state: U) => void): void;
+  subscribe(...params: any[]) {
+    const noSignatureError = () => {
+      throw `subscribe function has no signature corresponding to the one you provided :
+      subscribe(${params.map( p => typeof(p)).join(", ")}) => void; not found !`;
+    };
+
+    if (params.length === 0) {
+      noSignatureError();
+    }
+
+    if(typeof(params[0]) !== "string") {
+      noSignatureError();
+    }
+
+    // params[0] -> StoreId
+    let event = params.shift() as string;
+
+    if (this._stores.filter(s => s.id === event).length === 0) {
+      throw `Cannot subscribe to the store ${event}. This store does not exists or is not registered into the dispatcher.`;
+    }
+
+    if (params.length === 1) {
+      if (typeof(params[0]) === "function") {
+        // subscribe<T>(storeId, updatedStateHandler): void;
+        return this._eventBus.on(`${event}.updated`, params[0]);
+      } else {
+        noSignatureError();
+      }
+    } else if (params.length === 2) {
+      if (typeof(params[0] === "function") && typeof(params[1] === "function")) {
+          //subscribe<T,U>(storeId, mapToStateHandler, updatedStateHandler): void;
+
+      } else if (typeof(params[0] === "string") && typeof(params[1] === "function")) {
+        //subscribe<T>(storeId, eventName, updatedStateHandler): void;
+
+      } else {
+        noSignatureError();
+      }
+    } else if (params.length === 3) {
+      if (typeof(params[0] === "string") && typeof(params[1] === "function") && typeof(params[2] === "function")) {
+        //subscribe<T,U>(storeI, eventName, mapToStateHandler, updatedStateHandler): void;
+
+      } else {
+        noSignatureError();
+      }
+    } else {
+      noSignatureError();
+    }
+  }
+
 
   /**
    * @method unregister
