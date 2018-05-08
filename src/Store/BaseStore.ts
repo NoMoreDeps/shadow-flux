@@ -10,9 +10,9 @@ export abstract class BaseStore<T> implements IStore<T>{
 
   constructor() {
     this.id = "";
-    this.state = {} as T;
-    this._eventBus = null;
-    this._lockState = false;
+    this.state      = {} as T ;
+    this._eventBus  = null    ;
+    this._lockState = false   ;
     this.initState();
   }
 
@@ -24,7 +24,9 @@ export abstract class BaseStore<T> implements IStore<T>{
       this._lockState = data;
     });
     this._eventBus.on(`${this.id}.setState`, (data: T) => {
-      this.state = data;
+      if (this._lockState) {
+        this.state = data;
+      }
     });
   }
 

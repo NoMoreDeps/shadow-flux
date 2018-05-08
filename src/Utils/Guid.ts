@@ -28,13 +28,13 @@ export class Guid {
    * @field {any} _Guid_
    */
   protected _Guid_: {
-    toString : string       ;
-    part1    : number       ;
-    part2    : number       ;
-    part3    : number       ;
-    part4    : number       ;
-    part5    : number       ;
-    part6    : Array<number>;
+    toString : string        ;
+    part1    : number        ;
+    part2    : number        ;
+    part3    : number        ;
+    part4    : number        ;
+    part5    : number        ;
+    part6    : Array<number> ;
   };
 
   /**
@@ -54,7 +54,11 @@ export class Guid {
       part3: Guid.generate(),
       part4: Guid.generate(),
       part5: Guid.generate(),
-      part6: [Guid.generate(), Guid.generate(), Guid.generate()],
+      part6: [
+        Guid.generate(),
+        Guid.generate(),
+        Guid.generate()
+      ],
       toString: ""
     };
   }
