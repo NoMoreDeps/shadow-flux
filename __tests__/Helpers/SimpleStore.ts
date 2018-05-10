@@ -1,39 +1,45 @@
 import { BaseStore } from "../../src/Store/BaseStore";
 import { IAction } from "../../src/Action/IAction";
 
-type State = {
+export type State = {
   state: string;
 };
 
 export class SimpleStore extends BaseStore<State> {
   initState(): void {
-
+    
   }
 
   async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>): Promise<void> {
-    switch(payload.type) {
+    switch (payload.type) {
       case "classic":
         this.nextState({
-          state:"classic"
+          state: "classic"
         });
         this.emit();
         success();
-      break;
+        break;
       case "wait":
-        await For("otherStore");
-        this.nextState({
-          state:"wait"
-        });
+        if (this.id !== "otherStore") {
+          await For("otherStore");
+          this.nextState({
+            state: "wait"
+          });
+        } else {
+          this.nextState({
+            state: "otherStore"
+          });
+        }
         this.emit();
         success();
-      break;
+        break;
       default:
         this.nextState({
-          state:"nothing"
+          state: "nothing"
         });
         this.emit();
         success();
-      break;
+        break;
     }
   }
 }

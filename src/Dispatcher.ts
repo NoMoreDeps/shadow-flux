@@ -200,17 +200,34 @@ export class Dispatcher {
 
     if (params.length === 1) {
       if (typeof(params[0]) === "function") {
-        // subscribe<T>(storeId, updatedStateHandler): void;
-        return this._eventBus.on(`${event}.updated`, params[0]);
+        // subscribe<T>(storeId, updatedStateHandler): void;c
+        return this._eventBus.on(`${event}.updated`, (store: IStore<any>) => {
+          const updatedStateHandler: Function = params[0];
+
+          updatedStateHandler(store.getState());
+        });
       } else {
         noSignatureError();
       }
     } else if (params.length === 2) {
       if (typeof(params[0] === "function") && typeof(params[1] === "function")) {
           //subscribe<T,U>(storeId, mapToStateHandler, updatedStateHandler): void;
+          return this._eventBus.on(`${event}.updated`, (store: IStore<any>) => {
+            const mapToStateHandler: Function = params[0];
+            const updatedStateHandler: Function = params[1];
+
+            updatedStateHandler(mapToStateHandler(store.getState()));
+          });
 
       } else if (typeof(params[0] === "string") && typeof(params[1] === "function")) {
         //subscribe<T>(storeId, eventName, updatedStateHandler): void;
+        const eventName: string = params[0];
+
+        return this._eventBus.on(`${event}.updated.${eventName}`, (store: IStore<any>) => {
+          const updatedStateHandler: Function = params[1];
+
+          updatedStateHandler(store.getState());
+        });
 
       } else {
         noSignatureError();
@@ -218,6 +235,14 @@ export class Dispatcher {
     } else if (params.length === 3) {
       if (typeof(params[0] === "string") && typeof(params[1] === "function") && typeof(params[2] === "function")) {
         //subscribe<T,U>(storeI, eventName, mapToStateHandler, updatedStateHandler): void;
+        const eventName: string = params[0];
+
+        return this._eventBus.on(`${event}.updated.${eventName}`, (store: IStore<any>) => {
+          const mapToStateHandler: Function = params[1];
+          const updatedStateHandler: Function = params[2];
+
+          updatedStateHandler(mapToStateHandler(store.getState()));
+        });
 
       } else {
         noSignatureError();
