@@ -24,7 +24,7 @@ import {
   IStore,
   IPrivateStore
 } from "./Store/IStore";
-import { DispatcherCycle } from "./Utils/Debug/DispatcherCycle";
+import { DispatcherCycle, CycleEvent } from "./Utils/Debug/DispatcherCycle";
 
 export type WaitFor = (...ids: string[]) => Promise<void>;
 
@@ -46,9 +46,9 @@ export class Dispatcher {
   private _isDispatching   : boolean                                       ;
   private _currentStoreTab : { [storeId: string] : DefferedPromise<void> } ;
   private _eventBus        : EventBus                                      ;
-  private _debugFrames     : Array<DispatcherCycle>                        ;
-  private _currentFrame    : DispatcherCycle | null                        ;
+  private _debugCycle      : DispatcherCycle | null                        ;
   private _debugMode       : boolean                                       ;
+  private _currentFrame    : CycleEvent | null                             ;
 
 	/**
 	 * @constructor
@@ -60,12 +60,12 @@ export class Dispatcher {
     this._isDispatching   = false          ;
     this._currentStoreTab = {}             ;
     this._eventBus        = new EventBus() ;
-    this._debugFrames     = []             ;
+    this._debugCycle      = null           ;
+    this._debugMode       = false          ;
     this._currentFrame    = null           ;
-    this._debugMode       = false;
 
     this._eventBus.on("allEvents", (data) => {
-      this._currentFrame && this._currentFrame.newEvent(data.eventName, data.data);
+      this._debugCycle && this._debugCycle.newEvent(data.eventName, data.data);
     })
 	}
 
@@ -84,11 +84,11 @@ export class Dispatcher {
    * @method processNextPayload
    */
   private processNextPayload() {
-    if (this._currentFrame) {
-      this._currentFrame.newEvent("dispatcher.endCycle", null);
-      this._debugFrames.push(this._currentFrame);
-      this._currentFrame = null;
-    }
+    
+    this._debugMode 
+      && this._isDispatching
+      && this._debugCycle 
+      && this._debugCycle.newEvent("dispatcher.endCycle", null);
 
     // gets the next payload from the stack
     const payload = this._payloads.shift();
@@ -99,8 +99,9 @@ export class Dispatcher {
       return;
     }
 
-    this._currentFrame = new DispatcherCycle();
-    this._currentFrame.newEvent("dispatcher.newCycle", null);
+    this._debugMode 
+      && this._debugCycle 
+      && this._debugCycle.newEvent("dispatcher.newCycle", null);
 
     // sets the dispatching flag to true
     this._isDispatching = true;
@@ -124,7 +125,9 @@ export class Dispatcher {
       return promise;
     });
 
-    this._currentFrame.newEvent("dispatcher.dispatch", payload);
+    this._debugMode 
+      && this._debugCycle 
+      && this._debugCycle.newEvent("dispatcher.dispatch", payload);
 
     Promise.all( storeTab.map(p => p.getPromise()) ).then( () => {
       this._currentStoreTab = {};
@@ -132,11 +135,10 @@ export class Dispatcher {
       if (this._payloads.length > 0) {
         this.processNextPayload();
       } else {
-        if (this._currentFrame) {
-          this._currentFrame.newEvent("dispatcher.endCycle", null);
-          this._debugFrames.push(this._currentFrame);
-          this._currentFrame = null;
-        }
+        this._debugMode 
+          && this._debugCycle 
+          && this._debugCycle.newEvent("dispatcher.endCycle", null);
+
         this._isDispatching = false;
       }
     })
@@ -150,13 +152,13 @@ export class Dispatcher {
 	register(store: IStore<any>, id: string = "") {
     const pStore = store as IPrivateStore<any>;
 
-    if (!pStore.id) {
-      if (id) {
-        pStore.id = id;
-      } else {
-        pStore.id = Guid.getGuid();
-      }
-    }
+    !pStore.id && 
+      (id 
+        ? 
+          (pStore.id = id) 
+        : 
+          (pStore.id = Guid.getGuid())
+      ); 
 
     if (this._storeHash[pStore.id]) {
       throw `A store with id ${pStore.id} already exists.`
@@ -200,7 +202,7 @@ export class Dispatcher {
 
     if (params.length === 1) {
       if (typeof(params[0]) === "function") {
-        // subscribe<T>(storeId, updatedStateHandler): void;c
+        // subscribe<T>(storeId, updatedStateHandler): void;
         return this._eventBus.on(`${event}.updated`, (store: IStore<any>) => {
           const updatedStateHandler: Function = params[0];
 
@@ -272,20 +274,50 @@ export class Dispatcher {
   }
 
   debug = {
-    setDebugOn: () => {
-
+    setDebugOn: (): void => {
+      this.debugHelper.setDebugState(true);
     },
-    setDebugOff: () => {
-
+    setDebugOff: (): void  => {
+      this.debugHelper.setDebugState(false);
     },
-    getFrameLength: () => {
-
+    lockState: (active: boolean): void  => {
+      this._debugMode 
+        && this._stores.forEach( store => this._eventBus.emit(`${store.id}.lockState`, active) );
     },
-    goToFrame: (index: number) => {
-
+    getFrameLength: (): number => {
+      return this.debugHelper.countUpdates();
     },
-    playCurrentFrame: () => {
+    goToFrame: (index: number): void => {
+      this._debugCycle 
+        && (this._debugCycle.frameIndex = index);
+    },
+    playCurrentFrame: (): void => {
+      this._debugCycle
+        && this._debugCycle.playCurrentFrame();
+    }
+  }
 
+  protected debugHelper = {
+    setDebugState: (value: boolean) => {
+      this._debugMode = value;
+
+      if (value) {
+        !this._debugCycle 
+          && (this._debugCycle = new DispatcherCycle(this));
+      } else {
+        if (this._debugCycle) {
+          this._debugCycle["_events"].length = 0;
+          this._debugCycle = null;
+        }
+      }
+    },
+    countUpdates: () => {
+      return this._debugCycle 
+      ? 
+        this._debugCycle.length
+      : 
+        0
+      ;
     }
   }
 

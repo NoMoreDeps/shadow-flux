@@ -1,5 +1,5 @@
-import { BaseStore } from "../../src/Store/BaseStore";
-import { IAction } from "../../src/Action/IAction";
+import { BaseStore } from "../../src/Store/BaseStore" ;
+import { IAction }   from "../../src/Action/IAction"  ;
 
 export type State = {
   state: string;
@@ -12,6 +12,20 @@ export class SimpleStore extends BaseStore<State> {
 
   async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>): Promise<void> {
     switch (payload.type) {
+      case "debugFirst":
+        this.nextState({
+          state: "debugFirst"
+        });
+        this.emit();
+        success();
+        break;
+      case "debugSecond":
+        this.nextState({
+          state: "debugSecond"
+        });
+        this.emit();
+        success();
+        break;
       case "classic":
         this.nextState({
           state: "classic"

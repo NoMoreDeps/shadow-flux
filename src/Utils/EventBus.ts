@@ -303,6 +303,7 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
    * @md
    */
   emit(eventName: string, data: any = void 0): boolean {
+    eventName !== "allEvents" && this.emit("allEvents", { eventName: eventName, data: data });
 
     this.pools.forEach(poolRef => {
       for (const evt in poolRef) {
@@ -313,7 +314,6 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
     });
 
     this._Emitter_.parent && this._Emitter_.parent.emit(eventName, data);
-    eventName !== "allEvents" && this.emit("allEvents", { eventName: eventName, data: data });
     return true;
   }
 

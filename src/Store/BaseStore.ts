@@ -1,15 +1,15 @@
-import { IStore } from "./IStore";
-import { IAction } from "../Action/IAction";
-import { EventBus } from "../Utils/EventBus";
+import { IStore }   from "./IStore"          ;
+import { IAction }  from "../Action/IAction" ;
+import { EventBus } from "../Utils/EventBus" ;
 
 export abstract class BaseStore<T> implements IStore<T>{
   id: string;
-  private _lockState: boolean;
-  private _eventBus: EventBus | null;
+  private _lockState : boolean;
+  private _eventBus  : EventBus | null;
   private state: T;
 
   constructor() {
-    this.id = "";
+    this.id         = ""      ;
     this.state      = {} as T ;
     this._eventBus  = null    ;
     this._lockState = false   ;

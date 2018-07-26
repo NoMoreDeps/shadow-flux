@@ -129,4 +129,52 @@ describe("Dispatcher tests", function () {
         expect(() => dispatcher.subscribe("GhostStore", () => void 0)).toThrowError("Cannot subscribe to the store GhostStore. This store does not exists or is not registered into the dispatcher.")
 
     });
+
+    it("Should activate and deactivate debugger", (done) => {
+        const dispatcher = new Dispatcher();
+
+        const simpleStore = new SimpleStore();
+        dispatcher.register(simpleStore, "store");
+
+        dispatcher.debug.setDebugOn();
+
+
+        let tab = ["debugFirst","debugSecond","nothing","debugSecond","debugFirst","nothing"];
+
+        dispatcher.subscribe( simpleStore.id, (state: {state: string}) => {
+            expect(simpleStore.getState().state).toBe(tab.shift());
+
+            if (tab.length === 3) {
+                dispatcher.debug.lockState(true);
+
+                dispatcher.debug.goToFrame(1);
+                dispatcher.debug.playCurrentFrame();
+                
+                expect(simpleStore.getState().state).toBe(tab.shift());
+
+                dispatcher.debug.goToFrame(0);
+                dispatcher.debug.playCurrentFrame();
+                
+                expect(simpleStore.getState().state).toBe(tab.shift());
+
+                dispatcher.debug.goToFrame(2);
+                dispatcher.debug.playCurrentFrame();
+                
+                expect(simpleStore.getState().state).toBe(tab.shift());
+                
+                dispatcher.debug.lockState(false);
+                dispatcher.debug.setDebugOff();
+                done();
+            }
+        });
+
+        dispatcher.dispatch({ type : "debugFirst"});
+        dispatcher.dispatch({ type : "debugSecond"});
+        dispatcher.dispatch({ type : "addNothing"});
+
+       
+        
+        
+
+    });
 });
