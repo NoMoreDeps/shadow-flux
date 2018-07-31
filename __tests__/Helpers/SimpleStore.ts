@@ -12,6 +12,9 @@ export class SimpleStore extends BaseStore<State> {
 
   async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>): Promise<void> {
     switch (payload.type) {
+      case "error":
+        error(new Error("There was an error"));
+        break;
       case "debugFirst":
         this.nextState({
           state: "debugFirst"
@@ -31,6 +34,13 @@ export class SimpleStore extends BaseStore<State> {
           state: "classic"
         });
         this.emit();
+        success();
+        break;
+      case "double":
+        this.nextState({
+          state: "double"
+        });
+        this.emit("double");
         success();
         break;
       case "wait":

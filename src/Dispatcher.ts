@@ -93,6 +93,12 @@ export class Dispatcher {
     // gets the next payload from the stack
     const payload = this._payloads.shift();
 
+    // checks if we need to dispatch
+    if (!payload) {
+      this._isDispatching = false;
+      return;
+    }
+
     this._debugMode 
       && this._debugCycle 
       && this._debugCycle.newEvent("dispatcher.newCycle", null);
@@ -109,7 +115,7 @@ export class Dispatcher {
         }
 
         const error = () => {
-          x();
+          r();
         }
 
         store.dispatchHandler(payload, success, error, _this.waitFor.bind(_this));
@@ -206,7 +212,7 @@ export class Dispatcher {
         noSignatureError();
       }
     } else if (params.length === 2) {
-      if (typeof(params[0] === "function") && typeof(params[1] === "function")) {
+      if (typeof(params[0]) === "function" && typeof(params[1]) === "function") {
           //subscribe<T,U>(storeId, mapToStateHandler, updatedStateHandler): void;
           return this._eventBus.on(`${event}.updated`, (store: IStore<any>) => {
             const mapToStateHandler: Function = params[0];
@@ -215,7 +221,7 @@ export class Dispatcher {
             updatedStateHandler(mapToStateHandler(store.getState()));
           });
 
-      } else if (typeof(params[0] === "string") && typeof(params[1] === "function")) {
+      } else if (typeof(params[0]) === "string" && typeof(params[1]) === "function") {
         //subscribe<T>(storeId, eventName, updatedStateHandler): void;
         const eventName: string = params[0];
 
@@ -229,8 +235,8 @@ export class Dispatcher {
         noSignatureError();
       }
     } else if (params.length === 3) {
-      if (typeof(params[0] === "string") && typeof(params[1] === "function") && typeof(params[2] === "function")) {
-        //subscribe<T,U>(storeI, eventName, mapToStateHandler, updatedStateHandler): void;
+      if (typeof(params[0]) === "string" && typeof(params[1]) === "function" && typeof(params[2]) === "function") {
+        //subscribe<T,U>(storeId, eventName, mapToStateHandler, updatedStateHandler): void;
         const eventName: string = params[0];
 
         return this._eventBus.on(`${event}.updated.${eventName}`, (store: IStore<any>) => {
