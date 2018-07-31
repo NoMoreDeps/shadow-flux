@@ -93,12 +93,6 @@ export class Dispatcher {
     // gets the next payload from the stack
     const payload = this._payloads.shift();
 
-    // checks if we need to dispatch
-    if (!payload) {
-      this._isDispatching = false;
-      return;
-    }
-
     this._debugMode 
       && this._debugCycle 
       && this._debugCycle.newEvent("dispatcher.newCycle", null);
