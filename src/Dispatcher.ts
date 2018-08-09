@@ -40,8 +40,8 @@ export type DispatchHandler = (
  */
 export class Dispatcher {
 
-	private _payloads        : Array<IAction>                                ;
-	private _stores          : Array<IPrivateStore<any>>                     ;
+  private _payloads        : Array<IAction>                                ;
+  private _stores          : Array<IPrivateStore<any>>                     ;
   private _storeHash       : { [storeId: string]: IPrivateStore<any> }     ;
   private _isDispatching   : boolean                                       ;
   private _currentStoreTab : { [storeId: string] : DefferedPromise<void> } ;
@@ -54,8 +54,8 @@ export class Dispatcher {
 	 * @constructor
 	 */
 	constructor() {
-		this._payloads        = []             ;
-		this._stores          = []             ;
+    this._payloads        = []             ;
+    this._stores          = []             ;
     this._storeHash       = {}             ;
     this._isDispatching   = false          ;
     this._currentStoreTab = {}             ;
