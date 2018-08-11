@@ -36,17 +36,17 @@ export class Guid {
     part5    : number  ;
   };
 
-  protected static generate2byteNumber(): [number, string] {
+  protected static generate2bytesNumber(): [number, string] {
     const res = Math.round((Math.random() * 0xFFFF));
     return [res, Guid.pad(res.toString(16), 4)];
   }
 
-  protected static generate4byteNumber(): [number, string] {
+  protected static generate4bytesNumber(): [number, string] {
     const res = Math.round((Math.random() * 0xFFFFFFFF));
     return [res, Guid.pad(res.toString(16), 8)];
   }
 
-  protected static generate6byteNumber(): [number, string] {
+  protected static generate6bytesNumber(): [number, string] {
     const res = Math.round((Math.random() * 0xFFFFFFFFFFFF));
     return [res, Guid.pad(res.toString(16), 12)];
   }
@@ -63,11 +63,11 @@ export class Guid {
    * @constructor
    */
   constructor() {
-    const [part1, strPart1] = Guid.generate4byteNumber();
-    const [part2, strPart2] = Guid.generate2byteNumber();
-    const [part3, strPart3] = Guid.generate2byteNumber();
-    const [part4, strPart4] = Guid.generate2byteNumber();
-    const [part5, strPart5] = Guid.generate6byteNumber();
+    const [part1, strPart1] = Guid.generate4bytesNumber();
+    const [part2, strPart2] = Guid.generate2bytesNumber();
+    const [part3, strPart3] = Guid.generate2bytesNumber();
+    const [part4, strPart4] = Guid.generate2bytesNumber();
+    const [part5, strPart5] = Guid.generate6bytesNumber();
 
     this._Guid_ = {
       part1: part1,
