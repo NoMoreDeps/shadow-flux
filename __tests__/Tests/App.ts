@@ -18,7 +18,7 @@ describe("Dispatcher tests", function () {
      * Tests how the dispactcher register a new store, with different options
      */
     it("should register a new store", () => {
-        const dispatcher = new Dispather();
+        const dispatcher = new Dispatcher();
 
         const simpleStore = new SimpleStore();
 
