@@ -39,9 +39,8 @@ export type DispatchHandler = (
  * Dispatcher class
  */
 export class Dispatcher {
-
-	private _payloads        : Array<IAction>                                ;
-	private _stores          : Array<IPrivateStore<any>>                     ;
+  private _payloads        : Array<IAction>                                ;
+  private _stores          : Array<IPrivateStore<any>>                     ;
   private _storeHash       : { [storeId: string]: IPrivateStore<any> }     ;
   private _isDispatching   : boolean                                       ;
   private _currentStoreTab : { [storeId: string] : DefferedPromise<void> } ;
@@ -50,12 +49,12 @@ export class Dispatcher {
   private _debugMode       : boolean                                       ;
   private _currentFrame    : CycleEvent | null                             ;
 
-	/**
-	 * @constructor
-	 */
-	constructor() {
-		this._payloads        = []             ;
-		this._stores          = []             ;
+  /**
+  * @constructor
+  */
+  constructor() {
+    this._payloads        = []             ;
+    this._stores          = []             ;
     this._storeHash       = {}             ;
     this._isDispatching   = false          ;
     this._currentStoreTab = {}             ;
@@ -67,7 +66,7 @@ export class Dispatcher {
     this._eventBus.on("allEvents", (data) => {
       this._debugCycle && this._debugCycle.newEvent(data.eventName, data.data);
     })
-	}
+  }
 
   /**
    * Waits for some promises to finish
