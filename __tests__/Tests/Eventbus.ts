@@ -271,4 +271,13 @@ Should be in '1' part`);
     evbChild.emitAsync("A.B");
   });
 
+  it("Should throw an exception if eventName is not defined", () => {
+    const bus = new EventBus(".", 3);
+    expect(() => {
+      bus.on((void 0 as any), () => {});
+    }).toThrow(`The event name is not in the correct format :
+Should be in '3' parts
+separated by '.'`);
+  });
+
 });
