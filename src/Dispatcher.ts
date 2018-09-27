@@ -35,6 +35,15 @@ export type DispatchHandler = (
   For     : WaitFor
 ) => Promise<void>;
 
+export type DebuggerCommands = {
+  lockState        : (active: boolean) => void ;
+  goToFrame        : (index: number)=> void    ;
+  getFrameLength   : () => number              ;
+  setDebugOn       : () => void                ;
+  setDebugOff      : () => void                ;
+  playCurrentFrame : () => void                ;
+}
+
 /**
  * Dispatcher class
  */
@@ -294,7 +303,7 @@ export class Dispatcher {
       this._debugCycle
         && this._debugCycle.playCurrentFrame();
     }
-  }
+  } as DebuggerCommands;
 
   protected debugHelper = {
     setDebugState: (value: boolean) => {
