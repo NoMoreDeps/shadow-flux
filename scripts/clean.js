@@ -6,6 +6,4 @@ function clean() {
   rmDirSync("coverage");
 }
 
-module.exports = {
-  clean
-};
+clean();

@@ -16,7 +16,8 @@
     "test": "jest --coverage",
     "prepare-publish": "node scripts/publish.js",
     "clean": "node scripts/clean.js",
-    "clean-all": "node scripts/cleanall.js"
+    "clean-all": "node scripts/cleanall.js",
+    "build":"tsc"
   },
   "jest": {
     "verbose": true,

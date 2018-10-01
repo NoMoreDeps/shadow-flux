@@ -1,11 +1,10 @@
 var {rmDirSync} = require("./tools");
-var {clean} = require("./clean");
 
 function cleanAll() {
-  clean();
+  rmDirSync("publish");
+  rmDirSync("out");
+  rmDirSync("coverage");
   rmDirSync("node_modules");
 }
 
-module.exports = {
-  cleanAll
-};
+cleanAll();
