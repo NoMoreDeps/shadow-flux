@@ -13,7 +13,10 @@
     "typescript": "^2.8.3"
   },
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "prepare-publish": "node scripts/publish.js",
+    "clean": "node scripts/clean.js",
+    "clean-all": "node scripts/cleanall.js"
   },
   "jest": {
     "verbose": true,
