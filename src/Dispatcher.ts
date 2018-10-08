@@ -18,7 +18,7 @@
 import { TAction }         from "./Action/TAction"        ;
 import { Guid }            from "./Utils/Guid"            ;
 import { DefferedPromise } from "./Utils/DefferedPromise" ;
-import { EventBus }        from "./Utils/EventBus"        ;
+import { EventBus, EventBusAutoOff }        from "./Utils/EventBus"        ;
 
 import {
   IStore,
@@ -83,8 +83,8 @@ export class Dispatcher {
    * @param ids {...string[]} list of store id to process first
    */
   private async waitFor(...ids: string[]): Promise<void> {
-      const storeTab = ids.map(id => this._currentStoreTab[id].getPromise());
-      await Promise.all(storeTab)
+    const storeTab = ids.map(id => this._currentStoreTab[id].getPromise());
+    await Promise.all(storeTab)
   }
 
   /**
@@ -92,7 +92,6 @@ export class Dispatcher {
    * @method processNextPayload
    */
   private processNextPayload() {
-    
     this._debugMode 
       && this._isDispatching
       && this._debugCycle 
@@ -183,10 +182,10 @@ export class Dispatcher {
    * @param storeId
    * @param updatedStateHandler
    */
-  subscribe<T>(storeId: string, updatedStateHandler: (state: T) => void): void;
-  subscribe<T,U>(storeId: string, mapToStateHandler:(state: T) => U, updatedStateHandler: (state: U) => void): void;
-  subscribe<T>(storeId: string, eventName: string, updatedStateHandler: (state: T) => void): void;
-  subscribe<T,U>(storeId: string, eventName: string, mapToStateHandler:(state: T) => U, updatedStateHandler: (state: U) => void): void;
+  subscribe<T>(storeId: string, updatedStateHandler: (state: T) => void): EventBusAutoOff;
+  subscribe<T,U>(storeId: string, mapToStateHandler:(state: T) => U, updatedStateHandler: (state: U) => void): EventBusAutoOff;
+  subscribe<T>(storeId: string, eventName: string, updatedStateHandler: (state: T) => void): EventBusAutoOff;
+  subscribe<T,U>(storeId: string, eventName: string, mapToStateHandler:(state: T) => U, updatedStateHandler: (state: U) => void): EventBusAutoOff;
   subscribe(...params: any[]) {
     const noSignatureError = () => {
       throw `subscribe function has no signature corresponding to the one you provided :
@@ -261,7 +260,6 @@ export class Dispatcher {
       noSignatureError();
     }
   }
-
 
   /**
    * @method unregister

@@ -27,6 +27,9 @@
     <TypeScriptCompile Include="src\Dispatcher.ts" />
     <Content Include="__tests__\tsconfig.json" />
     <TypeScriptCompile Include="src\Action\TAction.ts" />
+    <TypeScriptCompile Include="src\Extension\Container.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\Store\BaseStore.ts" />
     <TypeScriptCompile Include="src\Store\IStore.ts" />
     <TypeScriptCompile Include="src\Utils\DefferedPromise.ts" />
@@ -39,6 +42,7 @@
     <TypeScriptCompile Include="__tests__\Tests\Guid.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\Extension\" />
     <Folder Include="__tests__" />
     <Folder Include="__tests__\Helpers" />
     <Folder Include="__tests__\Tests" />
