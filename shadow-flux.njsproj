@@ -26,7 +26,7 @@
     <Content Include="tsconfig.json" />
     <TypeScriptCompile Include="src\Dispatcher.ts" />
     <Content Include="__tests__\tsconfig.json" />
-    <TypeScriptCompile Include="src\Action\IAction.ts" />
+    <TypeScriptCompile Include="src\Action\TAction.ts" />
     <TypeScriptCompile Include="src\Store\BaseStore.ts" />
     <TypeScriptCompile Include="src\Store\IStore.ts" />
     <TypeScriptCompile Include="src\Utils\DefferedPromise.ts" />

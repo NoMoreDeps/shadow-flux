@@ -15,7 +15,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-import { IAction }         from "./Action/IAction"        ;
+import { TAction }         from "./Action/TAction"        ;
 import { Guid }            from "./Utils/Guid"            ;
 import { DefferedPromise } from "./Utils/DefferedPromise" ;
 import { EventBus }        from "./Utils/EventBus"        ;
@@ -29,7 +29,7 @@ import { DispatcherCycle, CycleEvent } from "./Utils/Debug/DispatcherCycle";
 export type WaitFor = (...ids: string[]) => Promise<void>;
 
 export type DispatchHandler = (
-  payload : IAction                ,
+  payload : TAction                ,
   success : () => void             ,
   error   : (error: Error) => void ,
   For     : WaitFor
@@ -48,7 +48,7 @@ export type DebuggerCommands = {
  * Dispatcher class
  */
 export class Dispatcher {
-  private _payloads        : Array<IAction>                                ;
+  private _payloads        : Array<TAction>                                ;
   private _stores          : Array<IPrivateStore<any>>                     ;
   private _storeHash       : { [storeId: string]: IPrivateStore<any> }     ;
   private _isDispatching   : boolean                                       ;
@@ -276,7 +276,7 @@ export class Dispatcher {
    * @method dispatch
    * @param payload an action to dispatch
    */
-	dispatch(payload: IAction): void {
+	dispatch(payload: TAction): void {
     this._payloads.push(payload);
     !this._isDispatching && this.processNextPayload();
   }

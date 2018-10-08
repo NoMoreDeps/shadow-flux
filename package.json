@@ -17,7 +17,8 @@
     "prepare-publish": "node scripts/publish.js",
     "clean": "node scripts/clean.js",
     "clean-all": "node scripts/cleanall.js",
-    "build":"tsc"
+    "build":"tsc",
+    "buildw":"tsc -w"
   },
   "jest": {
     "verbose": true,

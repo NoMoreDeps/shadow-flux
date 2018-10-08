@@ -1,5 +1,5 @@
 import { IStore }   from "./IStore"          ;
-import { IAction }  from "../Action/IAction" ;
+import { TAction }  from "../Action/TAction" ;
 import { EventBus } from "../Utils/EventBus" ;
 
 export abstract class BaseStore<T> implements IStore<T>{
@@ -62,5 +62,5 @@ export abstract class BaseStore<T> implements IStore<T>{
     this._eventBus && this._eventBus.emit(`${this.id}.nextState`, this);
   }
 
-  protected abstract async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void>;
+  protected abstract async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void>;
 }

@@ -1,5 +1,5 @@
 import { BaseStore } from "../../src/Store/BaseStore" ;
-import { IAction }   from "../../src/Action/IAction"  ;
+import { TAction }   from "../../src/Action/TAction"  ;
 
 export type State = {
   state: string;
@@ -10,7 +10,7 @@ export class SimpleStore extends BaseStore<State> {
     
   }
 
-  async dispatchHandler(payload: IAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>): Promise<void> {
+  async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>): Promise<void> {
     switch (payload.type) {
       case "error":
         error(new Error("There was an error"));

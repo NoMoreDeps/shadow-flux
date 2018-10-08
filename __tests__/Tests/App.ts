@@ -1,6 +1,6 @@
 import { Dispatcher } from "../../src/Dispatcher";
 import { SimpleStore, State as StoreState } from "../Helpers/SimpleStore";
-import { IAction } from "../../src/Action/IAction";
+import { TAction } from "../../src/Action/TAction";
 
 /**
  * These tests cover the Dispatcher Class
@@ -142,16 +142,13 @@ describe("Dispatcher tests", function () {
             done();
         });
 
-        dispatcher.dispatch(null as any as IAction);
+        dispatcher.dispatch(null as any as TAction);
         expect(dispatcher["_isDispatching"]).toBe(false);
         expect(dispatcher["_payloads"].length).toBe(0);
 
         dispatcher.dispatch({
             type: "nothing"
         });
-
-
-
     });
 
     it("Should allow to process an error and continue", (done) => {
@@ -172,7 +169,6 @@ describe("Dispatcher tests", function () {
         dispatcher.dispatch({
             type: "nothing"
         });
-
     });
 
 
