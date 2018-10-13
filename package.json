@@ -1,23 +1,23 @@
 {
-  "name": "shadow-flux",
-  "version": "2.0.0",
-  "description": "Flux implementation",
-  "main": "index.js",
-  "repository": "git@github.com:fskorzec/shadow-flux.git",
-  "author": "François Skorzec",
-  "license": "MIT",
+  "name"        : "shadow-flux"                             ,
+  "version"     : "2.0.0"                                   ,
+  "description" : "Flux implementation"                     ,
+  "main"        : "index.js"                                ,
+  "repository"  : "git@github.com:fskorzec/shadow-flux.git" ,
+  "author"      : "François Skorzec"                        ,
+  "license"     : "MIT"                                     ,
   "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "jest": "^22.4.3",
-    "ts-jest": "22.4.3",
+    "@types/jest" : "^22.2.3" ,
+    "jest"        : "^22.4.3" ,
+    "ts-jest"     : "22.4.3"  ,
     "typescript": "^2.8.3"
   },
   "scripts": {
-    "test": "jest --coverage",
-    "prepare-publish": "node scripts/publish.js",
-    "clean": "node scripts/clean.js",
-    "clean-all": "node scripts/cleanall.js",
-    "build":"tsc",
+    "test"            : "jest --coverage"          ,
+    "prepare-publish" : "node scripts/publish.js"  ,
+    "clean"           : "node scripts/clean.js"    ,
+    "clean-all"       : "node scripts/cleanall.js" ,
+    "build"           : "tsc"                      ,
     "buildw":"tsc -w"
   },
   "jest": {

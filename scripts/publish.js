@@ -6,8 +6,9 @@ function prepareNpmPublish() {
   // Setup output folder
   rmDirSync("publish");
   copySync("out/src", "publish");
-  let json = JSON.parse(fs.readFileSync("package.json"));
-  let version = json.version.split(".");
+  let json    = JSON.parse(fs.readFileSync("package.json")) ;
+  let version = json.version.split(".")                     ;
+  
   version[version.length - 1] = Number(version[version.length - 1]) + 1;
   json.version = version.join(".");
   if (!fs.existsSync("publish/package.json")) {

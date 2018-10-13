@@ -1,5 +1,5 @@
-import { IStore } from "../../Store/IStore";
-import { Dispatcher } from "../../Dispatcher";
+import { IStore }     from "../../Store/IStore" ;
+import { Dispatcher } from "../../Dispatcher"   ;
 
 type NextState = {
   type       : "NextState" ;
@@ -11,9 +11,9 @@ type NextState = {
 type UpdatedState = {
   type       : "UpdatedState" ;
   storeId    : string         ;
-  fullEvent  : string         ;
-  storeState : any            ;
-  time       : number         ;
+  fullEvent  : string         ; 
+  time       : number         ; 
+  storeState : any            ; 
 };
 
 type NewCycle = {
@@ -39,14 +39,15 @@ type Dispatch = {
   payload   : any        ;
 }
 
-export type CycleEvent = NextState | UpdatedState | NewCycle 
-                       | EndCycle  | NotProcessed | Dispatch;
+export type CycleEvent = NextState 
+ | UpdatedState | NewCycle    
+ | EndCycle     | NotProcessed | Dispatch;
 
 export class DispatcherCycle {
   private _events     : Array<CycleEvent> ;
   private _cycleIndex : Array<number>     ;
   private _frameIndex : number            ;
-  private _dispatcher  : Dispatcher       ;
+  private _dispatcher : Dispatcher        ;
 
   constructor(dispatcher: Dispatcher) {
     this._events     = []         ;
@@ -97,10 +98,10 @@ export class DispatcherCycle {
     // New nextState trigger from a store
     if (event[1] === "nextState") {
       this._events.push({
-        time       : Date.now()  ,
-        type       : "NextState" ,
-        storeId    : event[0]    ,
-        storeState : (data as IStore<any>).getState()
+        time    : Date.now()  ,
+        type    : "NextState" ,
+        storeId : event[0]    ,
+        storeState: (data as IStore<any>).getState()
       } as NextState);
       return;
     }
@@ -137,17 +138,17 @@ export class DispatcherCycle {
 
     if (eventName === "dispatcher.dispatch") {
       this._events.push({
-        time    : Date.now(),
-        type    : "Dispatch",
+        time    : Date.now() ,
+        type    : "Dispatch" ,
         payload : data
       } as Dispatch);
       return;
     }
 
     this._events.push({
-      time      : Date.now()      ,
-      type      : "NotProcessed"  ,
-      eventName : eventName       ,
+      time      : Date.now()     ,
+      type      : "NotProcessed" ,
+      eventName : eventName      ,
       data      : data
     } as NotProcessed)
   }

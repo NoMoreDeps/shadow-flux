@@ -28,12 +28,12 @@ export class Guid {
    * @field {any} _Guid_
    */
   protected _Guid_: {
-    toString : string  ;
-    part1    : number  ;
-    part2    : number  ;
-    part3    : number  ;
-    part4    : number  ;
-    part5    : number  ;
+    toString : string ;
+    part1    : number ;
+    part2    : number ;
+    part3    : number ;
+    part4    : number ;
+    part5    : number ;
   };
 
   protected static generate2bytesNumber(): [number, string] {
@@ -63,18 +63,18 @@ export class Guid {
    * @constructor
    */
   constructor() {
-    const [part1, strPart1] = Guid.generate4bytesNumber();
-    const [part2, strPart2] = Guid.generate2bytesNumber();
-    const [part3, strPart3] = Guid.generate2bytesNumber();
-    const [part4, strPart4] = Guid.generate2bytesNumber();
-    const [part5, strPart5] = Guid.generate6bytesNumber();
+    const [part1, strPart1] = Guid.generate4bytesNumber() ;
+    const [part2, strPart2] = Guid.generate2bytesNumber() ;
+    const [part3, strPart3] = Guid.generate2bytesNumber() ;
+    const [part4, strPart4] = Guid.generate2bytesNumber() ;
+    const [part5, strPart5] = Guid.generate6bytesNumber() ;
 
     this._Guid_ = {
-      part1: part1,
-      part2: part2,
-      part3: part3,
-      part4: part4,
-      part5: part5,
+      part1 : part1 ,
+      part2 : part2 ,
+      part3 : part3 ,
+      part4 : part4 ,
+      part5 : part5 ,
       toString: `${strPart1}-${strPart2}-${strPart3}-${strPart4}-${strPart5}`
     };
   }

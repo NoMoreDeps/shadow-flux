@@ -15,10 +15,10 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-import { TAction }         from "./Action/TAction"        ;
-import { Guid }            from "./Utils/Guid"            ;
-import { DefferedPromise } from "./Utils/DefferedPromise" ;
-import { EventBus, EventBusAutoOff }        from "./Utils/EventBus"        ;
+import { TAction }                   from "./Action/TAction"        ;
+import { Guid }                      from "./Utils/Guid"            ;
+import { DefferedPromise }           from "./Utils/DefferedPromise" ;
+import { EventBus, EventBusAutoOff } from "./Utils/EventBus"        ;
 
 import {
   IStore,
@@ -32,12 +32,12 @@ export type DispatchHandler = (
   payload : TAction                ,
   success : () => void             ,
   error   : (error: Error) => void ,
-  For     : WaitFor
+  For: WaitFor
 ) => Promise<void>;
 
 export type DebuggerCommands = {
   lockState        : (active: boolean) => void ;
-  goToFrame        : (index: number)=> void    ;
+  goToFrame        : (index: number) => void   ;
   getFrameLength   : () => number              ;
   setDebugOn       : () => void                ;
   setDebugOff      : () => void                ;
@@ -222,8 +222,8 @@ export class Dispatcher {
       if (typeof(params[0]) === "function" && typeof(params[1]) === "function") {
           //subscribe<T,U>(storeId, mapToStateHandler, updatedStateHandler): void;
           return this._eventBus.on(`${event}.updated`, (store: IStore<any>) => {
-            const mapToStateHandler: Function = params[0];
-            const updatedStateHandler: Function = params[1];
+            const mapToStateHandler   : Function = params[0];
+            const updatedStateHandler : Function = params[1];
 
             updatedStateHandler(mapToStateHandler(store.getState()));
           });

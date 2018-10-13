@@ -46,9 +46,9 @@ export class EventBus {
     Ids: number; // Ids auto increment
     parent: EventBus | undefined; // Parent emitter, optional
   } = {
-    oncePool: {},
-    onPool: {},
-    parent: void 0,
+    oncePool : {}     ,
+    onPool   : {}     ,
+    parent   : void 0 ,
     Ids: 0
   };
 
@@ -222,13 +222,13 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
   off(callbackId: number): void;
   off(eventName: string, callback: EventBusDelegate): void;
   off(...params: any[]): void {
-    let eventName  : string | undefined = void 0;
-    let callback   : EventBusDelegate | undefined = void 0;
-    let callbackId : number | undefined = void 0;
+    let eventName  : string | undefined           = void 0 ;
+    let callback   : EventBusDelegate | undefined = void 0 ;
+    let callbackId : number | undefined           = void 0 ;
 
     if (params.length === 0 || !params) {
-      this._Emitter_.oncePool = {};
-      this._Emitter_.onPool = {};
+      this._Emitter_.oncePool = {} ;
+      this._Emitter_.onPool   = {} ;
       return;
     }
 
@@ -245,9 +245,9 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
           break;
       }
     } else {
-      eventName = params[0];
-      callback = params[1];
-      callbackId = params[2] || void 0;
+      eventName  = params[0]           ;
+      callback   = params[1]           ;
+      callbackId = params[2] || void 0 ;
     }
 
     if (eventName && typeof(eventName) === "string") {

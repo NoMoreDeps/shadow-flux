@@ -1,7 +1,7 @@
-import { Dispatcher } from "../../src/Dispatcher";
-import { Subscriber } from "../../src/Extension/Container";
-import { SimpleStore, State as StoreState } from "../Helpers/SimpleStore";
-import { TAction } from "../../src/Action/TAction";
+import { Dispatcher }                       from "../../src/Dispatcher"          ;
+import { Subscriber }                       from "../../src/Extension/Container" ;
+import { SimpleStore, State as StoreState } from "../Helpers/SimpleStore"        ;
+import { TAction }                          from "../../src/Action/TAction"      ;
 
 /**
  * These tests cover the Dispatcher Class
@@ -68,8 +68,8 @@ describe("Dispatcher tests", function () {
    * The simpliest case
    */
   it("shoud dispatch action", (done) => {
-    const dispatcher = new Dispatcher();
-    const wrapper = new Subscriber(dispatcher);
+    const dispatcher = new Dispatcher()           ;
+    const wrapper    = new Subscriber(dispatcher) ;
 
     const simpleStore = new SimpleStore();
 
@@ -89,10 +89,9 @@ describe("Dispatcher tests", function () {
    * to process first before fininssing its own process
    */
   it("shoud dispatch action and handle wait for process", (done) => {
-    const dispatcher = new Dispatcher();
-    const wrapper = new Subscriber(dispatcher);
-
-    const simpleStore = new SimpleStore();
+    const dispatcher  = new Dispatcher()           ;
+    const wrapper     = new Subscriber(dispatcher) ;
+    const simpleStore = new SimpleStore()          ;
     dispatcher.register(simpleStore, "store");
 
 
@@ -155,11 +154,10 @@ describe("Dispatcher tests", function () {
   });
 
   it("Should allow to process an error and continue", (done) => {
-    const dispatcher = new Dispatcher();
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
 
-    const simpleStore = new SimpleStore();
     dispatcher.register(simpleStore, "store");
-
     dispatcher.dispatch({
       type: "error"
     });
@@ -176,15 +174,13 @@ describe("Dispatcher tests", function () {
 
 
   it("Should activate and deactivate debugger", (done) => {
-    const dispatcher = new Dispatcher();
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
 
-    const simpleStore = new SimpleStore();
     dispatcher.register(simpleStore, "store");
     dispatcher.debug.setDebugOff();
-
     dispatcher.debug.setDebugOn();
     dispatcher.debug.setDebugOff();
-
     dispatcher.debug.setDebugOn();
 
     let tab = ["debugFirst", "debugSecond", "nothing", "debugSecond", "debugFirst", "nothing"];
@@ -222,19 +218,17 @@ describe("Dispatcher tests", function () {
       }
     });
 
-    dispatcher.dispatch({ type: "debugFirst" });
-    dispatcher.dispatch({ type: "debugSecond" });
-    dispatcher.dispatch({ type: "addNothing" });
+    dispatcher.dispatch({ type : "debugFirst" })  ;
+    dispatcher.dispatch({ type : "debugSecond" }) ;
+    dispatcher.dispatch({ type : "addNothing" })  ;
   });
 
   it("Should log the endCycle in debug mode", (done) => {
-    const dispatcher = new Dispatcher();
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
 
-    const simpleStore = new SimpleStore();
     dispatcher.register(simpleStore, "store");
-
     dispatcher.debug.setDebugOn();
-
     dispatcher.subscribe(simpleStore.id, (state: { state: string }) => {
       done();
     });
@@ -243,9 +237,9 @@ describe("Dispatcher tests", function () {
   });
 
   it("Should throw all possible errors", () => {
-    const dispatcher = new Dispatcher();
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
 
-    const simpleStore = new SimpleStore();
     dispatcher.register(simpleStore, "store");
 
     expect(() => {
@@ -273,12 +267,11 @@ describe("Dispatcher tests", function () {
   });
 
   it("Should handle subscribe<T>(storeId, eventName, updatedStateHandler): void;", (done) => {
-    const dispatcher = new Dispatcher();
-    const wrapper = new Subscriber(dispatcher);
+    const dispatcher  = new Dispatcher()           ;
+    const wrapper     = new Subscriber(dispatcher) ;
+    const simpleStore = new SimpleStore()          ;
 
-    const simpleStore = new SimpleStore();
     dispatcher.register(simpleStore, "store");
-
     wrapper.subscribe<any, any>(simpleStore.id, (state) => {
       return state;
     }, (state) => {
@@ -289,12 +282,11 @@ describe("Dispatcher tests", function () {
   });
 
   it("Should handle subscribe<T>(storeId, eventName, updatedStateHandler): void;", (done) => {
-    const dispatcher = new Dispatcher();
-    const wrapper = new Subscriber(dispatcher);
+    const dispatcher  = new Dispatcher()           ;
+    const wrapper     = new Subscriber(dispatcher) ;
+    const simpleStore = new SimpleStore()          ;
 
-    const simpleStore = new SimpleStore();
     dispatcher.register(simpleStore, "store");
-
     wrapper.subscribe<any>(simpleStore.id, "double", (state) => {
       done();
     });
@@ -303,12 +295,11 @@ describe("Dispatcher tests", function () {
   });
 
   it("Should handle subscribe<T,U>(storeId, eventName, mapToStateHandler, updatedStateHandler): void;", (done) => {
-    const dispatcher = new Dispatcher();
-    const wrapper = new Subscriber(dispatcher);
+    const dispatcher  = new Dispatcher()           ;
+    const wrapper     = new Subscriber(dispatcher) ;
+    const simpleStore = new SimpleStore()          ;
 
-    const simpleStore = new SimpleStore();
     dispatcher.register(simpleStore, "store");
-
     wrapper.subscribe<any, any>(simpleStore.id, "double", (state) => {
       return state;
     }, (state) => {

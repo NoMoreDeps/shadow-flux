@@ -17,9 +17,9 @@ function mkDirSync(source) {
 }
 
 function copySync(source, target) {
-  let path = `${source}`;
-  let files = [];
-  let dirs = [];
+  let path  = `${source}` ;
+  let files = []          ;
+  let dirs  = []          ;
 
   fs.existsSync(`${path}`) && fs.readdirSync(path).forEach( item => {
     if (fs.lstatSync(`${source}/${item}`).isFile()) {
@@ -42,9 +42,9 @@ function copySync(source, target) {
 }
 
 function rmDirSync(source) {
-  let path = `${source}`;
-  let files = [];
-  let dirs = [];
+  let path  = `${source}` ;
+  let files = []          ;
+  let dirs  = []          ;
 
   fs.existsSync(`${source}`) && fs.readdirSync(path).forEach( item => {
     if (fs.lstatSync(`${source}/${item}`).isFile()) {
@@ -66,7 +66,7 @@ function rmDirSync(source) {
 }
 
 module.exports = {
-  mkDirSync,
-  copySync,
+  mkDirSync ,
+  copySync  , 
   rmDirSync
 };

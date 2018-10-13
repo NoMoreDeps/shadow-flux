@@ -8,15 +8,15 @@ describe("Test Guid", () => {
   });
 
   it("Should generate a valid guid with 5 parts", () => {
-    let guid = new Guid();
-    let strGuid = guid.toString();
+    let guid    = new Guid()      ;
+    let strGuid = guid.toString() ;
 
     expect(strGuid.split("-").length).toEqual(5);
   });
 
   it("Should let us access all part with getters", () => {
-    let guid = new Guid();
-    let strGuid = guid.toString();
+    let guid    = new Guid()      ;
+    let strGuid = guid.toString() ;
 
     const tabPart = strGuid.split("-");
 
@@ -28,8 +28,8 @@ describe("Test Guid", () => {
   })
 
   it("Should be generated from the static method and be correct", () => {
-    let guid = Guid.getGuid();
-    const tabPart = guid.split("-");
+    let guid      = Guid.getGuid()  ;
+    const tabPart = guid.split("-") ;
 
     expect(tabPart[0].length).toEqual(8);
     expect(tabPart[1].length).toEqual(4);
@@ -39,9 +39,9 @@ describe("Test Guid", () => {
   });
 
   it("Shoud get the String Guid version on each call", () => {
-    const guid = new Guid();
-    const str1 = guid.toString();
-    const str2 = guid.toString();
+    const guid = new Guid()      ;
+    const str1 = guid.toString() ;
+    const str2 = guid.toString() ;
 
     expect(str1).toEqual(str2);
   })
