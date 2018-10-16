@@ -84,6 +84,42 @@ describe("Dispatcher tests", function () {
     wrapper.sendAction({ type: "nothingToDo" });
   })
 
+  it("Should get the correct frameindex", () => {
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
+
+    dispatcher.register(simpleStore, "store");
+
+    dispatcher.debug.setDebugOn();
+    dispatcher.dispatch({type: "1"});
+    dispatcher.dispatch({type: "2"});
+    dispatcher.dispatch({type: "3"});
+    dispatcher.dispatch({type: "4"});
+
+    setTimeout(() => {
+      
+      dispatcher.debug.lockState(true);
+      expect(dispatcher["_debugCycle"]).not.toBe(null);
+      
+      for(let i=0; i<4; i++) {
+        dispatcher.debug.goToFrame(i);
+        if (dispatcher["_debugCycle"]) {
+          expect(dispatcher["_debugCycle"].frameIndex).toBe(i);
+        }
+      }
+
+      if (dispatcher["_debugCycle"]) {
+        dispatcher.debug.goToFrame(10);
+        expect(dispatcher["_debugCycle"].frameIndex).toBe(3);
+        dispatcher.debug.goToFrame(-5);
+        expect(dispatcher["_debugCycle"].frameIndex).toBe(0);
+      }
+      
+
+    }, 200);
+
+  })
+
   /**
    * Tests the dispatche life cycle when a store have to wait for another one
    * to process first before fininssing its own process
@@ -222,6 +258,81 @@ describe("Dispatcher tests", function () {
     dispatcher.dispatch({ type : "debugSecond" }) ;
     dispatcher.dispatch({ type : "addNothing" })  ;
   });
+
+  it("Should not set debug setState if not in debug mode even if lockState is false", (done) => {
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
+
+    dispatcher.debug.setDebugOn();
+
+    dispatcher.register(simpleStore, "store");
+
+    dispatcher.dispatch({ type : "debugFirst" });
+    dispatcher.dispatch({ type : "debugSecond" });
+
+    dispatcher.debug.lockState(false);
+    dispatcher.debug.goToFrame(0);
+    dispatcher.debug.playCurrentFrame();
+
+    setTimeout(() => {
+      expect(simpleStore.getState().state).toBe("debugSecond");
+      done();
+    }, 200);
+  });
+
+  it ("should not emit if lockState is true", (done) => {
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
+
+    dispatcher.register(simpleStore, "store");
+    dispatcher.debug.setDebugOn();
+
+    dispatcher.subscribe(simpleStore.id, (state) => {
+      throw Error();
+    });
+
+    dispatcher.debug.lockState(true);
+    dispatcher.dispatch({ type : "debugFirst" });
+
+    setTimeout(() => {
+      done();
+    }, 200);
+
+  });
+
+  it("Should emit a sub event", (done) => {
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
+
+    dispatcher.register(simpleStore, "store");
+
+    dispatcher.subscribe(simpleStore.id, "child" ,(state) => {
+      done();
+    });
+
+    dispatcher.dispatch({ type: "emitChild" });
+  });
+
+  it("Should update state base on a function in nextState", (done) => {
+    const dispatcher  = new Dispatcher()  ;
+    const simpleStore = new SimpleStore() ;
+
+    dispatcher.register(simpleStore, "store");
+
+    dispatcher.subscribe(simpleStore.id ,(state) => {
+      expect(state).toBe("FctState");
+      done();
+    });
+
+    dispatcher.dispatch({ type: "FctState" });
+  });
+
+
+  it("Should not trigger an event if no eventBus is defined", () => {
+    const simpleStore = new SimpleStore() ;
+
+    simpleStore["emit"]("test");
+  })
 
   it("Should log the endCycle in debug mode", (done) => {
     const dispatcher  = new Dispatcher()  ;

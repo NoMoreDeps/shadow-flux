@@ -15,6 +15,19 @@ export class SimpleStore extends BaseStore<State> {
       case "error":
         error(new Error("There was an error"));
         break;
+      case "FctState":
+        this.nextState((oldState) => {
+          return "FctState";
+        });
+        this.emit();
+        break;
+      case "emitChild":
+        this.emit("updated.child");
+        this.nextState({
+          state: "emitChild"
+        });
+        success();
+        break;
       case "debugFirst":
         this.nextState({
           state: "debugFirst"
