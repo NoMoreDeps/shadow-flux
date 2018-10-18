@@ -6,7 +6,11 @@ export abstract class BaseStore<T> implements IStore<T>{
   id: string;
   private _lockState : boolean;
   private _eventBus  : EventBus | null;
-  private state: T;
+  private state      : T;
+
+  // This method is overriden by the dispatcher
+  protected getStoreStateByToken: <T>(tokenId: string) =>  T 
+    = <T>() => {return void 0 as unknown as T};
 
   constructor() {
     this.id         = ""      ;

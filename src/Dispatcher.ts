@@ -25,6 +25,7 @@ import {
   IPrivateStore
 } from "./Store/IStore";
 import { DispatcherCycle, CycleEvent } from "./Utils/Debug/DispatcherCycle";
+import { BaseStore } from "./Store/BaseStore";
 
 export type WaitFor = (...ids: string[]) => Promise<void>;
 
@@ -175,6 +176,9 @@ export class Dispatcher {
     this._stores.push(pStore);
 
     pStore.registerEventBus(this._eventBus);
+    (pStore as unknown as BaseStore<any>)["getStoreStateByToken"] = _ => {
+      return this._storeHash[_].getState();
+    };
   }
 
   /**
