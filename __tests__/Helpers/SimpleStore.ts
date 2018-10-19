@@ -59,6 +59,7 @@ export class SimpleStore extends BaseStore<State> {
       case "wait":
         if (this.id !== "otherStore") {
           await For("otherStore");
+          let st = this.getStoreStateByToken("otherStore");
           this.nextState({
             state: "wait"
           });

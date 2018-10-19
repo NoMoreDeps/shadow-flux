@@ -63,6 +63,15 @@ describe("Dispatcher tests", function () {
     }).not.toThrowError();
   })
 
+  it("should not throw exception if store try to call other state without been regsitered", () => {
+    const store = new SimpleStore();
+    store["id"] = "testId";
+    store["nextState"]({ state : "testState" });
+    const current = store["getStoreStateByToken"]("testId");
+
+    expect(current).toBe(void 0);
+  });
+
   /**
    * Tests an action that is dispatched to one store
    * The simpliest case
@@ -411,12 +420,15 @@ describe("Dispatcher tests", function () {
     const simpleStore = new SimpleStore()          ;
 
     dispatcher.register(simpleStore, "store");
-    wrapper.subscribe<any, any>(simpleStore.id, "double", (state) => {
+    const subscription = wrapper.subscribe<any, any>(simpleStore.id, "double", (state) => {
       return state;
     }, (state) => {
       done();
+      subscription.off();
     });
 
     wrapper.sendAction({ type: "double" });
+
+    
   });
 });
