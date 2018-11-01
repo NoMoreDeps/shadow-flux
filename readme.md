@@ -13,8 +13,14 @@ Enjoy !
 ===
 * Working on a new feature : Timeline debugging
 
-**What's new in version 2.0.2**
+**What's new in version 2.0.6**
 ===
+* Fixed the npm package to include the missing Index.d.ts file and sourcemap
+<br/>(Sorry for that !)
+
+* Fixed the npm package to include the types attribute
+
+**What's new in version 2.0.2**
 * Complete rewrite of the library
 
 **What's new in version 1.0.16**

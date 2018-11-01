@@ -1,8 +1,9 @@
 {
   "name"        : "shadow-flux"                             ,
-  "version"     : "2.0.2"                                   ,
+  "version"     : "2.0.6"                                   ,
   "description" : "Flux implementation"                     ,
-  "main"        : "index.js"                                ,
+  "main"        : "Index.js"                                ,
+  "types"       : "Index.d.ts"                              ,
   "repository"  : "git@github.com:fskorzec/shadow-flux.git" ,
   "author"      : "François Skorzec"                        ,
   "license"     : "MIT"                                     ,
@@ -34,7 +35,7 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/Tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex": "/__tests__/Tests/.*$",
     "moduleFileExtensions": [
       "ts",
       "tsx",

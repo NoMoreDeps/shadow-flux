@@ -5,7 +5,7 @@ var {rmDirSync, copySync, mkDirSync} = require("./tools");
 function prepareNpmPublish() {
   // Setup output folder
   rmDirSync("publish");
-  copySync("out/src", "publish");
+  copySync("out/", "publish");
   let json    = JSON.parse(fs.readFileSync("package.json")) ;
   let version = json.version.split(".")                     ;
   
