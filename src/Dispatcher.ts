@@ -16,9 +16,9 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 import { TAction }                   from "./Action/TAction"        ;
-import { Guid }                      from "./Utils/Guid"            ;
+import { Guid }                      from "./shared/text/Guid"            ;
 import { DefferedPromise }           from "./Utils/DefferedPromise" ;
-import { EventBus, EventBusAutoOff } from "./Utils/EventBus"        ;
+import { EventBus, EventBusAutoOff } from "./shared/event/EventBus"        ;
 
 import {
   IStore,

@@ -1,6 +1,6 @@
 import { IStore }   from "./IStore"          ;
 import { TAction }  from "../Action/TAction" ;
-import { EventBus } from "../Utils/EventBus" ;
+import { EventBus } from "../shared/event/EventBus" ;
 
 export abstract class BaseStore<T> implements IStore<T>{
   id: string;
