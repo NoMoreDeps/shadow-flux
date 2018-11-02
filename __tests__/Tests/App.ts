@@ -2,6 +2,7 @@ import { Dispatcher }                       from "../../src/Dispatcher"         
 import { Subscriber }                       from "../../src/Extension/Container" ;
 import { SimpleStore, State as StoreState } from "../Helpers/SimpleStore"        ;
 import { TAction }                          from "../../src/Action/TAction"      ;
+import { StrategyStore , State as StrategyState} from "../Helpers/StrategyStore";
 
 /**
  * These tests cover the Dispatcher Class
@@ -328,8 +329,8 @@ describe("Dispatcher tests", function () {
 
     dispatcher.register(simpleStore, "store");
 
-    dispatcher.subscribe(simpleStore.id ,(state) => {
-      expect(state).toBe("FctState");
+    dispatcher.subscribe<{state: string}>(simpleStore.id ,(state) => {
+      expect(state.state).toBe("FctState");
       done();
     });
 
@@ -428,7 +429,35 @@ describe("Dispatcher tests", function () {
     });
 
     wrapper.sendAction({ type: "double" });
+  });
 
+  it("Should works when Store ActionStrategy pattern is applied", (done) => {
+    const dispatcher  = new Dispatcher()           ;
+    const wrapper     = new Subscriber(dispatcher) ;
+    const strategyStore = new StrategyStore();
+
+    dispatcher.register(strategyStore);
     
+    let tab = ["StrategyActionOne", "StrategyActionTwo"]
+    wrapper.subscribe<StrategyState>(strategyStore.id, (state) => {
+      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx")
+      const item = tab.shift();
+
+      if (state.state === item && item === "StrategyActionOne") {
+        wrapper.sendAction({
+          type: "StrategyActionTwo"
+        });
+      }
+
+      if (state.state === item && item === "StrategyActionTwo") {
+        done();
+      } 
+    });
+
+    wrapper.sendAction({
+      type: "StrategyActionOne"
+    });
+
+
   });
 });

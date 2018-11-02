@@ -7,7 +7,9 @@ export type State = {
 
 export class SimpleStore extends BaseStore<State> {
   initState(): void {
-    
+   this.nextState({
+     state: ""
+   });
   }
 
   async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>): Promise<void> {
@@ -16,8 +18,8 @@ export class SimpleStore extends BaseStore<State> {
         error(new Error("There was an error"));
         break;
       case "FctState":
-        this.nextState((oldState) => {
-          return "FctState";
+        this.nextState((previousState) => {
+          return {state: "FctState"};
         });
         this.emit();
         break;

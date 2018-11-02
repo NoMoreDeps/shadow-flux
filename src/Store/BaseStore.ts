@@ -2,19 +2,23 @@ import { IStore }   from "./IStore"          ;
 import { TAction }  from "../Action/TAction" ;
 import { EventBus } from "../shared/event/EventBus" ;
 
+type TActionStrategy<T> = {
+  [k: string] : (payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) => Promise<void | Error>;
+}
+
 export abstract class BaseStore<T> implements IStore<T>{
   id: string;
   private _lockState : boolean;
   private _eventBus  : EventBus | null;
-  private state      : T;
+  private state      : Partial<T>;
 
   // This method is overriden by the dispatcher
-  protected getStoreStateByToken: <T>(tokenId: string) =>  T 
-    = <T>() => {return void 0 as unknown as T};
+  protected getStoreStateByToken: <U>(tokenId: string) =>  Partial<T> 
+    = <U>() => {return void 0 as unknown as Partial<T>};
 
   constructor() {
     this.id         = ""      ;
-    this.state      = {} as T ;
+    this.state      = {} as Partial<T> ;
     this._eventBus  = null    ;
     this._lockState = false   ;
     this.initState();
@@ -27,7 +31,7 @@ export abstract class BaseStore<T> implements IStore<T>{
     this._eventBus.on(`${this.id}.lockState`, (data: boolean) => {
       this._lockState = data;
     });
-    this._eventBus.on(`${this.id}.setState`, (data: T) => {
+    this._eventBus.on(`${this.id}.setState`, (data: Partial<T>) => {
       if (this._lockState) {
         this.state = data;
       }
@@ -48,13 +52,13 @@ export abstract class BaseStore<T> implements IStore<T>{
     }
   }
 
-  getState(): T {
+  getState(): Partial<T> {
     return this.state;
   }
 
-  protected nextState(handler: (oldState: T) => T): void;
-  protected nextState(newState: any): void;
-  protected nextState(newState: any) {
+  protected nextState(handler: (oldState: Partial<T>) => Partial<T>): void;
+  protected nextState(newState: Partial<T>): void;
+  protected nextState(newState: unknown) {
     if (this._lockState) return;
 
     if (typeof(newState) === "function") {
@@ -66,5 +70,15 @@ export abstract class BaseStore<T> implements IStore<T>{
     this._eventBus && this._eventBus.emit(`${this.id}.nextState`, this);
   }
 
-  protected abstract async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void>;
+  protected async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void | Error> {
+    if (`action${payload.type}` in this) {
+      try {
+        return await (this as unknown as TActionStrategy<this>)[`action${payload.type}`](payload, success, error, For);
+      } catch(ex) {
+        return ex;
+      }
+    } else {
+      success();
+    }
+  }
 }

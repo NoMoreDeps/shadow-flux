@@ -157,8 +157,8 @@ export class Dispatcher {
    * @param store The store to register
    * @param id The store's id
    */
-	register(store: IStore<any>, id: string = "") {
-    const pStore = store as IPrivateStore<any>;
+	register(store: IStore<unknown>, id: string = "") {
+    const pStore = store as IPrivateStore<unknown>;
 
     !pStore.id && 
       (id 
@@ -176,7 +176,7 @@ export class Dispatcher {
     this._stores.push(pStore);
 
     pStore.registerEventBus(this._eventBus);
-    (pStore as unknown as BaseStore<any>)["getStoreStateByToken"] = _ => {
+    (pStore as unknown as any)["getStoreStateByToken"] = (_: any) => {
       return this._storeHash[_].getState();
     };
   }
