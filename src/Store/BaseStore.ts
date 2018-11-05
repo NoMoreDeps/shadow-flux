@@ -1,16 +1,17 @@
 import { IStore }   from "./IStore"          ;
 import { TAction }  from "../Action/TAction" ;
 import { EventBus } from "../shared/event/EventBus" ;
+import { IActionStrategy } from "./IActionStrategy";
+import { BaseActionStrategy } from "./ActionStrategy";
 
-type TActionStrategy<T> = {
-  [k: string] : (payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) => Promise<void | Error>;
-}
+
 
 export abstract class BaseStore<T> implements IStore<T>{
   id: string;
   private _lockState : boolean;
   private _eventBus  : EventBus | null;
   private state      : Partial<T>;
+  protected actionStrategy : IActionStrategy<BaseStore<T>>;
 
   // This method is overriden by the dispatcher
   protected getStoreStateByToken: <U>(tokenId: string) =>  Partial<T> 
@@ -22,6 +23,7 @@ export abstract class BaseStore<T> implements IStore<T>{
     this._eventBus  = null    ;
     this._lockState = false   ;
     this.initState();
+    this.actionStrategy = new BaseActionStrategy();
   }
 
   protected abstract initState(): void;
@@ -71,14 +73,6 @@ export abstract class BaseStore<T> implements IStore<T>{
   }
 
   protected async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void | Error> {
-    if (`action${payload.type}` in this) {
-      try {
-        return await (this as unknown as TActionStrategy<this>)[`action${payload.type}`](payload, success, error, For);
-      } catch(ex) {
-        return ex;
-      }
-    } else {
-      success();
-    }
+    return await this.actionStrategy.resolve(this, payload, success, error, For);
   }
 }
