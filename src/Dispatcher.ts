@@ -283,12 +283,28 @@ export class Dispatcher {
     !this._isDispatching && this.processNextPayload();
   }
 
+  private messagingHandler = (ev: MessageEvent): void => {
+    console.log(this, ev);
+  }
+
+  private activateCrossMessaging() : void {
+    window && window.addEventListener &&
+      window.addEventListener("message", this.messagingHandler);
+  }
+
+  private deactivateCrossMessaging() : void {
+    window && window.addEventListener &&
+      window.removeEventListener("message", this.messagingHandler)
+  }
+
   debug = {
     setDebugOn: (): void => {
       this.debugHelper.setDebugState(true);
+      this.activateCrossMessaging();
     },
     setDebugOff: (): void  => {
       this.debugHelper.setDebugState(false);
+      this.deactivateCrossMessaging();
     },
     lockState: (active: boolean): void  => {
       this._debugMode 
