@@ -13,8 +13,12 @@ Enjoy !
 ===
 * Working on a new feature : Timeline debugging
 
-**What's new in version 2.0.6**
+**What's new in version 2.0.7**
 ===
+* Added A default Strategy Pattern implementation to handle the default behavior of teh DispatchHandler function
+<br />See the advance programming section of the store in the documentation
+
+**What's new in version 2.0.6**
 * Fixed the npm package to include the missing Index.d.ts file and sourcemap
 <br/>(Sorry for that !)
 
