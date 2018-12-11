@@ -23,6 +23,7 @@
   },
   "jest": {
     "verbose": true,
+    "testURL": "http://localhost/",
     "collectCoverageFrom": [
       "src/**/*.ts"
     ],
