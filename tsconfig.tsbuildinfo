@@ -1,0 +1,250 @@
+{
+  "program": {
+    "fileInfos": {
+      "./node_modules/typescript/lib/lib.es6.d.ts": {
+        "version": "c180f01a2aaac7d733001fa1db20f881dc83cf33096b674a1546ca26762e69da",
+        "signature": "c180f01a2aaac7d733001fa1db20f881dc83cf33096b674a1546ca26762e69da"
+      },
+      "./node_modules/typescript/lib/lib.es5.d.ts": {
+        "version": "ff5688d6b2fcfef06842a395d7ff4d5730d45b724d4c48913118c889829052a1",
+        "signature": "ff5688d6b2fcfef06842a395d7ff4d5730d45b724d4c48913118c889829052a1"
+      },
+      "./node_modules/typescript/lib/lib.es2015.d.ts": {
+        "version": "7994d44005046d1413ea31d046577cdda33b8b2470f30281fd9c8b3c99fe2d96",
+        "signature": "7994d44005046d1413ea31d046577cdda33b8b2470f30281fd9c8b3c99fe2d96"
+      },
+      "./node_modules/typescript/lib/lib.dom.d.ts": {
+        "version": "2d53f3741e5a4f78a90f623387d71a1cc809bb258f10cdaec034b67cbf71022f",
+        "signature": "2d53f3741e5a4f78a90f623387d71a1cc809bb258f10cdaec034b67cbf71022f"
+      },
+      "./node_modules/typescript/lib/lib.dom.iterable.d.ts": {
+        "version": "f42b5c6ad71e2229f1fea2065bc28b887344bc7e7acd9d87e2e53d6376736890",
+        "signature": "f42b5c6ad71e2229f1fea2065bc28b887344bc7e7acd9d87e2e53d6376736890"
+      },
+      "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts": {
+        "version": "fe4e59403e34c7ff747abe4ff6abbc7718229556d7c1a5b93473fb53156c913b",
+        "signature": "fe4e59403e34c7ff747abe4ff6abbc7718229556d7c1a5b93473fb53156c913b"
+      },
+      "./node_modules/typescript/lib/lib.scripthost.d.ts": {
+        "version": "b9faa17292f17d2ad75e34fac77dd63a6403af1dba02d39cd0cbb9ffdf3de8b9",
+        "signature": "b9faa17292f17d2ad75e34fac77dd63a6403af1dba02d39cd0cbb9ffdf3de8b9"
+      },
+      "./node_modules/typescript/lib/lib.es2015.core.d.ts": {
+        "version": "4ab19088d508f9e62bfc61c157e8a65b2afaefa251ecca315e7d20b5b97b256f",
+        "signature": "4ab19088d508f9e62bfc61c157e8a65b2afaefa251ecca315e7d20b5b97b256f"
+      },
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts": {
+        "version": "dd94d8ef48c562389eb58af8df3a3a34d11367f7c818192aa5f16470d469e3f0",
+        "signature": "dd94d8ef48c562389eb58af8df3a3a34d11367f7c818192aa5f16470d469e3f0"
+      },
+      "./node_modules/typescript/lib/lib.es2015.generator.d.ts": {
+        "version": "765e0e9c9d74cf4d031ca8b0bdb269a853e7d81eda6354c8510218d03db12122",
+        "signature": "765e0e9c9d74cf4d031ca8b0bdb269a853e7d81eda6354c8510218d03db12122"
+      },
+      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts": {
+        "version": "285958e7699f1babd76d595830207f18d719662a0c30fac7baca7df7162a9210",
+        "signature": "285958e7699f1babd76d595830207f18d719662a0c30fac7baca7df7162a9210"
+      },
+      "./node_modules/typescript/lib/lib.es2015.promise.d.ts": {
+        "version": "e6b8ff2798f8ebd7a1c7afd8671f2cb67ee1901c422f5964d74b0b34c6574ea2",
+        "signature": "e6b8ff2798f8ebd7a1c7afd8671f2cb67ee1901c422f5964d74b0b34c6574ea2"
+      },
+      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts": {
+        "version": "5e72f949a89717db444e3bd9433468890068bb21a5638d8ab15a1359e05e54fe",
+        "signature": "5e72f949a89717db444e3bd9433468890068bb21a5638d8ab15a1359e05e54fe"
+      },
+      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts": {
+        "version": "f5b242136ae9bfb1cc99a5971cccc44e99947ae6b5ef6fd8aa54b5ade553b976",
+        "signature": "f5b242136ae9bfb1cc99a5971cccc44e99947ae6b5ef6fd8aa54b5ade553b976"
+      },
+      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts": {
+        "version": "9ae2860252d6b5f16e2026d8a2c2069db7b2a3295e98b6031d01337b96437230",
+        "signature": "9ae2860252d6b5f16e2026d8a2c2069db7b2a3295e98b6031d01337b96437230"
+      },
+      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": {
+        "version": "3e0a459888f32b42138d5a39f706ff2d55d500ab1031e0988b5568b0f67c2303",
+        "signature": "3e0a459888f32b42138d5a39f706ff2d55d500ab1031e0988b5568b0f67c2303"
+      },
+      "./src/Action/TAction.ts": {
+        "version": "35e780ed6dcf6384f888e16de1d34dff935840979a8a1320219e4115a31a4256",
+        "signature": "5ed44d58066b50ededac1effd20eba70ef40c169a176da9e0c9be4a8d9e3d81d"
+      },
+      "./src/shared/text/Guid.ts": {
+        "version": "3245283d49026c2b5efebe63f0736a950ba5590f17fae68ae800d24ece1b61e6",
+        "signature": "c930e5c3b09241395013a395d4d114520b31e7425ce6a85ec2182cef8a747c4c"
+      },
+      "./src/Utils/DefferedPromise.ts": {
+        "version": "56e7bd09c6c4fe2b3ef4fcddae7071fd30adf6f8c403d44db3f7dd19170b8cb0",
+        "signature": "674fa1819c38ec8f0174635010df314bca1e409f6be4e5b246703683f983be7c"
+      },
+      "./src/shared/event/EventBus.ts": {
+        "version": "28afb802af503cbace37c2b7ee0f884a7472d0301c6d88f5b7b73011e9a768cd",
+        "signature": "58e43e56b1bfaa0d8c0d711dc8a7e0c6199cd44d04b7023262638581b1e61077"
+      },
+      "./src/Store/IStore.ts": {
+        "version": "02a29e0606f5b2b68365feaa12f94c271d97f87d5f491452ad3a48326eec270a",
+        "signature": "fd508f3e23142b9de4f9e3a218e2389d00fd7a6c2dcfd861f2c9108cef4868b0"
+      },
+      "./src/Utils/Debug/DispatcherCycle.ts": {
+        "version": "459c9ee03e6b6e03e99b774f1303ba7f6848dc653974c77f3b032bc09d72b700",
+        "signature": "39200f71a386c9dddc2c49b1e3f8aad9a28029b30a7840b9e798b818041517c4"
+      },
+      "./src/Extension/Container.ts": {
+        "version": "3033badb9ea895af3af6456354431077fadabc6d5367f258ab0f282f1e355c42",
+        "signature": "b98b9d3a8c6df3441e95dff85214b8a61dd2e0d1e783f555195839d6d263fe35"
+      },
+      "./src/Index.ts": {
+        "version": "34be9e96a72232cab2434bb668b1a9ed7f97659dd1f98ce350192e061b3d70ef",
+        "signature": "1d4d851f6fb1b4ca7401d26ebeff2bb3b330a79e1dd470f342c3cde9dc53a5ae"
+      },
+      "./src/Store/IActionStrategy.ts": {
+        "version": "4a29e09469950e162c622a1f0e187ad17b0f7b38d7b4456032a9134a5e994067",
+        "signature": "4c8e1e5ad7f14a90198109bf638e7d565e82facd7c0da5f34a3019f90ec36442"
+      },
+      "./src/Store/ActionStrategy.ts": {
+        "version": "9d3dc9e75edef3d731e3c757d2ab8519d4a0a5b7d8d8cb2c988675a70024b964",
+        "signature": "2729c0f2726a7335c6808575378192c4e29fd838685a720910813a3a5ac0bbd1"
+      },
+      "./src/Store/BaseStore.ts": {
+        "version": "66b7cd28b41e29034550819de5ab79b40a543ed731a4d4245ffe3ebe944a9f28",
+        "signature": "66faf70167c68179c3481030f95791cf39339b67114243ee5981f5d15478563f"
+      },
+      "./src/Dispatcher.ts": {
+        "version": "576819b75738cf1e536b69844c74f1de2907ea1865498f9c97940c672daa28f1",
+        "signature": "ca15d5516a782eb5bc4c4ec4972b290e80f183fc296b5b6718fe821c1679e505"
+      },
+      "./node_modules/@types/jest/index.d.ts": {
+        "version": "ff4413a4d9e336780b1862b9f51424873b53d256d07eaa3e1398f4d118972ff9",
+        "signature": "ff4413a4d9e336780b1862b9f51424873b53d256d07eaa3e1398f4d118972ff9"
+      }
+    },
+    "options": {
+      "target": 2,
+      "module": 1,
+      "declaration": true,
+      "sourceMap": true,
+      "outDir": "./out",
+      "rootDir": "./src",
+      "strict": true,
+      "esModuleInterop": true,
+      "incremental": true,
+      "configFilePath": "./tsconfig.json"
+    },
+    "referencedMap": {
+      "./src/Store/IStore.ts": [
+        "./src/Dispatcher.ts",
+        "./src/shared/event/EventBus.ts"
+      ],
+      "./src/Utils/Debug/DispatcherCycle.ts": [
+        "./src/Store/IStore.ts",
+        "./src/Dispatcher.ts"
+      ],
+      "./src/Extension/Container.ts": [
+        "./src/Dispatcher.ts",
+        "./src/shared/event/EventBus.ts",
+        "./src/Action/TAction.ts"
+      ],
+      "./src/Index.ts": [
+        "./src/Dispatcher.ts",
+        "./src/Store/BaseStore.ts",
+        "./src/Store/IStore.ts",
+        "./src/Extension/Container.ts",
+        "./src/Action/TAction.ts"
+      ],
+      "./src/Store/IActionStrategy.ts": [
+        "./src/Index.ts"
+      ],
+      "./src/Store/ActionStrategy.ts": [
+        "./src/Store/IActionStrategy.ts",
+        "./src/Index.ts"
+      ],
+      "./src/Store/BaseStore.ts": [
+        "./src/Store/IStore.ts",
+        "./src/Action/TAction.ts",
+        "./src/shared/event/EventBus.ts",
+        "./src/Store/IActionStrategy.ts",
+        "./src/Store/ActionStrategy.ts"
+      ],
+      "./src/Dispatcher.ts": [
+        "./src/Action/TAction.ts",
+        "./src/shared/text/Guid.ts",
+        "./src/Utils/DefferedPromise.ts",
+        "./src/shared/event/EventBus.ts",
+        "./src/Store/IStore.ts",
+        "./src/Utils/Debug/DispatcherCycle.ts",
+        "./src/Store/BaseStore.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "./src/Store/IStore.ts": [
+        "./src/Dispatcher.ts",
+        "./src/shared/event/EventBus.ts"
+      ],
+      "./src/Utils/Debug/DispatcherCycle.ts": [
+        "./src/Dispatcher.ts"
+      ],
+      "./src/Extension/Container.ts": [
+        "./src/Dispatcher.ts",
+        "./src/shared/event/EventBus.ts",
+        "./src/Action/TAction.ts"
+      ],
+      "./src/Index.ts": [
+        "./src/Dispatcher.ts",
+        "./src/Store/BaseStore.ts",
+        "./src/Store/IStore.ts",
+        "./src/Extension/Container.ts",
+        "./src/Action/TAction.ts"
+      ],
+      "./src/Store/IActionStrategy.ts": [
+        "./src/Index.ts"
+      ],
+      "./src/Store/ActionStrategy.ts": [
+        "./src/Index.ts",
+        "./src/Store/IActionStrategy.ts"
+      ],
+      "./src/Store/BaseStore.ts": [
+        "./src/Store/IActionStrategy.ts",
+        "./src/shared/event/EventBus.ts",
+        "./src/Action/TAction.ts",
+        "./src/Store/IStore.ts"
+      ],
+      "./src/Dispatcher.ts": [
+        "./src/Action/TAction.ts",
+        "./src/Store/IStore.ts",
+        "./src/shared/event/EventBus.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "./node_modules/typescript/lib/lib.es6.d.ts",
+      "./node_modules/typescript/lib/lib.es5.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.d.ts",
+      "./node_modules/typescript/lib/lib.dom.d.ts",
+      "./node_modules/typescript/lib/lib.dom.iterable.d.ts",
+      "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
+      "./node_modules/typescript/lib/lib.scripthost.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.core.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.generator.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.promise.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts",
+      "./src/Action/TAction.ts",
+      "./src/shared/text/Guid.ts",
+      "./src/Utils/DefferedPromise.ts",
+      "./src/shared/event/EventBus.ts",
+      "./src/Store/IStore.ts",
+      "./src/Utils/Debug/DispatcherCycle.ts",
+      "./src/Extension/Container.ts",
+      "./src/Index.ts",
+      "./src/Store/IActionStrategy.ts",
+      "./src/Store/ActionStrategy.ts",
+      "./src/Store/BaseStore.ts",
+      "./src/Dispatcher.ts",
+      "./node_modules/@types/jest/index.d.ts"
+    ]
+  },
+  "version": "3.6.4"
+}

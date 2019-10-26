@@ -45,7 +45,7 @@ export class Subscriber {
    */
   subscribe<T, U>(storeId: string, eventName: string, mapToStateHandler: (state: T) => U, updatedStateHandler: (state: U) => void): EventBusAutoOff;
   subscribe(...params: any[]) {
-    return this.dispatcher.subscribe.apply(this.dispatcher, params);
+    return this.dispatcher.subscribe.apply(this.dispatcher, params as any);
   }
 
 /**
