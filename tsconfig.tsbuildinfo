@@ -138,7 +138,7 @@
         "signature": "674fa1819c38ec8f0174635010df314bca1e409f6be4e5b246703683f983be7c"
       },
       "/home/fskorzec/git/shadow-flux/src/shared/event/EventBus.ts": {
-        "version": "70299614da91e84fcf153b82f17384fc5d1f327112f16dcc15a5ebea2cf0308a",
+        "version": "52e931e003e70fd109f52881f596ebe0007d46464ce511ccee71855dd900fe92",
         "signature": "58e43e56b1bfaa0d8c0d711dc8a7e0c6199cd44d04b7023262638581b1e61077"
       },
       "/home/fskorzec/git/shadow-flux/src/Store/IStore.ts": {
@@ -1410,8 +1410,8 @@
       "/home/fskorzec/git/shadow-flux/src/Action/TAction.ts",
       "/home/fskorzec/git/shadow-flux/src/shared/text/Guid.ts",
       "/home/fskorzec/git/shadow-flux/src/Utils/DefferedPromise.ts",
-      "/home/fskorzec/git/shadow-flux/src/shared/event/EventBus.ts",
       "/home/fskorzec/git/shadow-flux/src/Store/IStore.ts",
+      "/home/fskorzec/git/shadow-flux/src/Utils/Debug/DispatcherCycle.ts",
       "/home/fskorzec/git/shadow-flux/src/Dispatcher.ts",
       "/home/fskorzec/git/shadow-flux/src/Store/IActionStrategy.ts",
       "/home/fskorzec/git/shadow-flux/src/Store/ActionStrategy.ts",
@@ -1471,7 +1471,7 @@
       "/home/fskorzec/node_modules/csstype/index.d.ts",
       "/home/fskorzec/node_modules/@types/react/index.d.ts",
       "/home/fskorzec/node_modules/@types/react-dom/index.d.ts",
-      "/home/fskorzec/git/shadow-flux/src/Utils/Debug/DispatcherCycle.ts"
+      "/home/fskorzec/git/shadow-flux/src/shared/event/EventBus.ts"
     ]
   },
   "version": "3.5.1"
