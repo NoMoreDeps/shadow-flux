@@ -21,6 +21,13 @@ type NewCycle = {
   time : number     ;
 };
 
+type CallBack = {
+  type  : "CallBack" ;
+  time  : number     ;
+  event : string     ;
+  id    : string     ;
+};
+
 type EndCycle = {
   type : "EndCycle" ;
   time : number     ;
@@ -39,8 +46,14 @@ type Dispatch = {
   payload   : any        ;
 }
 
+type Stack = {
+  time      : number  ;
+  type      : "Stack" ;
+  payload   : any     ;
+}
+
 export type CycleEvent = NextState 
- | UpdatedState | NewCycle    
+ | UpdatedState | NewCycle     | CallBack | Stack
  | EndCycle     | NotProcessed | Dispatch;
 
 export class DispatcherCycle {
@@ -86,14 +99,36 @@ export class DispatcherCycle {
   }
 
   playCurrentFrame(): void {
+    this._dispatcher["_isPlayingDebug"] = true;
     const frame = this.getFrameContent(this._frameIndex);
     (frame.filter(_ => _.type === "UpdatedState") as Array<UpdatedState>).forEach( _ => {
       this._dispatcher["_eventBus"].emit(`${_.storeId}.setState`, _.storeState);
+      this._dispatcher["_eventBus"].emit(_.fullEvent, { getState: () => _.storeState });
     });
+    this._dispatcher["_isPlayingDebug"] = false;
+  }
+
+  getFrames() {
+    const res = [];
+    for(let i=0; i<this.length; i++) {
+      res.push(this.getFrameContent(i))
+    }
+    return res;
   }
 
   newEvent(eventName: string, data: any): void {
+    if (this._dispatcher["_isPlayingDebug"]) return;
     const event = eventName.split(".");
+
+    if (event[0] === "callback") {
+      this._events.push({
+        time     : Date.now()     ,
+        type     : "CallBack"     ,
+        id       : data           ,
+        event    : data.eventName
+      } as CallBack);
+      return;
+    } 
 
     // New nextState trigger from a store
     if (event[1] === "nextState") {
@@ -125,6 +160,15 @@ export class DispatcherCycle {
           type : "NewCycle"
         } as NewCycle) - 1
       );
+      return;
+    }
+
+    if (eventName === "dispatcher.stack") {
+      this._events.push({
+        time    : Date.now(),
+        type    : "Stack",
+        payload : data
+      } as Stack)
       return;
     }
                        
