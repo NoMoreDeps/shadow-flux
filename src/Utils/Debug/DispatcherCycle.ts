@@ -52,9 +52,16 @@ type Stack = {
   payload   : any     ;
 }
 
+type WaitFor = {
+  time      : number        ;
+  type      : "WaitFor"     ;
+  owner     : string        ;
+  waitList  : Array<string> ;
+}
+
 export type CycleEvent = NextState 
  | UpdatedState | NewCycle     | CallBack | Stack
- | EndCycle     | NotProcessed | Dispatch;
+ | EndCycle     | NotProcessed | Dispatch | WaitFor;
 
 export class DispatcherCycle {
   private _events     : Array<CycleEvent> ;
@@ -69,6 +76,10 @@ export class DispatcherCycle {
     this._dispatcher = dispatcher ;
   }
 
+  clear() {
+    this._events.length = 0;
+  }
+
   get length(): number {
     return this._cycleIndex.length;
   }
@@ -80,7 +91,7 @@ export class DispatcherCycle {
         if (this._cycleIndex[frameIndex + 1]) {
           return this._cycleIndex[frameIndex + 1] - 1;
         }
-        return this._events.length - 1
+        return this._events.length;
       })()
     ];
   }
@@ -119,6 +130,8 @@ export class DispatcherCycle {
   newEvent(eventName: string, data: any): void {
     if (this._dispatcher["_isPlayingDebug"]) return;
     const event = eventName.split(".");
+
+    console.log("newEvent", eventName, data);
 
     if (event[0] === "callback") {
       this._events.push({
@@ -186,6 +199,16 @@ export class DispatcherCycle {
         type    : "Dispatch" ,
         payload : data
       } as Dispatch);
+      return;
+    }
+
+    if (eventName === "store.WaitFor") {
+      this._events.push({
+        time     : Date.now() ,
+        type     : "WaitFor" ,
+        owner    : "",
+        waitList : []
+      } as WaitFor);
       return;
     }
 

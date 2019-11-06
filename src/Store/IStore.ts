@@ -1,9 +1,9 @@
-import { DispatchHandler } from "../Dispatcher"     ;
+import { TDispatchHandler } from "../Dispatcher"     ;
 import { EventBus }        from "../shared/event/EventBus" ;
 
 export interface IPrivateStore<T> extends IStore<T> {
     state: Partial<T>;
-    dispatchHandler: DispatchHandler;
+    dispatchHandler: TDispatchHandler;
     registerEventBus: (eventBus: EventBus) => void;
 }
 

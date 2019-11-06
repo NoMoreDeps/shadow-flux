@@ -14,8 +14,8 @@ export abstract class BaseStore<T> implements IStore<T>{
   protected actionStrategy : IActionStrategy<BaseStore<T>>;
 
   // This method is overriden by the dispatcher
-  protected getStoreStateByToken: <U>(tokenId: string) =>  Partial<T> 
-    = <U>() => {return void 0 as unknown as Partial<T>};
+  protected getStoreStateByToken: <U>(tokenId: string) =>  Partial<U> 
+    = <U>() => {return void 0 as unknown as Partial<U>};
 
   constructor() {
     this.id         = ""      ;

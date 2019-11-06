@@ -26,24 +26,29 @@ import {
 } from "./Store/IStore";
 import { DispatcherCycle, CycleEvent } from "./Utils/Debug/DispatcherCycle";
 
-export type WaitFor = (...ids: string[]) => Promise<void>;
+export type TWaitFor = (...ids: string[]) => Promise<void>;
 
-export type DispatchHandler = (
+export type TDispatchHandler = (
   payload : TAction                ,
   success : () => void             ,
   error   : (error: Error) => void ,
-  For: WaitFor
+  For: TWaitFor
 ) => Promise<void>;
 
-export type DebuggerCommands = {
-  lockState        : (active: boolean) => void ;
-  goToFrame        : (index: number) => void   ;
-  getFrameLength   : () => number              ;
-  setDebugOn       : () => void                ;
-  setDebugOff      : () => void                ;
-  playCurrentFrame : () => void                ;
-  getFrames        : () => Array<CycleEvent[]> ;
+export type TDebuggerCommands = {
+  lockState        : (active: boolean) => void       ;
+  goToFrame        : (index: number) => void         ;
+  getFrameLength   : () => number                    ;
+  setDebugOn       : (option: TDebugOptions) => void ;
+  setDebugOff      : () => void                      ;
+  playCurrentFrame : () => void                      ;
+  getFrames        : () => Array<CycleEvent[]>       ;
 }
+
+export type TDebugOptions = {
+  mode : "local" | "postMessage" | "websocket";
+  url? : string;
+};
 
 /**
  * Dispatcher class
@@ -59,24 +64,28 @@ export class Dispatcher {
   private _debugMode       : boolean                                       ;
   private _currentFrame    : CycleEvent | null                             ;
   private _isPlayingDebug  : boolean                                       ;
+  private _debugOptions    : TDebugOptions                                 ;
+  private _debugWindow     : Window | null                                 ;
 
   /**
   * @constructor
   */
   constructor() {
-    this._payloads        = []             ;
-    this._stores          = []             ;
-    this._storeHash       = {}             ;
-    this._isDispatching   = false          ;
-    this._currentStoreTab = {}             ;
-    this._eventBus        = new EventBus() ;
-    this._debugCycle      = null           ;
-    this._debugMode       = false          ;
-    this._currentFrame    = null           ;
-    this._isPlayingDebug  = false          ;
+    this._payloads        = []               ;
+    this._stores          = []               ;
+    this._storeHash       = {}               ;
+    this._isDispatching   = false            ;
+    this._currentStoreTab = {}               ;
+    this._eventBus        = new EventBus()   ;
+    this._debugCycle      = null             ;
+    this._debugMode       = false            ;
+    this._currentFrame    = null             ;
+    this._isPlayingDebug  = false            ;
+    this._debugOptions    = { mode: "local"} ;
+    this._debugWindow     = null             ;
 
     this._eventBus.on("allEvents", (data) => {
-      this._debugCycle && this._debugCycle.newEvent(data.eventName, data.data);
+      this.addTrace(data.eventName, data.data);
     })
   }
 
@@ -86,20 +95,29 @@ export class Dispatcher {
    * @param ids {...string[]} list of store id to process first
    */
   private async waitFor(...ids: string[]): Promise<void> {
+    this.addTrace("store.WaitFor", ids);
     const storeTab = ids.map(id => this._currentStoreTab[id].getPromise());
     await Promise.all(storeTab)
   }
+
+  private addTrace(eventName: string, data?: any) {
+    if (this._debugMode && this._isDispatching && this._debugCycle) {
+      this._debugCycle.newEvent(eventName, data);
+    }
+  }
+
+  private addDispatcherTrace(eventName: string, data?: any) {
+    if (this._debugMode && this._debugCycle) {
+      this._debugCycle.newEvent(eventName, data);
+    }
+  }
+
 
   /**
    * starts a new dispatch cycle
    * @method processNextPayload
    */
   private processNextPayload() {
-    this._debugMode 
-      && this._isDispatching
-      && this._debugCycle 
-      && this._debugCycle.newEvent("dispatcher.endCycle", null);
-
     // gets the next payload from the stack
     const payload = this._payloads.shift();
 
@@ -109,9 +127,7 @@ export class Dispatcher {
       return;
     }
 
-    this._debugMode 
-      && this._debugCycle 
-      && this._debugCycle.newEvent("dispatcher.newCycle", null);
+    this.addDispatcherTrace("dispatcher.newCycle", null);
 
     // sets the dispatching flag to true
     this._isDispatching = true;
@@ -135,20 +151,17 @@ export class Dispatcher {
       return promise;
     });
 
-    this._debugMode 
-      && this._debugCycle 
-      && this._debugCycle.newEvent("dispatcher.dispatch", payload);
+    this.addTrace("dispatcher.dispatch", payload)
 
     Promise.all( storeTab.map(p => p.getPromise()) ).then( () => {
+      this.addTrace("dispatcher.endCycle", null);
+      this.sendMsg({topic: "getFrames", value: this.debug.getFrames()});
+      
       this._currentStoreTab = {};
       // check if there is another one to process
       if (this._payloads.length > 0) {
         this.processNextPayload();
       } else {
-        this._debugMode 
-          && this._debugCycle 
-          && this._debugCycle.newEvent("dispatcher.endCycle", null);
-
         this._isDispatching = false;
       }
     })
@@ -290,10 +303,39 @@ export class Dispatcher {
   }
 
   private messagingHandler = (ev: MessageEvent): void => {
-    console.log(this, ev);
+    console.log("Messaging", ev.data)
+    switch(ev.data.topic) {
+      case "count": 
+        this.sendMsg({topic: "count", value: this.debug.getFrames().length})
+      break;
+
+      case "getFrames": 
+        this.sendMsg({topic: "getFrames", value: this.debug.getFrames()})
+      break;
+
+      case "playFrame":
+        this.debug.goToFrame(ev.data.value);
+        this.debug.playCurrentFrame();
+        this.sendMsg({topic: "playFrame"})
+      break;
+
+      case "clear":
+        this._debugCycle?.clear();
+        this.sendMsg({topic: "clear"});
+      break;
+    }
+  }
+  
+  private sendMsg(data: {topic: string, value?: any}) { 
+   this._debugWindow?.postMessage(data, this._debugOptions.url!);
+   console.log("sendMsg", this._debugWindow !== undefined, data)
   }
 
   private activateCrossMessaging() : void {
+    if (this._debugOptions.mode === "postMessage") {
+      this._debugWindow = window.open(`${this._debugOptions.url}?source=${window.origin}`, "_shadow_flux_");
+    }
+
     try {
       window && window.addEventListener &&
         window.addEventListener("message", this.messagingHandler);
@@ -308,7 +350,8 @@ export class Dispatcher {
   }
 
   debug = {
-    setDebugOn: (): void => {
+    setDebugOn: (options: TDebugOptions): void => {
+      this._debugOptions = options;
       this.debugHelper.setDebugState(true);
       this.activateCrossMessaging();
     },
@@ -332,7 +375,7 @@ export class Dispatcher {
         && this._debugCycle.playCurrentFrame();
     },
     getFrames: () => this._debugCycle && this._debugCycle.getFrames()
-  } as DebuggerCommands;
+  } as TDebuggerCommands;
 
   protected debugHelper = {
     setDebugState: (value: boolean) => {

@@ -1,6 +1,6 @@
 import { 
-  DebuggerCommands ,
-  DispatchHandler  ,
+  TDebuggerCommands ,
+  TDispatchHandler  ,
   Dispatcher
 } from "./Dispatcher";
 
@@ -10,8 +10,8 @@ import { Subscriber} from "./Extension/Container" ;
 import { TAction}    from "./Action/TAction"      ;
 
 export {
-  DebuggerCommands ,
-  DispatchHandler  ,
+  TDebuggerCommands as DebuggerCommands ,
+  TDispatchHandler as DispatchHandler  ,
   Dispatcher       ,
   BaseStore        ,
   IStore           ,

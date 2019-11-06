@@ -2,7 +2,7 @@ import { Dispatcher, Subscriber, BaseStore } from "../Index";
 
 const disp = new Dispatcher();
 const subs = new Subscriber(disp);
-disp.debug.setDebugOn();
+disp.debug.setDebugOn({ mode: "local"});
 
 class TestStore extends BaseStore<unknown> {
   constructor() {
