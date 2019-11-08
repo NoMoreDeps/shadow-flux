@@ -25,7 +25,6 @@ import {
   IPrivateStore
 } from "./Store/IStore";
 import { DispatcherCycle, CycleEvent } from "./Utils/Debug/DispatcherCycle";
-import { BaseStore } from "./Store/BaseStore";
 
 export type WaitFor = (...ids: string[]) => Promise<void>;
 
@@ -43,6 +42,7 @@ export type DebuggerCommands = {
   setDebugOn       : () => void                ;
   setDebugOff      : () => void                ;
   playCurrentFrame : () => void                ;
+  getFrames        : () => Array<CycleEvent[]> ;
 }
 
 /**
@@ -58,6 +58,7 @@ export class Dispatcher {
   private _debugCycle      : DispatcherCycle | null                        ;
   private _debugMode       : boolean                                       ;
   private _currentFrame    : CycleEvent | null                             ;
+  private _isPlayingDebug  : boolean                                       ;
 
   /**
   * @constructor
@@ -72,6 +73,7 @@ export class Dispatcher {
     this._debugCycle      = null           ;
     this._debugMode       = false          ;
     this._currentFrame    = null           ;
+    this._isPlayingDebug  = false          ;
 
     this._eventBus.on("allEvents", (data) => {
       this._debugCycle && this._debugCycle.newEvent(data.eventName, data.data);
@@ -279,6 +281,10 @@ export class Dispatcher {
    * @param payload an action to dispatch
    */
 	dispatch(payload: TAction): void {
+    if (this._isPlayingDebug) return;
+    if (this._debugMode) {
+      this._eventBus.emit("dispatcher.stack", payload);
+    }
     this._payloads.push(payload);
     !this._isDispatching && this.processNextPayload();
   }
@@ -288,13 +294,17 @@ export class Dispatcher {
   }
 
   private activateCrossMessaging() : void {
-    window && window.addEventListener &&
-      window.addEventListener("message", this.messagingHandler);
+    try {
+      window && window.addEventListener &&
+        window.addEventListener("message", this.messagingHandler);
+    } catch {}
   }
 
   private deactivateCrossMessaging() : void {
-    window && window.addEventListener &&
+    try {
+      window && window.addEventListener &&
       window.removeEventListener("message", this.messagingHandler)
+    } catch {}
   }
 
   debug = {
@@ -320,7 +330,8 @@ export class Dispatcher {
     playCurrentFrame: (): void => {
       this._debugCycle
         && this._debugCycle.playCurrentFrame();
-    }
+    },
+    getFrames: () => this._debugCycle && this._debugCycle.getFrames()
   } as DebuggerCommands;
 
   protected debugHelper = {
