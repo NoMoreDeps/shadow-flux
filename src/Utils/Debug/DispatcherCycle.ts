@@ -59,9 +59,22 @@ type WaitFor = {
   waitList  : Array<string> ;
 }
 
+type EndWaitFor = {
+  time      : number        ;
+  type      : "EndWaitFor"  ;
+  owner     : string        ;
+  waitList  : Array<string> ;
+}
+
+type StoreProcess = {
+  time      : number         ;
+  type      : "StoreProcess" ;
+  owner     : string         ;
+}
+
 export type CycleEvent = NextState 
- | UpdatedState | NewCycle     | CallBack | Stack
- | EndCycle     | NotProcessed | Dispatch | WaitFor;
+ | UpdatedState | NewCycle     | CallBack | Stack   | EndWaitFor
+ | EndCycle     | NotProcessed | Dispatch | WaitFor | StoreProcess ;
 
 export class DispatcherCycle {
   private _events     : Array<CycleEvent> ;
@@ -138,7 +151,7 @@ export class DispatcherCycle {
         time     : Date.now()     ,
         type     : "CallBack"     ,
         id       : data           ,
-        event    : data.eventName
+        event    : eventName
       } as CallBack);
       return;
     } 
@@ -206,9 +219,28 @@ export class DispatcherCycle {
       this._events.push({
         time     : Date.now() ,
         type     : "WaitFor" ,
-        owner    : "",
-        waitList : []
+        owner    : data.owner,
+        waitList : data.waitList
       } as WaitFor);
+      return;
+    }
+
+    if (eventName === "store.EndWaitFor") {
+      this._events.push({
+        time     : Date.now() ,
+        type     : "EndWaitFor" ,
+        owner    : data.owner,
+        waitList : data.waitList
+      } as EndWaitFor);
+      return;
+    }
+
+    if (eventName === "store.Process") {
+      this._events.push({
+        time     : Date.now() ,
+        type     : "StoreProcess" ,
+        owner    : data.owner
+      } as StoreProcess);
       return;
     }
 

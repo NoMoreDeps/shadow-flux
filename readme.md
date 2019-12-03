@@ -13,6 +13,12 @@ Enjoy !
 ===
 * Working on a new feature : Timeline debugging
 
+**What's new in version 2.0.8**
+===
+* Fixed the getStoreState type issue.
+<br />Compatible with the WIP timeline debugger interface.
+See how to use it on the online documentation. 
+
 **What's new in version 2.0.7**
 ===
 * Added A default Strategy Pattern implementation to handle the default behavior of teh DispatchHandler function

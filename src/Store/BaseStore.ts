@@ -17,6 +17,10 @@ export abstract class BaseStore<T> implements IStore<T>{
   protected getStoreStateByToken: <U>(tokenId: string) =>  Partial<U> 
     = <U>() => {return void 0 as unknown as Partial<U>};
 
+  // This method is overriden by the dispatcher
+  protected sendAction: (action: TAction) =>  void 
+    = (action: TAction) => void 0;
+
   constructor() {
     this.id         = ""      ;
     this.state      = {} as Partial<T> ;

@@ -95,7 +95,6 @@ export class Dispatcher {
    * @param ids {...string[]} list of store id to process first
    */
   private async waitFor(...ids: string[]): Promise<void> {
-    this.addTrace("store.WaitFor", ids);
     const storeTab = ids.map(id => this._currentStoreTab[id].getPromise());
     await Promise.all(storeTab)
   }
@@ -144,7 +143,20 @@ export class Dispatcher {
           r();
         }
 
-        store.dispatchHandler(payload, success, error, _this.waitFor.bind(_this));
+        this.addTrace("store.Process", {
+          owner: store.id
+        });
+        store.dispatchHandler(payload, success, error, async (...ids: string[]) => {
+          this.addTrace("store.WaitFor", {
+            owner    : store.id,
+            waitList : ids
+          });
+          await this.waitFor(...ids);
+          this.addTrace("store.EndWaitFor", {
+            owner    : store.id,
+            waitList : ids
+          });
+        });
       });
 
       this._currentStoreTab[store.id] = promise;
@@ -193,6 +205,9 @@ export class Dispatcher {
     pStore.registerEventBus(this._eventBus);
     (pStore as unknown as any)["getStoreStateByToken"] = (_: any) => {
       return this._storeHash[_].getState();
+    };
+    (pStore as unknown as any)["sendAction"] = (_: TAction) => {
+      this.dispatch(_);
     };
   }
 
@@ -327,7 +342,7 @@ export class Dispatcher {
   }
   
   private sendMsg(data: {topic: string, value?: any}) { 
-   this._debugWindow?.postMessage(data, this._debugOptions.url!);
+   this._debugWindow?.postMessage(JSON.parse(JSON.stringify(data)), this._debugOptions.url!);
    console.log("sendMsg", this._debugWindow !== undefined, data)
   }
 

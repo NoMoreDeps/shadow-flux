@@ -1,6 +1,6 @@
 {
   "name": "shadow-flux",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Flux implementation",
   "main": "Index.js",
   "types": "Index.d.ts",
@@ -11,7 +11,7 @@
     "@types/jest": "^22.2.3",
     "jest": "^22.4.3",
     "ts-jest": "22.4.3",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.2"
   },
   "scripts": {
     "test": "jest --coverage",

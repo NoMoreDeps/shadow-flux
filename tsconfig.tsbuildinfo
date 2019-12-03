@@ -1410,6 +1410,7 @@
       "/home/fskorzec/git/shadow-flux/src/Action/TAction.ts",
       "/home/fskorzec/git/shadow-flux/src/shared/text/Guid.ts",
       "/home/fskorzec/git/shadow-flux/src/Utils/DefferedPromise.ts",
+      "/home/fskorzec/git/shadow-flux/src/shared/event/EventBus.ts",
       "/home/fskorzec/git/shadow-flux/src/Store/IStore.ts",
       "/home/fskorzec/git/shadow-flux/src/Utils/Debug/DispatcherCycle.ts",
       "/home/fskorzec/git/shadow-flux/src/Dispatcher.ts",
@@ -1470,8 +1471,7 @@
       "/home/fskorzec/node_modules/@types/react/global.d.ts",
       "/home/fskorzec/node_modules/csstype/index.d.ts",
       "/home/fskorzec/node_modules/@types/react/index.d.ts",
-      "/home/fskorzec/node_modules/@types/react-dom/index.d.ts",
-      "/home/fskorzec/git/shadow-flux/src/shared/event/EventBus.ts"
+      "/home/fskorzec/node_modules/@types/react-dom/index.d.ts"
     ]
   },
   "version": "3.5.1"
