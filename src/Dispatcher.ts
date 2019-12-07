@@ -18,7 +18,11 @@
 import { TAction }                   from "./Action/TAction"        ;
 import { Guid }                      from "./shared/text/Guid"            ;
 import { DefferedPromise }           from "./Utils/DefferedPromise" ;
-import { EventBus, EventBusAutoOff } from "./shared/event/EventBus"        ;
+import { 
+  EventBus, 
+  EventBusAutoOff, 
+  EventBusDelegate 
+} from "./shared/event/EventBus"        ;
 
 import {
   IStore,
@@ -134,18 +138,33 @@ export class Dispatcher {
     const storeTab = this._stores.map(store => {
       const _this = this;
 
-      const promise = new DefferedPromise<void>( (r, x) => {
-        const success = () => {
-          r();
-        }
+      const promise = new DefferedPromise<void>((r, x) => {
+        let succeed = false;
+        let errored = false;
 
-        const error = () => {
+        const success = () => {
+          !succeed && r();
+          succeed = true;
+        };
+
+        const error = (ex: any) => {
+          if (errored) return;
+          errored = true;
+          this.addTrace("store.Error", {
+            owner    : store.id,
+            error    : ex
+          });
+          this._eventBus.emit("Dispatcher.Store.Error", {
+            owner    : store.id,
+            error    : ex
+          });
           r();
-        }
+        };
 
         this.addTrace("store.Process", {
           owner: store.id
         });
+
         store.dispatchHandler(payload, success, error, async (...ids: string[]) => {
           this.addTrace("store.WaitFor", {
             owner    : store.id,
@@ -156,7 +175,9 @@ export class Dispatcher {
             owner    : store.id,
             waitList : ids
           });
-        });
+        })
+        .then(() => success())
+        .catch(ex => error(ex));
       });
 
       this._currentStoreTab[store.id] = promise;
@@ -177,6 +198,14 @@ export class Dispatcher {
         this._isDispatching = false;
       }
     })
+  }
+
+  /**
+   * Register to receive all errors from any stores
+   * @param handler Handler to pass errors to
+   */
+  onError(handler: (data: { owner: string, error: any}) => void): EventBusAutoOff {
+    return this._eventBus.on("Dispatcher.Store.Error", handler as EventBusDelegate);
   }
 
   /**
