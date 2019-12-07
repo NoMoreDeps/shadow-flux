@@ -318,7 +318,6 @@ export class Dispatcher {
   }
 
   private messagingHandler = (ev: MessageEvent): void => {
-    console.log("Messaging", ev.data)
     switch(ev.data.topic) {
       case "count": 
         this.sendMsg({topic: "count", value: this.debug.getFrames().length})
@@ -343,7 +342,6 @@ export class Dispatcher {
   
   private sendMsg(data: {topic: string, value?: any}) { 
    this._debugWindow?.postMessage(JSON.parse(JSON.stringify(data)), this._debugOptions.url!);
-   console.log("sendMsg", this._debugWindow !== undefined, data)
   }
 
   private activateCrossMessaging() : void {

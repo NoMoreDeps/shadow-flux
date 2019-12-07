@@ -6,7 +6,7 @@ import {
 
 import { BaseStore}  from "./Store/BaseStore"     ;
 import { IStore}     from "./Store/IStore"        ;
-import { Subscriber} from "./Extension/Container" ;
+import { Subscriber} from "./Extension/Subscriber" ;
 import { TAction}    from "./Action/TAction"      ;
 
 export {

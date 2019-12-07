@@ -144,8 +144,6 @@ export class DispatcherCycle {
     if (this._dispatcher["_isPlayingDebug"]) return;
     const event = eventName.split(".");
 
-    console.log("newEvent", eventName, data);
-
     if (event[0] === "callback") {
       this._events.push({
         time     : Date.now()     ,
