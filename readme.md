@@ -14,17 +14,19 @@ Enjoy !
 * Updating Unit tests suite
 * Updating Online documentation to see how to use the TimeLine debugger
 
-**What's new in version 2.0.10**
+**What's new in version 2.0.11**
 ===
+* Updated type TDispatch handler to use a payload type from TAction to <T extends TActions>
+This was causing a typing issue in strict mode
+
+**What's new in version 2.0.10**
 * Updated The dispatcher so it can delay to the next execution Frame the next payload processing,
 so the UI can refresh between each action if mulples are stacked.
 
 **What's new in version 2.0.9**
-===
 * Fixed await For that was not waiting anymore
 
 **What's new in version 2.0.8**
-===
 * Fixed the getStoreState type issue.
 <br />Compatible with the WIP timeline debugger interface.
 
@@ -33,7 +35,6 @@ so the UI can refresh between each action if mulples are stacked.
 * Added new global error handler, use it with : subscriber.onError
 
 **What's new in version 2.0.7**
-===
 * Added A default Strategy Pattern implementation to handle the default behavior of teh DispatchHandler function
 <br />See the advance programming section of the store in the documentation
 
