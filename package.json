@@ -1,6 +1,6 @@
 {
   "name": "shadow-flux",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "Flux implementation",
   "main": "Index.js",
   "types": "Index.d.ts",
@@ -8,10 +8,10 @@
   "author": "François Skorzec",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "jest": "^22.4.3",
-    "ts-jest": "22.4.3",
-    "typescript": "^3.7.2"
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.5"
   },
   "scripts": {
     "test": "jest --coverage",
@@ -45,8 +45,5 @@
       "json",
       "node"
     ]
-  },
-  "dependencies": {
-    "yarn": "^1.19.1"
   }
 }

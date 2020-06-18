@@ -32,8 +32,8 @@ import { DispatcherCycle, CycleEvent } from "./Utils/Debug/DispatcherCycle";
 
 export type TWaitFor = (...ids: string[]) => Promise<void>;
 
-export type TDispatchHandler = (
-  payload : TAction                ,
+export type TDispatchHandler = <T extends TAction>(
+  payload : T                      ,
   success : () => void             ,
   error   : (error: Error) => void ,
   For: TWaitFor

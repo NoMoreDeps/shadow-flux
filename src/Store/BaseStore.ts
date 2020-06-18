@@ -1,16 +1,16 @@
-import { IStore }   from "./IStore"          ;
-import { TAction }  from "../Action/TAction" ;
-import { EventBus } from "../shared/event/EventBus" ;
-import { IActionStrategy } from "./IActionStrategy";
-import { BaseActionStrategy } from "./ActionStrategy";
+import { IStore }             from "./IStore"                 ;
+import { TAction }            from "../Action/TAction"        ;
+import { EventBus }           from "../shared/event/EventBus" ;
+import { IActionStrategy }    from "./IActionStrategy"        ;
+import { BaseActionStrategy } from "./ActionStrategy"         ;
 
 
 
 export abstract class BaseStore<T> implements IStore<T>{
   id: string;
-  private _lockState : boolean;
-  private _eventBus  : EventBus | null;
-  private state      : Partial<T>;
+  private _lockState       : boolean;
+  private _eventBus        : EventBus | null;
+  private state            : Partial<T>;
   protected actionStrategy : IActionStrategy<BaseStore<T>>;
 
   // This method is overriden by the dispatcher
@@ -22,10 +22,10 @@ export abstract class BaseStore<T> implements IStore<T>{
     = (action: TAction) => void 0;
 
   constructor() {
-    this.id         = ""      ;
+    this.id         = ""               ;
     this.state      = {} as Partial<T> ;
-    this._eventBus  = null    ;
-    this._lockState = false   ;
+    this._eventBus  = null             ;
+    this._lockState = false            ;
     this.initState();
     this.actionStrategy = new BaseActionStrategy();
   }
@@ -76,7 +76,7 @@ export abstract class BaseStore<T> implements IStore<T>{
     this._eventBus && this._eventBus.emit(`${this.id}.nextState`, this);
   }
 
-  protected async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void | Error> {
+  protected async dispatchHandler<T extends TAction>(payload: T, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void | Error> {
     await this.actionStrategy.resolve(this, payload, success, error, For);
   }
 }
