@@ -5,19 +5,32 @@ Shadow Flux is an implementation of the Flux pattern in Typescript. It can be us
 
 Version 2 available
 
-Please find all documentation available on [Shaodw-Flux Website](https://fskorzec.github.io/shadowjs/)
+Please find all documentation available on [Shadow-Flux Website](https://fskorzec.github.io/shadowjs/)
 
 Enjoy !
 
 **What's next**
 ===
-* Working on a new feature : Timeline debugging
+* Updating Unit tests suite
+* Updating Online documentation to see how to use the TimeLine debugger
+
+**What's new in version 2.0.10**
+===
+* Updated The dispatcher so it can delay to the next execution Frame the next payload processing,
+so the UI can refresh between each action if mulples are stacked.
+
+**What's new in version 2.0.9**
+===
+* Fixed await For that was not waiting anymore
 
 **What's new in version 2.0.8**
 ===
 * Fixed the getStoreState type issue.
 <br />Compatible with the WIP timeline debugger interface.
-See how to use it on the online documentation. 
+
+* Documentation update and TimeLine UI will be online very soon
+
+* Added new global error handler, use it with : subscriber.onError
 
 **What's new in version 2.0.7**
 ===

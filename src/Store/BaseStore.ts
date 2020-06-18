@@ -77,6 +77,6 @@ export abstract class BaseStore<T> implements IStore<T>{
   }
 
   protected async dispatchHandler(payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void | Error> {
-    return await this.actionStrategy.resolve(this, payload, success, error, For);
+    await this.actionStrategy.resolve(this, payload, success, error, For);
   }
 }

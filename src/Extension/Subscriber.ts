@@ -16,6 +16,14 @@ export class Subscriber {
     this.dispatcher = dispatcher;
   }
 
+    /**
+   * Register to receive all errors from any stores
+   * @param handler Handler to pass errors to
+   */
+  onError(handler: (data: { owner: string, error: any}) => void): EventBusAutoOff {
+    return this.dispatcher.onError(handler);
+  }
+
   /**
    * 
    * @param storeId

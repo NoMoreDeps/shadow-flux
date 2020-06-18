@@ -8,15 +8,7 @@ type TActionStrategy<T> = {
 export class BaseActionStrategy<T> implements IActionStrategy<T> {
   async resolve(instance: T, payload: TAction, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>): Promise<void | Error> {
     if (`action${payload.type}` in instance) {
-      try {
         await (instance as unknown as TActionStrategy<T>)[`action${payload.type}`](payload, success, error, For);
-        success();
-      } catch(ex) {
-        error(ex);
-        return ex;
-      }
-    } else {
-      success();
     }
   }
 }

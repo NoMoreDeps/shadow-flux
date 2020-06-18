@@ -1,5 +1,5 @@
 import { Dispatcher }                       from "../../src/Dispatcher"          ;
-import { Subscriber }                       from "../../src/Extension/Container" ;
+import { Subscriber }                       from "../../src/Extension/Subscriber" ;
 import { SimpleStore, State as StoreState } from "../Helpers/SimpleStore"        ;
 import { TAction }                          from "../../src/Action/TAction"      ;
 import { StrategyStore , State as StrategyState} from "../Helpers/StrategyStore";
@@ -100,7 +100,7 @@ describe("Dispatcher tests", function () {
 
     dispatcher.register(simpleStore, "store");
 
-    dispatcher.debug.setDebugOn();
+    dispatcher.debug.setDebugOn({mode: "local"});
     dispatcher.dispatch({type: "1"});
     dispatcher.dispatch({type: "2"});
     dispatcher.dispatch({type: "3"});
@@ -225,9 +225,9 @@ describe("Dispatcher tests", function () {
 
     dispatcher.register(simpleStore, "store");
     dispatcher.debug.setDebugOff();
-    dispatcher.debug.setDebugOn();
+    dispatcher.debug.setDebugOn({mode: "local"});
     dispatcher.debug.setDebugOff();
-    dispatcher.debug.setDebugOn();
+    dispatcher.debug.setDebugOn({mode: "local"});
 
     let tab = ["debugFirst", "debugSecond", "nothing", "debugSecond", "debugFirst", "nothing"];
 
@@ -273,7 +273,7 @@ describe("Dispatcher tests", function () {
     const dispatcher  = new Dispatcher()  ;
     const simpleStore = new SimpleStore() ;
 
-    dispatcher.debug.setDebugOn();
+    dispatcher.debug.setDebugOn({mode: "local"});
 
     dispatcher.register(simpleStore, "store");
 
@@ -295,7 +295,7 @@ describe("Dispatcher tests", function () {
     const simpleStore = new SimpleStore() ;
 
     dispatcher.register(simpleStore, "store");
-    dispatcher.debug.setDebugOn();
+    dispatcher.debug.setDebugOn({mode: "local"});
 
     dispatcher.subscribe(simpleStore.id, (state) => {
       throw Error();
@@ -349,7 +349,7 @@ describe("Dispatcher tests", function () {
     const simpleStore = new SimpleStore() ;
 
     dispatcher.register(simpleStore, "store");
-    dispatcher.debug.setDebugOn();
+    dispatcher.debug.setDebugOn({mode: "local"});
     dispatcher.subscribe(simpleStore.id, (state: { state: string }) => {
       done();
     });
@@ -364,27 +364,22 @@ describe("Dispatcher tests", function () {
     dispatcher.register(simpleStore, "store");
 
     expect(() => {
-      dispatcher.subscribe.apply(dispatcher, [simpleStore.id, 1]);
+      dispatcher.subscribe.apply(dispatcher, [simpleStore.id, 1 as any, undefined as any, undefined as any]);
 
     }).toThrowError(`subscribe function has no signature corresponding to the one you provided :
       subscribe(number) => void; not found !`)
 
     expect(() => {
-      dispatcher.subscribe.apply(dispatcher, [simpleStore.id, 1, 2]);
+      dispatcher.subscribe.apply(dispatcher, [simpleStore.id, 1 as any, 2 as any, undefined as any]);
 
     }).toThrowError(`subscribe function has no signature corresponding to the one you provided :
       subscribe(number, number) => void; not found !`)
 
     expect(() => {
-      dispatcher.subscribe.apply(dispatcher, [simpleStore.id, 1, 2, 3]);
+      dispatcher.subscribe.apply(dispatcher, [simpleStore.id, 1 as any, 2 as any, 3 as any]);
 
     }).toThrowError(`subscribe function has no signature corresponding to the one you provided :
       subscribe(number, number, number) => void; not found !`);
-
-    expect(() => {
-      dispatcher.subscribe.apply(dispatcher, [simpleStore.id, 1, 2, 3, 4]);
-    }).toThrowError(`subscribe function has no signature corresponding to the one you provided :
-      subscribe(number, number, number, number) => void; not found !`);
   });
 
   it("Should handle subscribe<T>(storeId, eventName, updatedStateHandler): void;", (done) => {

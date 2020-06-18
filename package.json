@@ -1,6 +1,6 @@
 {
   "name": "shadow-flux",
-  "version": "2.0.7",
+  "version": "2.0.9",
   "description": "Flux implementation",
   "main": "Index.js",
   "types": "Index.d.ts",

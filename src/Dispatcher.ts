@@ -115,6 +115,17 @@ export class Dispatcher {
     }
   }
 
+  private formatErrorTrace(ex: Error | any) {
+    if (typeof ex === "object" && "message" in ex) {
+      return {
+        name    : (ex as Error).name,
+        message : (ex as Error).message,
+        stack   : (ex as Error).stack
+      };
+    } else {
+      return ex;
+    }
+  }
 
   /**
    * starts a new dispatch cycle
@@ -136,8 +147,6 @@ export class Dispatcher {
     this._isDispatching = true;
 
     const storeTab = this._stores.map(store => {
-      const _this = this;
-
       const promise = new DefferedPromise<void>((r, x) => {
         let succeed = false;
         let errored = false;
@@ -152,7 +161,7 @@ export class Dispatcher {
           errored = true;
           this.addTrace("store.Error", {
             owner    : store.id,
-            error    : ex
+            error    : this.formatErrorTrace(ex)
           });
           this._eventBus.emit("Dispatcher.Store.Error", {
             owner    : store.id,
@@ -193,7 +202,9 @@ export class Dispatcher {
       this._currentStoreTab = {};
       // check if there is another one to process
       if (this._payloads.length > 0) {
-        this.processNextPayload();
+        setTimeout(() => {
+          this.processNextPayload();
+        }, 0);
       } else {
         this._isDispatching = false;
       }
