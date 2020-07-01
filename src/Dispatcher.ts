@@ -16,13 +16,13 @@
  * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 import { TAction }                   from "./Action/TAction"        ;
-import { Guid }                      from "./shared/text/Guid"            ;
+import { Guid }                      from "./Utils/Eext_/Guid"            ;
 import { DefferedPromise }           from "./Utils/DefferedPromise" ;
 import { 
   EventBus, 
   EventBusAutoOff, 
   EventBusDelegate 
-} from "./shared/event/EventBus"        ;
+} from "./Utils/Event_/EventBus"        ;
 
 import {
   IStore,
