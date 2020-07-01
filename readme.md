@@ -5,18 +5,22 @@ Shadow Flux is an implementation of the Flux pattern in Typescript. It can be us
 
 Version 2 available
 
-Please find all documentation available on [Shadow-Flux Website](https://fskorzec.github.io/shadowjs/)
+Please find all documentation available on [Shadow-Flux Website](https://nomoredeps.github.io/shadowjs/)
 
 Enjoy !
 
 **What's next**
 ===
-* Updating Unit tests suite
-* Updating Online documentation to see how to use the TimeLine debugger
+- [ ] Updating Unit tests suite
+- [ ] Updating Online documentation to see how to use the TimeLine debugger
+
+**What's new in version 2.0.12**
+===
+* Fixed Event typing issue with latest typescript compiler
+* Updated links to git repository and documentation
 
 **What's new in version 2.0.11**
-===
-* Updated type TDispatch handler to use a payload type from TAction to <T extends TActions>
+* Updated type TDispatch handler to use a payload type from TAction to &lt;T extends TActions&gt; 
 This was causing a typing issue in strict mode
 
 **What's new in version 2.0.10**

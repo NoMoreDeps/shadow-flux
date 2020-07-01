@@ -1,10 +1,10 @@
 {
   "name": "shadow-flux",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "Flux implementation",
   "main": "Index.js",
   "types": "Index.d.ts",
-  "repository": "git@github.com:fskorzec/shadow-flux.git",
+  "repository": "git@github.com:nomoredeps/shadow-flux.git",
   "author": "François Skorzec",
   "license": "MIT",
   "devDependencies": {
