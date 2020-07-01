@@ -1,5 +1,5 @@
 import { TDispatchHandler } from "../Dispatcher"     ;
-import { EventBus }        from "../Utils/Event_/EventBus" ;
+import { EventBus }        from "../Utils/Event/EventBus" ;
 
 export interface IPrivateStore<T> extends IStore<T> {
     state: Partial<T>;

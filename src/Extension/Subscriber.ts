@@ -1,5 +1,5 @@
 ﻿import { Dispatcher }      from "../Dispatcher"     ;
-import { EventBusAutoOff } from "../Utils/Event_/EventBus" ;
+import { EventBusAutoOff } from "../Utils/Event/EventBus" ;
 import { TAction }         from "../Action/TAction" ;
 
 export class Subscriber {

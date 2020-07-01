@@ -1,6 +1,6 @@
 import { IStore }             from "./IStore"                 ;
 import { TAction }            from "../Action/TAction"        ;
-import { EventBus }           from "../Utils/Event_/EventBus" ;
+import { EventBus }           from "../Utils/Event/EventBus" ;
 import { IActionStrategy }    from "./IActionStrategy"        ;
 import { BaseActionStrategy } from "./ActionStrategy"         ;
 
