@@ -1,82 +1,65 @@
-import { IStore }             from "./IStore"                 ;
-import { TAction }            from "../Action/TAction"        ;
-import { EventBus }           from "../Utils/Event/EventBus" ;
-import { IActionStrategy }    from "./IActionStrategy"        ;
-import { BaseActionStrategy } from "./ActionStrategy"         ;
+import { EventBusAutoOff } from "../Utils/Event/EventBus";
 
+export type TBaseStore<T> = {
+  id?: string;
+  nextState  : (newState: Partial<State>, mergeToPreviousState: boolean) => void;
+  sendAction : <T>(type: string, payload: T) => void;
+}
 
+export type TExtentedStore<T> = TBaseStore<T> & {
+  mappedActions ?: { [key: string] : string; }
+}
 
-export abstract class BaseStore<T> implements IStore<T>{
-  id: string;
-  private _lockState       : boolean;
-  private _eventBus        : EventBus | null;
-  private state            : Partial<T>;
-  protected actionStrategy : IActionStrategy<BaseStore<T>>;
+export type TStoreDefinition<T, U> = {
+  id             : string                      ;
+  actions        : T                           ;
+  events         : U                           ;
+  mappedActions ?: { [key: string] : string; } ;
+}
 
-  // This method is overriden by the dispatcher
-  protected getStoreStateByToken: <U>(tokenId: string) =>  Partial<U> 
-    = <U>() => {return void 0 as unknown as Partial<U>};
+type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
+function registerStore<State, Actions extends {[key: string]: (...args: any) => Promise<void | null | string | string[]>}, Events extends { [key: string]: string}>(def: TStoreDefinition<Actions, Events>) {
 
-  // This method is overriden by the dispatcher
-  protected sendAction: (action: TAction) =>  void 
-    = (action: TAction) => void 0;
+  const _actions = {} as {
+    [P in keyof Actions] : PropType<Parameters<Actions[P]> , "0"> extends object ? 
+      (payload: PropType<Parameters<Actions[P]> , "0">) => void 
+      : 
+      () => void;
+  };
 
-  constructor() {
-    this.id         = ""               ;
-    this.state      = {} as Partial<T> ;
-    this._eventBus  = null             ;
-    this._lockState = false            ;
-    this.initState();
-    this.actionStrategy = new BaseActionStrategy();
-  }
+  const _subscribeTo = {} as {
+    [P in keyof Events]: (handler: (newState: State) => void) => EventBusAutoOff;
+  };
 
-  protected abstract initState(): void;
-
-  protected registerEventBus(eventBus: EventBus) {
-    this._eventBus = eventBus;
-    this._eventBus.on(`${this.id}.lockState`, (data: boolean) => {
-      this._lockState = data;
-    });
-    this._eventBus.on(`${this.id}.setState`, (data: Partial<T>) => {
-      if (this._lockState) {
-        this.state = data;
-      }
-    });
-  }
-
-  protected emit(event: string = "") {
-    if (this._lockState) return;
-
-    if (event === "") {
-      event = "updated";
-    } else if(!event.startsWith("updated")) {
-      event = `updated.${event}`;
-    }
-
-    if (this._eventBus) {
-      this._eventBus.emit(`${this.id}.${event}`, this);
-    }
-  }
-
-  getState(): Partial<T> {
-    return this.state;
-  }
-
-  protected nextState(handler: (oldState: Partial<T>) => Partial<T>): void;
-  protected nextState(newState: Partial<T>): void;
-  protected nextState(newState: unknown) {
-    if (this._lockState) return;
-
-    if (typeof(newState) === "function") {
-      this.state = newState(this.state);
-    } else {
-      this.state = Object.assign({}, this.state, newState);
-    }
-
-    this._eventBus && this._eventBus.emit(`${this.id}.nextState`, this);
-  }
-
-  protected async dispatchHandler<T extends TAction>(payload: T, success: () => void, error: (error: Error) => void, For: (...ids: string[]) => Promise<void>) : Promise<void | Error> {
-    await this.actionStrategy.resolve(this, payload, success, error, For);
+  return {
+    id: def.id,
+    actions: _actions,
+    subscribeTo: _subscribeTo,
+    getState: function(): State { return null as unknown as State; }
   }
 }
+
+type State = {
+  counter: number;
+}
+
+const actions = {
+  async getCounter() { },
+  async add(this: TBaseStore<State>, payload: { xxx: number}, waitFor: any) {
+    return null;
+  }
+}
+
+const events = {
+  None: ""
+}
+
+const x = registerStore<State, typeof actions, typeof events>({
+  id: "",
+  actions,
+  events
+});
+
+
+x.actions.add({ xxx: 22 });
+x.subscribeTo.None(_ => void 0);
