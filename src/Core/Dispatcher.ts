@@ -1,7 +1,7 @@
-import { TAction }                    from "./Store/Action"         ;
-import { TBaseStore, TExtentedStore } from "./Store/BaseStore"      ;
-import { EventBus }                   from "./Utils/Event/EventBus" ;
-import { Guid }                       from "./Utils/Text/Guid"      ;
+import { TAction }                    from "../Store/Action"               ;
+import { BaseStore, TBaseStore, TExtentedStore } from "../Store/BaseStore" ;
+import { EventBus }                   from "../Utils/Event/EventBus"       ;
+import { Guid }                       from "../Utils/Text/Guid"            ;
 
 export class Dispatcher { 
   private _StoreHash      : { [key: string] : TExtentedStore<any> } = {}                   ;
@@ -20,11 +20,28 @@ export class Dispatcher {
     return new Promise(r => setTimeout(() => r(), time))
   }
 
-  registerStore<T>(store: TBaseStore<T>, storeId?: string){
+  registerStore<T>(store: BaseStore<T>, storeId?: string){
     store.id = store.id ?? storeId ?? Guid.getGuid();
 
+    store["nextState"] = function(this: BaseStore<T>, newState: Partial<T>, mergeToPreviousState?: boolean) {
+      this["state"] = mergeToPreviousState ? 
+      {
+        ...this["state"],
+        ...newState as T
+      } 
+      : 
+      newState as T;
+    };
+
+    store["sendAction"] = <U>(type: string, payload: U) => {
+      this.dispatch({
+        type,
+        ...payload
+      });
+    }
+
     if (store.id in this._StoreHash) throw Error(`A store named ${store.id} already exists, maybe you are trying to add the same store several times...`);
-    this._StoreHash[store.id] = store;
+    this._StoreHash[store.id] = store as unknown as TExtentedStore<any>;
   }
 
   private async processNextCycle() {
@@ -80,7 +97,21 @@ export class Dispatcher {
 
     try {
       // Wait the cycle to finish
-      const cycleResult = await Promise.all(allPromises) ;
+      const cycleResult = await Promise.all<{id: string, result: undefined | null | string | string[]}>(allPromises) ;
+      cycleResult.forEach(_ => {
+        if (_.result === null) return;
+
+        this._EvtBus.emitAsync(`STORE.${_.id}.EMIT.ALL`, (this._StoreHash[_.id] as any)["state"]);
+        
+        if (typeof _.result === "string" && _.result !== "ALL") 
+          this._EvtBus.emitAsync(`STORE.${_.id}.EMIT.${_.result}`, (this._StoreHash[_.id] as any)["state"]);
+
+        if (Array.isArray(_.result)) 
+          _.result.filter(__ => __ !== "ALL")
+          .forEach(__ => {
+            this._EvtBus.emitAsync(`STORE.${_.id}.EMIT.${__}`, (this._StoreHash[_.id] as any)["state"]);
+          });
+      })
     } catch(ex) {
       console.error(ex);
     } finally {
@@ -90,5 +121,9 @@ export class Dispatcher {
         this.processNextCycle();
       }
     }
+  }
+
+  subscribe<T>(storeId: string, handler: (newState: T) => void, eventName: string = "ALL") {
+    return this._EvtBus.on(`STORE.${storeId}.EMIT.${eventName}`, handler);
   }
 }

@@ -172,8 +172,8 @@
         "affectsGlobalScope": false
       },
       "./src/store/basestore.ts": {
-        "version": "59535b0ccbeb79b1e4e27dbc2d69757a80a980c5a86eb5c509084baeb22d4967",
-        "signature": "22627ba3bdf87bc1b09c443f6e26bc0f03046808508fe52a0ce6474edc852614",
+        "version": "ef0e750f1d6348aa3d971580a78ab9bb3fb07bfaea00ce7a9ac14ff0ca62a5e0",
+        "signature": "1776f8e704bbcfa7116242b6f4c9f69df2a17d9931a3a49a89e057ecb86c24bd",
         "affectsGlobalScope": false
       },
       "./src/utils/text/guid.ts": {
@@ -181,14 +181,19 @@
         "signature": "ff4f6df0d4b538b056a0e3bbd33b2fd236e396a7f6606ac8da866e40a2a57abf",
         "affectsGlobalScope": false
       },
-      "./src/dispatcher.ts": {
-        "version": "411eedce556a2956cd372683f24bc0e85735325b79a73e9d476cfeed20df57c5",
-        "signature": "7e2a697afe61bc08b2d818532ce76e6587f5210be4b3e484be06641d7f5b2a90",
+      "./src/core/dispatcher.ts": {
+        "version": "159daba9fe4ac7b03de9f33f0ab75e0c4b0747b66cd0f8e64c164a43f5eb013e",
+        "signature": "b87618029bd5ab1bdae70a9551fb12f7725734ac628275ea887f5c3ea755b8c4",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
-        "version": "1f059e17a1610a4412ba0569113e28848d2448e38b3ac4882415eaa3608c6edc",
-        "signature": "f761c91419d0a89422a0004ef1a92929dd4d2d5e5c16758654d8b0467d1998c6",
+        "version": "acc98ef54e849efee716300400301a06e3808a08b80065beae94872832171475",
+        "signature": "6f353bef48edd54b3c2c0f858cf826216806ab81ec788b4d62c6971e90154b92",
+        "affectsGlobalScope": false
+      },
+      "./src/core/flux.ts": {
+        "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
       "./src/utils/defferedpromise.ts": {
@@ -1471,7 +1476,7 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
-      "./src/dispatcher.ts": [
+      "./src/core/dispatcher.ts": [
         "./node_modules/@types/graceful-fs/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
@@ -1482,13 +1487,22 @@
         "./src/utils/event/eventbus.ts",
         "./src/utils/text/guid.ts"
       ],
+      "./src/core/flux.ts": [
+        "./node_modules/@types/graceful-fs/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts"
+      ],
       "./src/index.ts": [
         "./node_modules/@types/graceful-fs/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts",
-        "./src/dispatcher.ts"
+        "./src/core/dispatcher.ts",
+        "./src/store/action.ts",
+        "./src/store/basestore.ts"
       ],
       "./src/store/action.ts": [
         "./node_modules/@types/graceful-fs/index.d.ts",
@@ -1503,6 +1517,7 @@
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts",
+        "./src/core/dispatcher.ts",
         "./src/utils/event/eventbus.ts"
       ],
       "./src/utils/defferedpromise.ts": [
@@ -2408,9 +2423,18 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
-      "./src/dispatcher.ts": [
+      "./src/core/dispatcher.ts": [
+        "./src/store/action.ts",
+        "./src/store/basestore.ts",
+        "./src/utils/event/eventbus.ts"
+      ],
+      "./src/index.ts": [
+        "./src/core/dispatcher.ts",
         "./src/store/action.ts",
         "./src/store/basestore.ts"
+      ],
+      "./src/store/basestore.ts": [
+        "./src/utils/event/eventbus.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -2522,7 +2546,8 @@
       "./node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "./node_modules/typescript/lib/lib.scripthost.d.ts",
       "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
-      "./src/dispatcher.ts",
+      "./src/core/dispatcher.ts",
+      "./src/core/flux.ts",
       "./src/index.ts",
       "./src/store/action.ts",
       "./src/store/basestore.ts",
