@@ -1,4 +1,4 @@
-import { Guid } from "../../../text/Guid";
+import { Guid } from "../../src/Utils/Text/Guid";
 
 
 describe("Test Guid", () => {
