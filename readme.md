@@ -11,11 +11,27 @@ Enjoy !
 
 **What's next**
 ===
-- [ ] Updating Unit tests suite
-- [ ] Updating Online documentation to see how to use the TimeLine debugger
+- [ ] Console debugger
+- [ ] Built-In Timeline 
+- [ ] New documentation website 
+
+**What's new in version 3.0.0-beta.3**
+===
+* Fixed missing storeId
+
+**What's new in version 3.0.0-beta.2**
+===
+* Add subsribeTo.All to handle all updates
+* Add dispatchHandler to globally catch all payloads when no action is defined
+
+**What's new in version 3.0.0-beta.0**
+* Full rewrite of the library. (Code size reduced by 60%), using promise.all instead of custom workaround
+* Simple way to declare a new store / less code to write
+* Store helper now generated with full intellisense
+* Auto generated Subscribe method
+* Auto generated Action helper method
 
 **What's new in version 2.0.12**
-===
 * Fixed Event typing issue with latest typescript compiler
 * Updated links to git repository and documentation
 

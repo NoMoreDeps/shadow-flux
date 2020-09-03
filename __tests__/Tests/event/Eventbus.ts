@@ -1,4 +1,4 @@
-import { EventBus } from "../../src/Utils/Event/EventBus";
+import { EventBus } from "../../../src/Utils/Event/EventBus";
 
 
 describe("EventBus", () => {

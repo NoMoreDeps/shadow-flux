@@ -166,14 +166,14 @@
         "signature": "b562a1b2538b06142b728daf04e2178c487558c2bd2432affb0b291d20be21aa",
         "affectsGlobalScope": false
       },
+      "./src/utils/event/constanttree.ts": {
+        "version": "b57aacae66025bc758634db7aaa5b1582bf0813f5041b19d96daa78a183edb35",
+        "signature": "4ba67e25db2b7c5693f05b6e02e337dcab8130256d08754fa1f327f4f357a626",
+        "affectsGlobalScope": false
+      },
       "./src/utils/event/eventbus.ts": {
         "version": "3a00631f7e6a515036e068b31eed57640c170adf0e17758f1d4cadf56252aba2",
         "signature": "67b781f5f388302e156b3352919d392565b3c089a86d9db04e460c5f5d2ceef5",
-        "affectsGlobalScope": false
-      },
-      "./src/store/basestore.ts": {
-        "version": "ef0e750f1d6348aa3d971580a78ab9bb3fb07bfaea00ce7a9ac14ff0ca62a5e0",
-        "signature": "1776f8e704bbcfa7116242b6f4c9f69df2a17d9931a3a49a89e057ecb86c24bd",
         "affectsGlobalScope": false
       },
       "./src/utils/text/guid.ts": {
@@ -182,8 +182,18 @@
         "affectsGlobalScope": false
       },
       "./src/core/dispatcher.ts": {
-        "version": "159daba9fe4ac7b03de9f33f0ab75e0c4b0747b66cd0f8e64c164a43f5eb013e",
-        "signature": "b87618029bd5ab1bdae70a9551fb12f7725734ac628275ea887f5c3ea755b8c4",
+        "version": "f1d10348fe9ffa88be51b31719385a567969eb493a51da73b5525f9f56aa454e",
+        "signature": "1aae51cce933313a37e5f981b4f11d1a683aec5d948f0407817f3b74a7483abe",
+        "affectsGlobalScope": false
+      },
+      "./src/store/basestore.ts": {
+        "version": "118ea8c1343d77d3cc67fd69a491591b4e02072b122934b643b946a27ce04720",
+        "signature": "20781812779fac7f1bc7e0753c0c153e2553db568d1e939026d563eb000de66c",
+        "affectsGlobalScope": false
+      },
+      "./src/app.ts": {
+        "version": "175a4a853556ff387aef06c964e41162bd65d8b461e18a2ebacadd78a8408fe3",
+        "signature": "f761c91419d0a89422a0004ef1a92929dd4d2d5e5c16758654d8b0467d1998c6",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -196,9 +206,9 @@
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "affectsGlobalScope": false
       },
-      "./src/utils/defferedpromise.ts": {
-        "version": "3446cebc1e5da0502e16c3b4e99d3adb738f9fbeedec3779ce91007441843a95",
-        "signature": "22b2090a2f1ec8f2d202011cea81065c86c9c1b3f6b30e326083ea93b1ce93c9",
+      "./src/store/debugger.ts": {
+        "version": "e1f20f7367410f22ff1e3937ce254924e58d2642bcc63b25053c20cd874b7394",
+        "signature": "f761c91419d0a89422a0004ef1a92929dd4d2d5e5c16758654d8b0467d1998c6",
         "affectsGlobalScope": false
       },
       "./node_modules/@babel/types/lib/index.d.ts": {
@@ -1476,6 +1486,14 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
+      "./src/app.ts": [
+        "./node_modules/@types/graceful-fs/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./src/store/basestore.ts"
+      ],
       "./src/core/dispatcher.ts": [
         "./node_modules/@types/graceful-fs/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
@@ -1484,6 +1502,7 @@
         "./node_modules/@types/node/util.d.ts",
         "./src/store/action.ts",
         "./src/store/basestore.ts",
+        "./src/utils/event/constanttree.ts",
         "./src/utils/event/eventbus.ts",
         "./src/utils/text/guid.ts"
       ],
@@ -1520,7 +1539,17 @@
         "./src/core/dispatcher.ts",
         "./src/utils/event/eventbus.ts"
       ],
-      "./src/utils/defferedpromise.ts": [
+      "./src/store/debugger.ts": [
+        "./node_modules/@types/graceful-fs/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./src/index.ts",
+        "./src/store/basestore.ts",
+        "./src/utils/event/eventbus.ts"
+      ],
+      "./src/utils/event/constanttree.ts": [
         "./node_modules/@types/graceful-fs/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
@@ -2546,12 +2575,14 @@
       "./node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "./node_modules/typescript/lib/lib.scripthost.d.ts",
       "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
+      "./src/app.ts",
       "./src/core/dispatcher.ts",
       "./src/core/flux.ts",
       "./src/index.ts",
       "./src/store/action.ts",
       "./src/store/basestore.ts",
-      "./src/utils/defferedpromise.ts",
+      "./src/store/debugger.ts",
+      "./src/utils/event/constanttree.ts",
       "./src/utils/event/eventbus.ts",
       "./src/utils/text/guid.ts"
     ]

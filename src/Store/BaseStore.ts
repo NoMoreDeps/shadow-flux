@@ -8,12 +8,15 @@ export type TBaseStore<T> = {
 }
 
 export class BaseStore<T> {
-  private state       !: T                                                                                                                                 ;
-  id                  ?: string                                                                                                                            ;
+  protected state     !: T                                                                                                                                 ;
+  id                   : string = ""                                                                                                                       ;
   mappedActions       ?: { [key: string] : string; }                                                                                                       ;
   protected init       : () => void = () => void 0                                                                                                         ;
   protected nextState  : (newState: Partial<T>, mergeToPreviousState?: boolean) => void = (newState: Partial<T>, mergeToPreviousState?: boolean) => void 0 ;
   protected sendAction : <T>(type: string, payload: T) => void = <T>(type: string, payload: T) => void 0                                                   ;
+  getState() {
+    return this.state;
+  }
 }
 
 export type TExtentedStore<T> = TBaseStore<T> & {
@@ -21,13 +24,14 @@ export type TExtentedStore<T> = TBaseStore<T> & {
 }
 
 export type TStoreDefinition<S, T, U> = {
-  id            ?: string                                                         ;
-  localActions  ?: boolean                                                        ;
-  actions        : T                                                              ;
-  events        ?: U                                                              ;
-  mappedActions ?: { [key: string] : string; }                                    ;
-  init          ?: () => void                                                     ;
-  nextState     ?: (newState: Partial<S>, mergeToPreviousState?: boolean) => void ;
+  id              ?: string                                                               ;
+  localActions    ?: boolean                                                              ;
+  actions          : T                                                                    ;
+  events          ?: U                                                                    ;
+  mappedActions   ?: { [key: string] : string; }                                          ;
+  init            ?: () => void                                                           ;
+  dispatchHandler ?:(this: BaseStore<S>, payload: any, For? : TAwaitFor) => Promise<void> ;
+  nextState       ?: (newState: Partial<S>, mergeToPreviousState?: boolean) => void       ;
 }
 
 type TRegisterSystem = {
@@ -47,7 +51,9 @@ export function withEvents<T>(source: T) {
 
 type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
 
-function _registerStore<State, Actions extends {[key: string]: (...args: any) => Promise<void | null | string | string[]>}, Events extends { [key: string]: string}>(this: any, def: TStoreDefinition<State, Actions, Events>) {
+type TActionExtention = {[key: string]: (...args: any) => Promise<void | null | string | string[]>};
+
+function _registerStore<State, Actions extends TActionExtention, Events extends { [key: string]: string}> (this: any, def: TStoreDefinition<State, Actions, Events>) {
   const _this = <TRegisterSystem>this;
   
   if (!_this.__dispatcher) _this.__dispatcher = new Dispatcher();
@@ -67,14 +73,24 @@ function _registerStore<State, Actions extends {[key: string]: (...args: any) =>
     (store as any)[def.localActions ? `${def.id}-${key}` : key] = def.actions[key];
   }
 
+  if (def.dispatchHandler) {
+    (store as any)["dispatchHandler"] = def.dispatchHandler;
+  }
+
   const _subscribeTo = {} as {
     [P in keyof Events]: (handler: (newState: State) => void) => EventBusAutoOff;
+  } & {
+    All: (handler: (newState: State) => void) => EventBusAutoOff;
   };
 
   for (const key in def.events) {
     (_subscribeTo as any)[key] = (_: any) => {
       return _this.__dispatcher.subscribe(store.id!, _, key);
     }
+  }
+
+  (_subscribeTo as any)["All"] = (_: any) => {
+    return _this.__dispatcher.subscribe(store.id!, _, "ALL");
   }
 
   if (def.init) {
@@ -87,13 +103,11 @@ function _registerStore<State, Actions extends {[key: string]: (...args: any) =>
   }
 
   return {
-    id          : def.id!              ,
+    id          : store.id             ,
     actions     : _actions             ,
     subscribeTo : _subscribeTo         ,
     getState    : () => store["state"] ,
   }
 }
 
-export const registerStore = _registerStore.bind({
-  __dispatcher: null
-});
+export const registerStore = _registerStore.bind({ __dispatcher: new Dispatcher() });
