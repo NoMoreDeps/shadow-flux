@@ -7,6 +7,7 @@ export type TBaseStore<T> = {
   id         ?: string                                                         ;
   nextState   : (newState: Partial<T>, mergeToPreviousState?: boolean) => void ;
   sendAction  : <U>(type: string, payload: U) => void                          ;
+  getState    : () => T                                                        ;
 }
 
 export class BaseStore<T> {
@@ -25,15 +26,15 @@ export type TExtentedStore<T> = TBaseStore<T> & {
   mappedActions ?: { [key: string] : string; }
 }
 
-export type TStoreDefinition<S, T, U> = {
+export type TStoreDefinition<S extends (...args: any[]) => any, T extends {[key: string]: (...args: any[]) => any}, U> = {
   id              ?: string                                                               ;
   localActions    ?: boolean                                                              ;
   actions          : T                                                                    ;
   events          ?: U                                                                    ;
   mappedActions   ?: { [key: string] : string; }                                          ;
-  init            ?: () => void                                                           ;
-  dispatchHandler ?:(this: BaseStore<S>, payload: any, For? : TAwaitFor) => Promise<void> ;
-  nextState       ?: (newState: Partial<S>, mergeToPreviousState?: boolean) => void       ;
+  init             : S                                                                    ;
+  dispatchHandler ?:(this: TBaseStore<ReturnType<S>>, payload: any, For? : TAwaitFor) => Promise<void | null | string | string[]> ;
+  nextState       ?: (newState: Partial<ReturnType<S>>, mergeToPreviousState?: boolean) => void       ;
 }
 
 type TRegisterSystem = {
@@ -51,12 +52,35 @@ export function withEvents<T>(source: T) {
   return source as T;
 }
 
-type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
+export type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
 
-type TActionExtention = {[key: string]: (...args: any) => Promise<void | null | string | string[]>};
+export type TActionExtention<T, U> = {
+  [P in keyof T]: 
+  ((this: TBaseStore<U>, payload: any) => Promise<void | null | string | string[]>) | 
+  ((this: TBaseStore<U>, payload: any, For: TAwaitFor) => Promise<void | null | string | string[]>)
+};
 
-function _registerStore<State, Actions extends TActionExtention, Events extends { [key: string]: string}> (this: any, def: TStoreDefinition<State, Actions, Events>) {
-  const _this = <TRegisterSystem>this;
+
+type St = {
+  a: number;
+}
+
+type TFunction   = (...args: any[]) => any;
+type TActionsDef = { [key: string]: (...args: any[]) => any; };
+type TEventsDef  = { [key: string]: string };
+
+function _registerStore<
+  D       extends TStoreDefinition<State, Actions, Events> ,  
+  State   extends TFunction                                , 
+  Actions extends TActionsDef                              , 
+  Events  extends TEventsDef
+  >(this: any, def: D) {
+  
+  type TActions = PropType<typeof def, "actions">          ;
+  type TEvents  = PropType<typeof def, "events">           ;
+  type TState   = ReturnType<PropType<typeof def, "init">> ;
+
+  const _this = this;
   
   if (!_this.__dispatcher) _this.__dispatcher = new Dispatcher();
   const store = new BaseStore<State>();
@@ -65,11 +89,12 @@ function _registerStore<State, Actions extends TActionExtention, Events extends 
   _this.__dispatcher.registerStore(store, def.id);
 
   const _actions = {} as {
-    [P in keyof Actions] : PropType<Parameters<Actions[P]> , "0"> extends object ? 
-      (payload: PropType<Parameters<Actions[P]> , "0">) => void 
-      : 
-      () => void;
+    [P in keyof TActions] :  PropType<Parameters<TActions[P]> , 0> extends undefined ?
+    (() => void) 
+    :
+    ((payload: PropType<Parameters<TActions[P]> , 0>) => void) 
   };
+
 
   for (const key in def.actions) {
     (_actions as any)[key] = (_: any) => {
@@ -83,9 +108,9 @@ function _registerStore<State, Actions extends TActionExtention, Events extends 
   }
 
   const _subscribeTo = {} as {
-    [P in keyof Events]: (handler: (newState: State) => void) => EventBusAutoOff;
+    [P in keyof TEvents]: (handler: (newState: TState) => void) => EventBusAutoOff;
   } & {
-    All: (handler: (newState: State) => void) => EventBusAutoOff;
+    All: (handler: (newState: TState) => void) => EventBusAutoOff;
   };
 
   for (const key in def.events) {
@@ -99,19 +124,20 @@ function _registerStore<State, Actions extends TActionExtention, Events extends 
   }
 
   if (def.init) {
-    store["init"] = def.init;
+    store["init"] = function(this: BaseStore<TState>) { this.nextState(<any>def.init.call(this)) }
     store["init"]();
   }
 
   if (def.nextState) {
-    store["nextState"] = def.nextState;
+    store["nextState"] = <any>def.nextState;
   }
 
   return {
-    id          : store.id             ,
-    actions     : _actions             ,
-    subscribeTo : _subscribeTo         ,
-    getState    : () => store["state"] ,
+    id          : store.id              ,
+    actions     : _actions              ,
+    subscribeTo : _subscribeTo          ,
+    events      : def.events as TEvents ,
+    getState    : () => store["state"] as TState,
   }
 }
 

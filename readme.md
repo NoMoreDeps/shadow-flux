@@ -11,16 +11,25 @@ Enjoy !
 
 **What's next**
 ===
-- [ ] Console debugger
-- [ ] Built-In Timeline 
+- [x] Built-In Timeline 
 - [ ] New documentation website 
 
-**What's new in version 3.0.0-beta.3**
+**What's new in version 3.0.0-beta.6**
 ===
+* This is the last release before rc1
+* Documentation is nto yet ready
+* This version comes with some breaking changes so don't upgrade from v2 now
+
+**What's new in version 3.0.0-beta.5**
+* Fixed some typing
+
+**What's new in version 3.0.0-beta.4**
+* Debug viewer 
+
+**What's new in version 3.0.0-beta.3**
 * Fixed missing storeId
 
 **What's new in version 3.0.0-beta.2**
-===
 * Add subsribeTo.All to handle all updates
 * Add dispatchHandler to globally catch all payloads when no action is defined
 

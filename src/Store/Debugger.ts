@@ -140,7 +140,7 @@ class Debugger {
        stWait.forEach(      s => this.chkCycle(cycle, s.data.sourceId).wait       = s.data.targetIds ?? "--"                 );
        stWill.forEach(      s => this.chkCycle(cycle, s.data.storeId).will        = true                                     );
        stWIllNot.forEach(   s => this.chkCycle(cycle, s.data.storeId).will        = false                                    );
-       stNextState.forEach( s => this.chkCycle(cycle, s.data.storeId).nextState   = JSON.parse(JSON.stringify(s.data.state)) );
+       stNextState.forEach( s => this.chkCycle(cycle, s.data.storeId).nextState   = s.data.state ? JSON.parse(JSON.stringify(s.data.state)) : undefined);
        stEmit.forEach(      s => this.chkCycle(cycle, s.data.storeId).emit.push(s.data.event.split(".").pop())               );
        stEmit.forEach(      s => this.chkCycle(cycle, s.data.storeId).subscribers = s.data.subscribers                       );
 
