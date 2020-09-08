@@ -101,17 +101,15 @@ export class Dispatcher {
   }
 
   private async processNextCycle() {
-    const $this = this;
-    this.emitDbg($.DISPATCHER.CYCLE.START);
-
+    const $this = this;    
     if (this._IsCycleRunning || this._payloads.length === 0) {
       this.emitDbg($.DISPATCHER.CYCLE.ABORT_ALREADY_RUNNING);
-      this.emitDbg($.DISPATCHER.CYCLE.END);
       return;
     }
-
+    
     this._IsCycleRunning = true                    ;
     this._currentPayload = this._payloads.shift()! ;
+    this.emitDbg($.DISPATCHER.CYCLE.START, this._currentPayload);
     
     // Select  all
     this._cycle        = {}                                ;
@@ -120,7 +118,7 @@ export class Dispatcher {
 
     // Prevent cycling dependencies
     function checkBeforeWaiting(sourceId: string, targetIds: string[]) {
-      $this.emitDbg($.DISPATCHER.STORE.START_WAITING)
+      $this.emitDbg($.DISPATCHER.STORE.START_WAITING, {sourceId, targetIds});
       if (targetIds.includes(sourceId)) throw Error(`${sourceId} cannot wait for itself to finish berofe it can finish... Cycling dependency detected.`);
       if (sourceId in waitingQueue) throw Error(`${sourceId} already waiting in this current cycle, and it cannot wait a second time`);
       
@@ -182,22 +180,30 @@ export class Dispatcher {
       this.emitDbg($.DISPATCHER.CYCLE.START_PROCESSING);
       const cycleResult = await Promise.all<{id: string, result: undefined | null | string | string[]}>(allPromises) ;
       cycleResult.forEach(_ => {
-        if (_.result === null) return;
+        if (_.result === null) {
+          this.emitDbg($.DISPATCHER.STORE.EMIT, 
+            {
+              storeId: _.id, 
+              event: `STORE.${_.id}.EMIT.--`, 
+              state: (this._StoreHash[_.id] as any)["state"] ,
+              subscribers: 0});
+          return;
+        }
 
         this._EvtBus.emitAsync(`STORE.${_.id}.EMIT.ALL`, (this._StoreHash[_.id] as any)["state"]);
-        this.emitDbg($.DISPATCHER.STORE.EMIT, {storeId: _.id, event: `STORE.${_.id}.EMIT.ALL`, state: (this._StoreHash[_.id] as any)["state"] });
+        this.emitDbg($.DISPATCHER.STORE.EMIT, {storeId: _.id, event: `STORE.${_.id}.EMIT.ALL`, state: (this._StoreHash[_.id] as any)["state"] , subscribers: this._EvtBus["_Emitter_"].onPool[`STORE.${_.id}.EMIT.ALL`]?.length ?? 0});
 
         
         if (typeof _.result === "string" && _.result !== "ALL") {
           this._EvtBus.emitAsync(`STORE.${_.id}.EMIT.${_.result}`, (this._StoreHash[_.id] as any)["state"]);
-          this.emitDbg($.DISPATCHER.STORE.EMIT, {storeId: _.id, event: `STORE.${_.id}.EMIT.${_.result}`, state: (this._StoreHash[_.id] as any)["state"] });
+          this.emitDbg($.DISPATCHER.STORE.EMIT, {storeId: _.id, event: `STORE.${_.id}.EMIT.${_.result}`, state: (this._StoreHash[_.id] as any)["state"], subscribers: this._EvtBus["_Emitter_"].onPool[`STORE.${_.id}.EMIT.${_.result}`]?.length ?? 0 });
         }
 
         if (Array.isArray(_.result)) 
           _.result.filter(__ => __ !== "ALL")
           .forEach(__ => {
             this._EvtBus.emitAsync(`STORE.${_.id}.EMIT.${__}`, (this._StoreHash[_.id] as any)["state"]);
-            this.emitDbg($.DISPATCHER.STORE.EMIT, {storeId: _.id, event: `STORE.${_.id}.EMIT.${__}`, state: (this._StoreHash[_.id] as any)["state"] });
+            this.emitDbg($.DISPATCHER.STORE.EMIT, {storeId: _.id, event: `STORE.${_.id}.EMIT.${__}`, state: (this._StoreHash[_.id] as any)["state"], subscribers: this._EvtBus["_Emitter_"].onPool[`STORE.${_.id}.EMIT.${__}`]?.length ?? 0 });
           });
       })
     } catch(ex) {

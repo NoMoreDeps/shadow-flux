@@ -9,6 +9,7 @@ import {
   registerStore    ,
   withEvents
 } from "./Store/BaseStore";
+import { sFDebugger} from "./Store/Debugger";
 
 export {
   Dispatcher       ,
@@ -19,5 +20,6 @@ export {
   TActionHandler   ,
   TActionReturn    ,
   registerStore    ,
-  withEvents
+  withEvents       ,
+  sFDebugger
 }

@@ -11,7 +11,9 @@
     "@types/jest": "^26.0.0",
     "jest": "^26.0.1",
     "ts-jest": "^26.1.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "scripts": {
     "test": "jest --coverage",

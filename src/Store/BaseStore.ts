@@ -1,5 +1,7 @@
 import { Dispatcher }      from "../Core/Dispatcher"      ;
 import { EventBusAutoOff } from "../Utils/Event/EventBus" ;
+import { Guid } from "../Utils/Text/Guid";
+import { sFDebugger } from "./Debugger";
 
 export type TBaseStore<T> = {
   id         ?: string                                                         ;
@@ -59,11 +61,14 @@ function _registerStore<State, Actions extends TActionExtention, Events extends 
   if (!_this.__dispatcher) _this.__dispatcher = new Dispatcher();
   const store = new BaseStore<State>();
   store.mappedActions = def.mappedActions;
+  if (!def.id) def.id = Guid.getGuid();
   _this.__dispatcher.registerStore(store, def.id);
 
   const _actions = {} as {
     [P in keyof Actions] : PropType<Parameters<Actions[P]> , "0"> extends object ? 
-      (payload: PropType<Parameters<Actions[P]> , "0">) => void : () => void;
+      (payload: PropType<Parameters<Actions[P]> , "0">) => void 
+      : 
+      () => void;
   };
 
   for (const key in def.actions) {
@@ -110,4 +115,8 @@ function _registerStore<State, Actions extends TActionExtention, Events extends 
   }
 }
 
-export const registerStore = _registerStore.bind({ __dispatcher: new Dispatcher() });
+const dp = new Dispatcher();
+export const registerStore = _registerStore.bind({ __dispatcher: dp });
+
+ sFDebugger["evtBus"]      = dp["_EvtBus"] ;
+ sFDebugger["_dispatcher"] = dp            ;
