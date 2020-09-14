@@ -1,4 +1,5 @@
 import { TCycle }   from "../../Store/TCycle"         ;
+import { isNode } from "../../Utils/Env";
 import { EventBus } from "../../Utils/Event/EventBus" ;
 import { sFWindow } from "../sFWindow"                ;
 
@@ -95,5 +96,8 @@ class Trace extends sFWindow {
   }
 }
 
-const sfTrace = new Trace();
+let sfTrace: Trace;
+if (!isNode()) {
+  sfTrace= new Trace();
+}
 export { sfTrace };

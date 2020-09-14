@@ -11,12 +11,13 @@ export type TBaseStore<T> = {
 }
 
 export class BaseStore<T> {
-  protected state     !: T                                                                                                                                 ;
-  id                   : string = ""                                                                                                                       ;
-  mappedActions       ?: { [key: string] : string; }                                                                                                       ;
-  protected init       : () => void = () => void 0                                                                                                         ;
-  protected nextState  : (newState: Partial<T>, mergeToPreviousState?: boolean) => void = (newState: Partial<T>, mergeToPreviousState?: boolean) => void 0 ;
-  protected sendAction : <T>(type: string, payload: T) => void = <T>(type: string, payload: T) => void 0                                                   ;
+  protected state     !: T                                                      ;
+  id                   : string = ""                                            ;
+  mappedActions       ?: { [key: string] : string; }                            ;
+  protected initState() {}                                                      ;
+  protected nextState(newState: Partial<T>, mergeToPreviousState?: boolean) {}  ;
+  protected sendAction<T>(type: string, payload: T){}                           ;
+
   getState() {
     return this.state;
   }
@@ -27,14 +28,14 @@ export type TExtentedStore<T> = TBaseStore<T> & {
 }
 
 export type TStoreDefinition<S extends (...args: any[]) => any, T extends {[key: string]: (...args: any[]) => any}, U> = {
-  id              ?: string                                                               ;
-  localActions    ?: boolean                                                              ;
-  actions          : T                                                                    ;
-  events          ?: U                                                                    ;
-  mappedActions   ?: { [key: string] : string; }                                          ;
-  init             : S                                                                    ;
+  id              ?: string                      ;
+  localActions    ?: boolean                     ;
+  actions          : T                           ;
+  events          ?: U                           ;
+  mappedActions   ?: { [key: string] : string; } ;
+  init             : S                           ;
   dispatchHandler ?:(this: TBaseStore<ReturnType<S>>, payload: any, For? : TAwaitFor) => Promise<void | null | string | string[]> ;
-  nextState       ?: (newState: Partial<ReturnType<S>>, mergeToPreviousState?: boolean) => void       ;
+  nextState       ?: (newState: Partial<ReturnType<S>>, mergeToPreviousState?: boolean) => void                                   ;
 }
 
 type TRegisterSystem = {
@@ -124,8 +125,8 @@ function _registerStore<
   }
 
   if (def.init) {
-    store["init"] = function(this: BaseStore<TState>) { this.nextState(<any>def.init.call(this)) }
-    store["init"]();
+    store["initState"] = function(this: BaseStore<TState>) { this.nextState(<any>def.init.call(this)) }
+    store["initState"]();
   }
 
   if (def.nextState) {
@@ -146,3 +147,13 @@ export const registerStore = _registerStore.bind({ __dispatcher: dp });
 
  sFDebugger["evtBus"]      = dp["_EvtBus"] ;
  sFDebugger["_dispatcher"] = dp            ;
+
+ export function createRegisterStore(dispatcher?: Dispatcher): [Dispatcher, typeof _registerStore] {
+  const dp = dispatcher ?? new Dispatcher();
+  const registerStore = _registerStore.bind({ __dispatcher: dp });
+
+  sFDebugger["evtBus"]      = dp["_EvtBus"] ;
+  sFDebugger["_dispatcher"] = dp            ;
+
+  return [dp, registerStore];
+ }

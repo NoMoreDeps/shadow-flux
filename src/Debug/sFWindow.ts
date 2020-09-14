@@ -1,6 +1,8 @@
 import { DragNDrogManager }       from "./DragNDrop" ;
 import { createIcon, IconResize } from "./Icons"     ;
 
+declare var document: Document;
+
 type TWindowInfo  = {
   title  ?: string ;
   x      ?: number ;
@@ -67,7 +69,7 @@ export class sFWindow {
   }
 
   createDom() {
-    this.dom = document.createElement("div") ;
+    this.dom = document?.createElement("div") ;
     this.id  = performance.now().toString()  ;
 
     this.dom.setAttribute("id", this.id);
@@ -108,7 +110,7 @@ export class sFWindow {
       transform: "scaleX(-.8) scaleY(.8)"
     }));
 
-    const topBar = document.createElement("div");
+    const topBar = document?.createElement("div");
     this.css({
       height          : "30px"                          ,
       backgroundColor : "#323233"                       ,
@@ -126,7 +128,7 @@ export class sFWindow {
 
     this.dom.appendChild(topBar);
 
-    const title     = document.createElement("span") ;
+    const title     = document?.createElement("span") ;
     title.innerText = this._.title                   ;
     this.css({
       whiteSpace   : "nowrap"   ,
@@ -137,7 +139,7 @@ export class sFWindow {
 
     this.titleDom = title;
 
-    const contentZone = document.createElement("div");
+    const contentZone = document?.createElement("div");
     this.css({
       backgroundColor : "#252526"                       ,
       position        : "absolute"                      ,

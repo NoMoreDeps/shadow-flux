@@ -1,4 +1,5 @@
 import { TCycle } from "../../Store/TCycle";
+import { isNode } from "../../Utils/Env";
 import { EventBus } from "../../Utils/Event/EventBus";
 import { sFWindow } from "../sFWindow";
 
@@ -44,5 +45,9 @@ class Cycle extends sFWindow {
   }
 }
 
-const sfCycle = new Cycle();
+let sfCycle: Cycle;
+
+if (!isNode()) {
+ sfCycle = new Cycle();
+}
 export { sfCycle };

@@ -69,7 +69,8 @@ export class jsonTree {
   getJsonTypeIcon(value: any) {
     switch (typeof value) {
       case "object" : 
-        if (Array.isArray(value)) return `[${value.length}]`;
+				if (Array.isArray(value)) return `[${value.length}]`;
+				if (value === null) return "null";
         return `{${Object.keys(value).length}}`
     }
 

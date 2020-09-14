@@ -74,6 +74,7 @@ export class Dispatcher {
   }
 
   registerStore<T>(store: BaseStore<T>, storeId?: string){
+    console.log("registering")
     const $this = this;
     store.id = storeId ?? Guid.getGuid();
     this.emitDbg($.DISPATCHER.STORE.REGISTERING_NEW, store.id);
@@ -90,14 +91,28 @@ export class Dispatcher {
 
     store["sendAction"] = <U>(type: string, payload: U) => {
       $this.emitDbg($.DISPATCHER.STORE.SEND_ACTION, {storeId: store.id, type, payload});
-      this.dispatch({
-        type,
-        ...payload
-      });
+      if (typeof type === "string") {
+        this.dispatch({
+          type,
+          ...payload
+        });
+      } else {
+        this.dispatch(type);
+      }
     }
+
+    store["getState"] = function() {
+      return this["state"];
+    }
+
+    store["initState"]?.();
 
     if (store.id in this._StoreHash) throw Error(`A store named ${store.id} already exists, maybe you are trying to add the same store several times...`);
     this._StoreHash[store.id] = store as unknown as TExtentedStore<any>;
+  }
+
+  getStoreStateByToken<T>(storeId: string): T {
+    return this._StoreHash[storeId]?.getState() as T;
   }
 
   private async processNextCycle() {
@@ -207,7 +222,7 @@ export class Dispatcher {
           });
       })
     } catch(ex) {
-      console.error(ex);
+      this._EvtBus.emitAsync(`DISPATCHER.SYSTEM.ERROR.TRIGGER`, {owner: "Dispatcher", error: ex});
     } finally {
       this._IsCycleRunning = false;
       this.emitDbg($.DISPATCHER.CYCLE.END);
@@ -222,5 +237,13 @@ export class Dispatcher {
 
   subscribe<T>(storeId: string, handler: (newState: T) => void, eventName: string = "ALL") {
     return this._EvtBus.on(`STORE.${storeId}.EMIT.${eventName}`, handler);
+  }
+
+  /**
+   * Register to receive all errors from any stores
+   * @param handler Handler to pass errors to
+   */
+  onError(handler: (data: { owner: string, error: any}) => void) {
+    return this._EvtBus.on("DISPATCHER.SYSTEM.ERROR.TRIGGER", handler);
   }
 }
